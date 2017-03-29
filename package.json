@@ -1,0 +1,36 @@
+{
+  "name": "contactsnag",
+  "version": "1.0.0",
+  "description": "Bugsnag wrapper and utilities for Contactlab's applications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "contactsnag": "upload.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://moebiusmania@github.com/contactlab/contactsnag.git"
+  },
+  "keywords": [
+    "bugsnag",
+    "node",
+    "javascript",
+    "wrapper",
+    "cli",
+    "utility",
+    "contactlab"
+  ],
+  "author": "Salvatore Laisa <salvatore.laisa@contactlab.it>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/contactlab/contactsnag/issues"
+  },
+  "homepage": "https://github.com/contactlab/contactsnag#readme",
+  "dependencies": {
+    "bugsnag-js": "^3.1.0",
+    "bugsnag-sourcemap": "^0.0.4",
+    "find-root": "^1.0.0"
+  }
+}
