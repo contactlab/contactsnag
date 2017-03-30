@@ -1,7 +1,7 @@
 {
   "name": "contactsnag",
   "version": "1.0.0",
-  "description": "Bugsnag wrapper and utilities for Contactlab's applications",
+  "description": "Bugsnag utilities for Contactlab's applications",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

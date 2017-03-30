@@ -1,10 +1,11 @@
 'use strict';
 
-const PATH = require('PATH');
+const PATH = require('path');
+const ROOT = require('find-root')
 const UPLOAD = require('bugsnag-sourcemap').upload;
-const PROJECT = require('./package.json');
+const PROJECT = require(ROOT(PATH.resolve(__dirname)) + '/package.json');
 
-console.log(__dirname, PATH.resolve(__dirname,'.'));
+// console.log(PROJECT);
 console.log(`BUGSNAG: uploading sourcemap for v${PROJECT.version}`);
 
 UPLOAD({
@@ -19,4 +20,4 @@ UPLOAD({
     throw new Error(`BUGSNAG: Something went wrong - ${err.message}`);
   }
   console.log('BUGSNAG: Sourcemap was uploaded successfully.');
-}, PROJECT.bugsnag.uploadUrl);
+}, "https://upload-bugsnag.contactlab.it/");
