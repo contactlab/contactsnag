@@ -30,7 +30,7 @@
   "homepage": "https://github.com/contactlab/contactsnag#readme",
   "dependencies": {
     "bugsnag-js": "^3.1.0",
-    "bugsnag-sourcemap": "^0.0.4",
+    "bugsnag-sourcemaps": "^0.0.7",
     "find-root": "^1.0.0"
   }
 }
