@@ -1,10 +1,10 @@
 'use strict';
 
 import Bugsnag from 'bugsnag-js';
-import package from 'package.json';
+import project from './../../package.json';
 
 // Bugsnag configuration
-Bugsnag.apiKey = package.bugsnag.apiKey;
+Bugsnag.apiKey = project.bugsnag.apiKey;
 Bugsnag.endpoint = 'https://notify-bugsnag.contactlab.it/js';
 Bugsnag.user = null;
 Bugsnag.notifyReleaseStages = ["development"];
