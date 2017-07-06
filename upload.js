@@ -11,8 +11,8 @@ const OPTIONS = {
   apiKey: PROJECT.bugsnag.apiKey,
   appVersion: PROJECT.version,
   minifiedUrl: PROJECT.bugsnag.minifiedUrl,
-  sourceMap: ROOT(PATH.resolve(__dirname, './../')) + '/app/bundle.js.map',
-  minifiedFile: ROOT(PATH.resolve(__dirname, './../')) + '/app/bundle.js',
+  sourceMap: PROJECT.bugsnag.sourceMap || ROOT(PATH.resolve(__dirname, './../')) + '/app/bundle.js.map',
+  minifiedFile: PROJECT.bugsnag.minifiedFile || ROOT(PATH.resolve(__dirname, './../')) + '/app/bundle.js',
   overwrite: 'true'
 }
 
