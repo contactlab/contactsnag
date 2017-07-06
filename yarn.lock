@@ -45,13 +45,13 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
-bugsnag-js@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/bugsnag-js/-/bugsnag-js-3.1.0.tgz#231105e590895282f730a3e31ec83801d48bee5c"
+bugsnag-js@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/bugsnag-js/-/bugsnag-js-3.2.0.tgz#920f5e3f6b434e05b46b99315d92f0cd0dd74a3f"
 
-bugsnag-sourcemap@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/bugsnag-sourcemap/-/bugsnag-sourcemap-0.0.4.tgz#9b95dfd66f4ebe2dbe5690f7c46f9e5346ebe75e"
+bugsnag-sourcemaps@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/bugsnag-sourcemaps/-/bugsnag-sourcemaps-0.0.7.tgz#9ef48de61e3a2f1a02921a5af4f3f393a5becea3"
   dependencies:
     request "^2.79.0"
 
@@ -99,9 +99,9 @@ extsprintf@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.0.2.tgz#e1080e0658e300b06294990cc70e1502235fd550"
 
-find-root@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/find-root/-/find-root-1.0.0.tgz#962ff211aab25c6520feeeb8d6287f8f6e95807a"
+find-root@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/find-root/-/find-root-1.1.0.tgz#abcfc8ba76f708c42a97b3d685b7e9450bfb9ce4"
 
 forever-agent@~0.6.1:
   version "0.6.1"
