@@ -23,12 +23,16 @@ Add a `bugsnag` node in the root `package.json` of your application to set few p
 "bugsnag": {
   "apiKey": "my-project-api-key",
   "minifiedUrl": "https://my.application.com/bundle.js"
+  "sourceMap": "./path/to/your/source.map.js",
+  "minifiedFile": "./path/to/your/minified.js"
 }
 ...
 ```
 
 * **apiKey**: is used both by the Bugsnag instance to send error reports to the dashboard and by the uploader to authenticate with the upload API.
 * **minifiedUrl**: [docs here](https://docs.bugsnag.com/api/js-source-map-upload/#uploading-source-maps).
+* **[sourceMap]**: Path to your source map file. Default: `./app/bundle.js.map`.
+* **[minifiedFile]**: Path to your minified bundle file. Default: `./app/bundle.js`.
 
 ### JS usage example
 ```javascript
