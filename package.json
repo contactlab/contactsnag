@@ -9,7 +9,8 @@
     "yarn": ">= 1.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint index.js upload.js",
+    "test": "yarn lint"
   },
   "bin": {
     "contactsnag": "upload.js"
@@ -40,5 +41,23 @@
     "bugsnag-js": "3.2.0",
     "bugsnag-sourcemaps": "0.0.7",
     "find-root": "1.1.0"
+  },
+  "devDependencies": {
+    "eslint": "4.8.0",
+    "eslint-config-contactlab": "1.0.0"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
+    "extends": [
+      "contactlab"
+    ],
+    "env": {
+      "es6": true,
+      "browser": true,
+      "node": true
+    }
   }
 }
