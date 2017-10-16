@@ -2,6 +2,9 @@
   "name": "test-pkg",
   "version": "0.1.0",
   "bugsnag": {
-    "apiKey": "TEST-API-KEY"
+    "apiKey": "TEST-API-KEY",
+    "minifiedUrl": "https://my.application.com/bundle.js",
+    "sourceMap": "./path/to/bundle.js.map",
+    "minifiedFile": "./path/to/bundle.js"
   }
 }

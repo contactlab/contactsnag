@@ -4,20 +4,43 @@
 const path = require('path');
 const fs   = require('fs');
 
-const SRC  = path.join(__dirname, '../index.js');
-const DEST = path.join(__dirname, '../test/modules/contactsnag/index.js');
+const ROOT = path.resolve(__dirname, '..');
 
-const read  = fs.createReadStream(SRC);
-const write = fs.createWriteStream(DEST);
+const SRCS  = {
+  INDEX : path.join(ROOT, 'index.js'),
+  UPLOAD: path.join(ROOT, 'upload.js')
+};
 
-read.on('error', err => {
+const DESTS = {
+  INDEX : path.join(ROOT, 'test/modules/contactsnag/index.js'),
+  UPLOAD: path.join(ROOT, 'test/modules/contactsnag/upload.js')
+};
+
+const error = err => {
   throw err;
-});
+};
 
-write.on('error', err => {
-  throw err;
-});
+const succeed = src => console.log(`> ${src} copied`);
 
-write.on('finish', () => console.log('> contactsnag/index.js copied'));
+const copy = (src, dest, cb) => {
+  const read  = fs.createReadStream(src);
+  const write = fs.createWriteStream(dest);
 
-read.pipe(write);
+  read.on('error', error);
+  write.on('error', error);
+  write.on('finish', () => {
+    succeed(src);
+
+    if (cb) {
+      cb(dest);
+    }
+  });
+
+  return read.pipe(write);
+};
+
+// index.js
+copy(SRCS.INDEX, DESTS.INDEX);
+
+// upload.js
+copy(SRCS.UPLOAD, DESTS.UPLOAD, dest => fs.chmod(dest, '755', e => e ? error(e) : null));
