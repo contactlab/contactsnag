@@ -1,0 +1,7 @@
+{
+  "name": "test-pkg",
+  "version": "0.1.0",
+  "bugsnag": {
+    "apiKey": "TEST-API-KEY"
+  }
+}

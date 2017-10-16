@@ -9,8 +9,10 @@
     "yarn": ">= 1.1"
   },
   "scripts": {
+    "prepare": "node ./scripts/prepare-test",
     "lint": "eslint index.js upload.js",
-    "test": "yarn lint"
+    "pretest": "yarn prepare && yarn lint",
+    "test": "ava"
   },
   "bin": {
     "contactsnag": "upload.js"
@@ -43,8 +45,26 @@
     "find-root": "1.1.0"
   },
   "devDependencies": {
+    "ava": "0.22.0",
     "eslint": "4.8.0",
-    "eslint-config-contactlab": "1.0.0"
+    "eslint-config-contactlab": "1.0.0",
+    "mock-browser": "0.92.14",
+    "sinon": "4.0.1"
+  },
+  "ava": {
+    "files": [
+      "./test/**/*.test.js"
+    ],
+    "failFast": true,
+    "failWithoutAssertions": false,
+    "require": [
+      "babel-register"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "@ava/stage-4"
+    ]
   },
   "eslintConfig": {
     "parserOptions": {
