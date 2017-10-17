@@ -1,3 +1,8 @@
+/**
+ * Warning:
+ * Tests use commonjs syntax in order to mock the hard-coded `window` reference in Bugsnag module
+ */
+
 import path from 'path';
 import test from 'ava';
 import sinon from 'sinon';
