@@ -12,10 +12,10 @@ test('upload', async t => {
   t.true(spy.called, 'should call bugsnag-sourcemaps `upload`');
   t.true(
     spy.calledWith({
-      endpoint    : 'https: //upload-bugsnag.contactlab.it/',
+      endpoint    : 'https://upload-bugsnag.contactlab.it/',
       apiKey      : 'TEST-API-KEY',
       appVersion  : '0.1.0',
-      minifiedUrl : 'https: //my.application.com/bundle.js',
+      minifiedUrl : 'https://my.application.com/bundle.js',
       sourceMap   : './path/to/bundle.js.map',
       minifiedFile: './path/to/bundle.js',
       overwrite   : 'true'
