@@ -10,12 +10,12 @@
   },
   "scripts": {
     "prepare": "node ./scripts/prepare-test",
-    "lint": "eslint index.js upload.js",
+    "lint": "eslint index.js ./bin/upload.js",
     "pretest": "yarn prepare && yarn lint",
     "test": "ava"
   },
   "bin": {
-    "contactsnag": "upload.js"
+    "contactsnag": "./bin/upload.js"
   },
   "repository": {
     "type": "git",
