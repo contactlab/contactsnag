@@ -1,4 +1,4 @@
-# contactsnag
+# contactsnag [![Build Status](https://travis-ci.org/contactlab/contactsnag.svg?branch=master)](https://travis-ci.org/contactlab/contactsnag)
 > [Bugsnag]() utilities for Contactlab's applications.
 
 This package embeds 2 main functionalities:
