@@ -8,7 +8,7 @@ const ROOT = path.resolve(__dirname, '..');
 
 const SRCS  = {
   INDEX : path.join(ROOT, 'index.js'),
-  UPLOAD: path.join(ROOT, 'upload.js')
+  UPLOAD: path.join(ROOT, 'bin/upload.js')
 };
 
 const DESTS = {
