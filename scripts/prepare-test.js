@@ -8,12 +8,12 @@ const ROOT = path.resolve(__dirname, '..');
 
 const SRCS  = {
   INDEX : path.join(ROOT, 'index.js'),
-  UPLOAD: path.join(ROOT, 'upload.js')
+  UPLOAD: path.join(ROOT, 'bin/upload.js')
 };
 
 const DESTS = {
   INDEX : path.join(ROOT, 'test/modules/contactsnag/index.js'),
-  UPLOAD: path.join(ROOT, 'test/modules/contactsnag/upload.js')
+  UPLOAD: path.join(ROOT, 'test/modules/contactsnag/bin/upload.js')
 };
 
 const error = err => {
@@ -28,13 +28,7 @@ const copy = (src, dest, cb) => {
 
   read.on('error', error);
   write.on('error', error);
-  write.on('finish', () => {
-    succeed(src);
-
-    if (cb) {
-      cb(dest);
-    }
-  });
+  write.on('finish', () => succeed(src));
 
   return read.pipe(write);
 };
@@ -43,4 +37,4 @@ const copy = (src, dest, cb) => {
 copy(SRCS.INDEX, DESTS.INDEX);
 
 // upload.js
-copy(SRCS.UPLOAD, DESTS.UPLOAD, dest => fs.chmod(dest, '755', e => e ? error(e) : null));
+copy(SRCS.UPLOAD, DESTS.UPLOAD);

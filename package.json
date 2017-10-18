@@ -10,12 +10,12 @@
   },
   "scripts": {
     "prepare": "node ./scripts/prepare-test",
-    "lint": "eslint index.js upload.js",
+    "lint": "eslint index.js ./bin/upload.js",
     "pretest": "yarn prepare && yarn lint",
     "test": "ava"
   },
   "bin": {
-    "contactsnag": "upload.js"
+    "contactsnag": "./bin/upload.js"
   },
   "repository": {
     "type": "git",
@@ -49,6 +49,7 @@
     "eslint": "4.8.0",
     "eslint-config-contactlab": "1.0.0",
     "mock-browser": "0.92.14",
+    "proxyquire": "1.8.0",
     "sinon": "4.0.1"
   },
   "ava": {
