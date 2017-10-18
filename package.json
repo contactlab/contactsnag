@@ -49,6 +49,7 @@
     "eslint": "4.8.0",
     "eslint-config-contactlab": "1.0.0",
     "mock-browser": "0.92.14",
+    "proxyquire": "1.8.0",
     "sinon": "4.0.1"
   },
   "ava": {

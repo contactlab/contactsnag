@@ -2,11 +2,12 @@
 
 /*eslint no-console: 0*/
 
-const path     = require('path');
-const root     = require('find-root');
-const {upload} = require('bugsnag-sourcemaps');
+const path              = require('path');
+const root              = require('find-root');
+const bugsnagSourcemaps = require('bugsnag-sourcemaps');
 
-const ROOT           = root(path.join(__dirname, '../../'));
+// const ROOT           = root(process.cwd());
+const ROOT           = root(path.join(__dirname, '../..'));
 const DEFAULT_BUNDLE = 'app/bundle.js';
 
 const pkg = require(path.join(ROOT, 'package.json'));
@@ -26,7 +27,7 @@ const OPTIONS = {
 // --- Run command
 console.log(`BUGSNAG: uploading sourcemap for v${version}`);
 
-upload(OPTIONS, err => {
+bugsnagSourcemaps.upload(OPTIONS, err => {
   if (err) {
     throw new Error(`BUGSNAG: Something went wrong - ${err.message}`);
   }
