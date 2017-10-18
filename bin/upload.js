@@ -27,10 +27,7 @@ const OPTIONS = {
 // --- Run command
 console.log(`BUGSNAG: uploading sourcemap for v${version}`);
 
-bugsnagSourcemaps.upload(OPTIONS, err => {
-  if (err) {
-    throw new Error(`BUGSNAG: Something went wrong - ${err.message}`);
-  }
-
-  console.log('BUGSNAG: Sourcemap was uploaded successfully.');
-});
+bugsnagSourcemaps
+  .upload(OPTIONS)
+  .then(() => console.log('BUGSNAG: Sourcemap was uploaded successfully.'))
+  .catch(err => console.error(`BUGSNAG: Something went wrong - ${err.message}`));
