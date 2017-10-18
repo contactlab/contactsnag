@@ -2,23 +2,31 @@
 
 /*eslint no-console: 0*/
 
-const PATH = require('path');
-const ROOT = require('find-root');
-const UPLOAD = require('bugsnag-sourcemaps').upload;
-const PROJECT = require(`${ROOT(PATH.resolve(__dirname, './../'))}/package.json`);
+const path     = require('path');
+const root     = require('find-root');
+const {upload} = require('bugsnag-sourcemaps');
+
+const ROOT           = root(path.join(__dirname, '../../'));
+const DEFAULT_BUNDLE = 'app/bundle.js';
+
+const pkg = require(path.join(ROOT, 'package.json'));
+const {version, bugsnag} = pkg;
+const {apiKey, minifiedUrl, sourceMap, minifiedFile} = bugsnag;
+
 const OPTIONS = {
-  endpoint: 'https://upload-bugsnag.contactlab.it/',
-  apiKey: PROJECT.bugsnag.apiKey,
-  appVersion: PROJECT.version,
-  minifiedUrl: PROJECT.bugsnag.minifiedUrl,
-  sourceMap: PROJECT.bugsnag.sourceMap || `${ROOT(PATH.resolve(__dirname, './../'))}/app/bundle.js.map`,
-  minifiedFile: PROJECT.bugsnag.minifiedFile || `${ROOT(PATH.resolve(__dirname, './../'))}/app/bundle.js`,
-  overwrite: 'true'
+  apiKey,
+  minifiedUrl,
+  endpoint    : 'https://upload-bugsnag.contactlab.it/',
+  appVersion  : version,
+  sourceMap   : sourceMap || path.join(ROOT, `${DEFAULT_BUNDLE}.map`),
+  minifiedFile: minifiedFile || path.join(ROOT, DEFAULT_BUNDLE),
+  overwrite   : 'true'
 };
 
-console.log(`BUGSNAG: uploading sourcemap for v${PROJECT.version}`);
+// --- Run command
+console.log(`BUGSNAG: uploading sourcemap for v${version}`);
 
-UPLOAD(OPTIONS, err => {
+upload(OPTIONS, err => {
   if (err) {
     throw new Error(`BUGSNAG: Something went wrong - ${err.message}`);
   }

@@ -3,16 +3,16 @@
  * Tests use commonjs syntax in order to mock the hard-coded `window` reference in Bugsnag module
  */
 
-import test from 'ava';
-import sinon from 'sinon';
-import bugsnagSourcemaps from 'bugsnag-sourcemaps';
+const test = require('ava');
+const sinon = require('sinon');
+const bugsnagSourcemaps = require('bugsnag-sourcemaps');
 
-test('upload', t => {
+test('upload', async t => {
   t.plan(2);
 
   const spy = sinon.spy(bugsnagSourcemaps, 'upload');
   // eslint-disable-next-line no-unused-vars, global-require
-  const upload = require('./modules/contactsnag/upload.js');
+  const upload = await require('./modules/contactsnag/upload.js');
 
   t.true(spy.called, 'should call bugsnag-sourcemaps `upload`');
   t.true(
