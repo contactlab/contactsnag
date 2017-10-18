@@ -17,6 +17,10 @@
   "bin": {
     "contactsnag": "./bin/upload.js"
   },
+  "files": [
+    "./bin",
+    "./index.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://moebiusmania@github.com/contactlab/contactsnag.git"
