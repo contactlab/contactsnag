@@ -4,18 +4,21 @@
 This package embeds 2 main functionalities:
 
 * **Javascript wrapper for Bugsnag**: importing `ContactSnag` in your frontend code gives you access to a pre-configured Bugsnag browser SDK object wrapper that exposes the same APIs of the original SDK.
-* **CLI sourcemap uploader**: calling `contactsnag` from the command line it will upload your `./app/bundle.map.js` to the Bugsnag dashboard (using the Bugsnag API endpoint) for better error debugging.
+* **CLI sourcemap uploader**: calling `contactsnag` from the command line it will upload your bundle's sourcemap to the Bugsnag dashboard (using the Bugsnag API endpoint) for better error debugging.
 
 ### Install
 Get the latest version from NPM registry:
 
-```
+```sh
 $ npm install contactsnag --save
--- or --
+
+# -- or --
+
 $ yarn add contactsnag
 ```
 
 ### Configuration
+
 Add a `bugsnag` node in the root `package.json` of your application to set few parameters:
 
 ```javascript
@@ -23,8 +26,8 @@ Add a `bugsnag` node in the root `package.json` of your application to set few p
 "bugsnag": {
   "apiKey": "my-project-api-key",
   "minifiedUrl": "https://my.application.com/bundle.js"
-  "sourceMap": "./path/to/your/source.map.js",
-  "minifiedFile": "./path/to/your/minified.js"
+  "sourceMap": "./path/to/your/bundle.js.map",
+  "minifiedFile": "./path/to/your/bundle.js"
 }
 ...
 ```
@@ -35,6 +38,7 @@ Add a `bugsnag` node in the root `package.json` of your application to set few p
 * **[minifiedFile]**: Path to your minified bundle file. Default: `./app/bundle.js`.
 
 ### JS usage example
+
 ```javascript
 import {ContactSnag} from 'contactsnag';
 
