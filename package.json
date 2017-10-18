@@ -44,13 +44,13 @@
   },
   "homepage": "https://github.com/contactlab/contactsnag#readme",
   "dependencies": {
-    "bugsnag-js": "3.2.0",
-    "bugsnag-sourcemaps": "0.0.7",
+    "bugsnag-js": "3.3.1",
+    "bugsnag-sourcemaps": "1.0.1",
     "find-root": "1.1.0"
   },
   "devDependencies": {
     "ava": "0.22.0",
-    "eslint": "4.8.0",
+    "eslint": "4.9.0",
     "eslint-config-contactlab": "1.0.0",
     "mock-browser": "0.92.14",
     "proxyquire": "1.8.0",
