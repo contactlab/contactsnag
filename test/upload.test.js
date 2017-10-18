@@ -7,12 +7,12 @@ const test = require('ava');
 const sinon = require('sinon');
 const bugsnagSourcemaps = require('bugsnag-sourcemaps');
 
-test('upload', async t => {
+test('upload', t => {
   t.plan(2);
 
   const spy = sinon.spy(bugsnagSourcemaps, 'upload');
   // eslint-disable-next-line no-unused-vars, global-require
-  const upload = await require('./modules/contactsnag/upload.js');
+  const upload = require('./modules/contactsnag/upload.js');
 
   t.true(spy.called, 'should call bugsnag-sourcemaps `upload`');
   t.true(
