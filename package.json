@@ -1,6 +1,6 @@
 {
   "name": "contactsnag",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Bugsnag utilities for Contactlab's applications",
   "main": "index.js",
   "engines": {
@@ -49,12 +49,12 @@
     "find-root": "1.1.0"
   },
   "devDependencies": {
-    "ava": "0.22.0",
-    "eslint": "4.9.0",
+    "ava": "0.23.0",
+    "eslint": "4.10.0",
     "eslint-config-contactlab": "1.0.0",
     "mock-browser": "0.92.14",
     "proxyquire": "1.8.0",
-    "sinon": "4.0.1"
+    "sinon": "4.0.2"
   },
   "ava": {
     "files": [
@@ -64,11 +64,6 @@
     "failWithoutAssertions": false,
     "require": [
       "babel-register"
-    ]
-  },
-  "babel": {
-    "presets": [
-      "@ava/stage-4"
     ]
   },
   "eslintConfig": {
