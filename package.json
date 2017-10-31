@@ -66,11 +66,6 @@
       "babel-register"
     ]
   },
-  "babel": {
-    "presets": [
-      "@ava/stage-4"
-    ]
-  },
   "eslintConfig": {
     "parserOptions": {
       "ecmaVersion": 6,
