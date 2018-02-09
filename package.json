@@ -2,24 +2,25 @@
   "name": "contactsnag",
   "version": "1.2.1",
   "description": "Bugsnag utilities for Contactlab's applications",
-  "main": "index.js",
+  "main": "dist/index.js",
   "engines": {
-    "node": ">= 6",
-    "npm": ">= 5.0",
+    "node": ">= 8.0",
+    "npm": ">= 5.2",
     "yarn": ">= 1.1"
   },
   "scripts": {
     "prepare": "node ./scripts/prepare-test",
     "lint": "eslint index.js ./bin/upload.js",
     "pretest": "yarn prepare && yarn lint",
-    "test": "ava"
+    "test": "nyc ava",
+    "build": "babel index.js -d dist"
   },
   "bin": {
     "contactsnag": "./bin/upload.js"
   },
   "files": [
-    "./bin",
-    "./index.js"
+    "bin",
+    "dist"
   ],
   "repository": {
     "type": "git",
@@ -49,10 +50,14 @@
     "find-root": "1.1.0"
   },
   "devDependencies": {
+    "@contactlab/babelrc": "1.0.0",
     "ava": "0.23.0",
+    "babel-cli": "6.26.0",
+    "babel-register": "6.26.0",
     "eslint": "4.10.0",
     "eslint-config-contactlab": "1.0.0",
     "mock-browser": "0.92.14",
+    "nyc": "11.4.1",
     "proxyquire": "1.8.0",
     "sinon": "4.0.2"
   },
