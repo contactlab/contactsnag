@@ -3,6 +3,7 @@
   "version": "1.2.1",
   "description": "Bugsnag utilities for Contactlab's applications",
   "main": "dist.js",
+  "module": "index.js",
   "engines": {
     "node": ">= 8.0",
     "npm": ">= 5.2"
