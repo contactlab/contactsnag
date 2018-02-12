@@ -1,2 +1,3 @@
-index.js
+dist.js
 bin/upload.js
+package.json

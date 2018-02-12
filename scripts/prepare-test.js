@@ -4,37 +4,28 @@
 const path = require('path');
 const fs   = require('fs');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT        = path.resolve(__dirname, '..');
+const TEST_MODULE = path.join('test', 'modules', 'contactsnag');
 
-const SRCS  = {
-  INDEX : path.join(ROOT, 'index.js'),
-  UPLOAD: path.join(ROOT, 'bin/upload.js')
-};
+const src = p => path.join(ROOT, p);
 
-const DESTS = {
-  INDEX : path.join(ROOT, 'test/modules/contactsnag/index.js'),
-  UPLOAD: path.join(ROOT, 'test/modules/contactsnag/bin/upload.js')
-};
+const dest = p => path.join(ROOT, TEST_MODULE, p);
 
 const error = err => {
   throw err;
 };
 
-const succeed = src => console.log(`> ${src} copied`);
-
-const copy = (src, dest, cb) => {
-  const read  = fs.createReadStream(src);
-  const write = fs.createWriteStream(dest);
+const copy = file => {
+  const read  = fs.createReadStream(src(file));
+  const write = fs.createWriteStream(dest(file));
 
   read.on('error', error);
   write.on('error', error);
-  write.on('finish', () => succeed(src));
+  write.on('finish', () => console.log(`> ${file} copied`));
 
   return read.pipe(write);
 };
 
-// index.js
-copy(SRCS.INDEX, DESTS.INDEX);
-
-// upload.js
-copy(SRCS.UPLOAD, DESTS.UPLOAD);
+copy('dist.js');
+copy('bin/upload.js');
+copy('package.json');

@@ -2,25 +2,26 @@
   "name": "contactsnag",
   "version": "1.2.1",
   "description": "Bugsnag utilities for Contactlab's applications",
-  "main": "dist/index.js",
+  "main": "dist.js",
   "engines": {
     "node": ">= 8.0",
     "npm": ">= 5.2",
     "yarn": ">= 1.1"
   },
   "scripts": {
-    "prepare": "node ./scripts/prepare-test",
-    "lint": "eslint index.js ./bin/upload.js",
-    "pretest": "yarn prepare && yarn lint",
-    "test": "nyc ava",
-    "build": "babel index.js -d dist"
+    "build": "babel index.js -o dist.js",
+    "presetup": "yarn run build",
+    "setup": "node ./scripts/prepare-test",
+    "lint": "eslint index.js ./bin",
+    "pretest": "yarn run setup && yarn run lint",
+    "test": "nyc ava"
   },
   "bin": {
     "contactsnag": "./bin/upload.js"
   },
   "files": [
     "bin",
-    "dist"
+    "dist.js"
   ],
   "repository": {
     "type": "git",
