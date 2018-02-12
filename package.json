@@ -5,15 +5,14 @@
   "main": "dist.js",
   "engines": {
     "node": ">= 8.0",
-    "npm": ">= 5.2",
-    "yarn": ">= 1.1"
+    "npm": ">= 5.2"
   },
   "scripts": {
     "build": "babel index.js -o dist.js",
-    "presetup": "yarn run build",
+    "presetup": "npm run build",
     "setup": "node ./scripts/prepare-test",
     "lint": "eslint index.js ./bin",
-    "pretest": "yarn run setup && yarn run lint",
+    "pretest": "npm run setup && npm run lint",
     "test": "nyc ava"
   },
   "bin": {
