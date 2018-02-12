@@ -14,7 +14,7 @@
     "setup": "node ./scripts/prepare-test",
     "lint": "eslint index.js ./bin",
     "pretest": "npm run setup && npm run lint",
-    "test": "nyc ava"
+    "test": "ava"
   },
   "bin": {
     "contactsnag": "./bin/upload.js"
@@ -57,7 +57,6 @@
     "eslint": "4.10.0",
     "eslint-config-contactlab": "1.0.0",
     "mock-browser": "0.92.14",
-    "nyc": "11.4.1",
     "proxyquire": "1.8.0",
     "sinon": "4.0.2"
   },
