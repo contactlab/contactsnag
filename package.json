@@ -23,10 +23,7 @@
     "bin",
     "dist.js"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://moebiusmania@github.com/contactlab/contactsnag.git"
-  },
+  "repository": "contactlab/contactsnag",
   "keywords": [
     "bugsnag",
     "node",
@@ -36,9 +33,11 @@
     "utility",
     "contactlab"
   ],
-  "author": "Salvatore Laisa <salvatore.laisa@contactlab.it>",
+  "author": "Contactlab Front-end Team",
   "contributors": [
-    "Stefano Magrassi <stefano.magrassi@gmail.com>"
+    "Salvatore Laisa <salvatore.laisa@contactlab.it>",
+    "Stefano Magrassi <stefano.magrassi@gmail.com>",
+    "Laura Santalucia"
   ],
   "license": "Apache-2.0",
   "bugs": {
