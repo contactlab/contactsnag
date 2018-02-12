@@ -1,30 +1,29 @@
 {
   "name": "contactsnag",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "Bugsnag utilities for Contactlab's applications",
-  "main": "index.js",
+  "main": "dist.js",
+  "module": "index.js",
   "engines": {
-    "node": ">= 6",
-    "npm": ">= 5.0",
-    "yarn": ">= 1.1"
+    "node": ">= 8.0",
+    "npm": ">= 5.2"
   },
   "scripts": {
-    "prepare": "node ./scripts/prepare-test",
-    "lint": "eslint index.js ./bin/upload.js",
-    "pretest": "yarn prepare && yarn lint",
+    "build": "babel index.js -o dist.js",
+    "presetup": "npm run build",
+    "setup": "node ./scripts/prepare-test",
+    "lint": "eslint index.js ./bin",
+    "pretest": "npm run setup && npm run lint",
     "test": "ava"
   },
   "bin": {
     "contactsnag": "./bin/upload.js"
   },
   "files": [
-    "./bin",
-    "./index.js"
+    "bin",
+    "dist.js"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://moebiusmania@github.com/contactlab/contactsnag.git"
-  },
+  "repository": "contactlab/contactsnag",
   "keywords": [
     "bugsnag",
     "node",
@@ -34,9 +33,11 @@
     "utility",
     "contactlab"
   ],
-  "author": "Salvatore Laisa <salvatore.laisa@contactlab.it>",
+  "author": "Contactlab Front-end Team",
   "contributors": [
-    "Stefano Magrassi <stefano.magrassi@gmail.com>"
+    "Salvatore Laisa <salvatore.laisa@contactlab.it>",
+    "Stefano Magrassi <stefano.magrassi@gmail.com>",
+    "Laura Santalucia"
   ],
   "license": "Apache-2.0",
   "bugs": {
@@ -49,6 +50,7 @@
     "find-root": "1.1.0"
   },
   "devDependencies": {
+    "@contactlab/babelrc": "1.0.0",
     "ava": "0.23.0",
     "eslint": "4.10.0",
     "eslint-config-contactlab": "1.0.0",
