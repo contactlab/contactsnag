@@ -9,6 +9,7 @@
     "npm": ">= 5.2"
   },
   "scripts": {
+    "check": "tsc --noEmit",
     "build": "babel index.js -o dist.js",
     "presetup": "npm run build",
     "setup": "node ./scripts/prepare-test",
@@ -57,7 +58,8 @@
     "eslint-config-contactlab": "1.0.0",
     "mock-browser": "0.92.14",
     "proxyquire": "1.8.0",
-    "sinon": "4.0.2"
+    "sinon": "4.0.2",
+    "typescript": "3.3.3333"
   },
   "ava": {
     "files": [
