@@ -1,13 +1,14 @@
 import Bugsnag from 'bugsnag-js';
-import project from './../../package.json';
+
+const project = require('../../../package.json'); // tslint:disable-line
 
 // Bugsnag configuration
 Bugsnag.apiKey = project.bugsnag.apiKey;
 Bugsnag.endpoint = 'https://notify-bugsnag.contactlab.it/js';
-Bugsnag.user = null;
+Bugsnag.user = {};
 Bugsnag.notifyReleaseStages = ['development'];
 Bugsnag.releaseStage = 'development';
-Bugsnag.context = null;
+Bugsnag.context = '';
 Bugsnag.disableAutoBreadcrumbsConsole();
 
 // Export instance reference of Bugsnag
