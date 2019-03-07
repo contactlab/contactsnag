@@ -1,5 +1,5 @@
 import Bugsnag from 'bugsnag-js';
-import project from './../../package.json';
+import project from '../../../package.json';
 
 // Bugsnag configuration
 Bugsnag.apiKey = project.bugsnag.apiKey;

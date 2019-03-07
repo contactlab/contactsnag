@@ -1,12 +1,10 @@
 #!/usr/bin/env node
 
-/*eslint no-console: 0*/
-
 const path = require('path');
 const root = require('find-root');
 const bugsnagSourcemaps = require('bugsnag-sourcemaps');
 
-const ROOT = root(path.join(__dirname, '../..'));
+const ROOT = root(path.join(__dirname, '../../..'));
 const DEFAULT_BUNDLE = 'app/bundle.js';
 
 const pkg = require(path.join(ROOT, 'package.json'));

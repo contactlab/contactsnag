@@ -18,7 +18,8 @@
     "npm": ">= 6.0"
   },
   "files": [
-    "lib"
+    "lib",
+    "typings"
   ],
   "bin": {
     "contactsnag": "./lib/bin/upload.js"
@@ -30,11 +31,12 @@
     "wrapper"
   ],
   "scripts": {
-    "setup": "node ./scripts/prepare-test",
     "check": "tsc --noEmit",
     "lint": "tslint -p .",
     "jest": "jest --ci --coverage --config jest.config.json",
-    "pretest": "npm run check && npm run lint",
+    "setup": "ts-node ./scripts/prepare-test.ts",
+    "pre_test": "npm run check && npm run lint",
+    "pretest": "tsc -p ./tsconfig.build.json && npm run setup",
     "test": "npm run jest",
     "prebuild": "rimraf ./lib",
     "build": "tsc -p ./tsconfig.build.json && tsc -p ./tsconfig.build-es6.json",
