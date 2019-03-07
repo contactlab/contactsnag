@@ -14,8 +14,8 @@
   },
   "homepage": "https://github.com/contactlab/contactsnag#readme",
   "engines": {
-    "node": ">= 8.10",
-    "npm": ">= 6.0"
+    "node": ">=8.10 <11.0",
+    "npm": ">=6.0"
   },
   "files": [
     "lib",
