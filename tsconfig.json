@@ -1,16 +1,11 @@
 {
   "compilerOptions": {
-    // --- To be removed
-    "esModuleInterop": true,
-    "allowJs": true,
-    // ---
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "lib": ["esnext"],
-    // --- To be re-enabled
-    "declaration": false,
-    // ---
+    "declaration": true,
     "sourceMap": true,
     "outDir": "./lib",
     "importHelpers": true,
