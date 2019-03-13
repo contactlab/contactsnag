@@ -1,34 +1,65 @@
-#!/usr/bin/env node
-
-/*tslint:disable no-console*/
-
-import root from 'find-root';
-import * as path from 'path';
-
 import {BugsnagSourceMapsConfig, upload} from 'bugsnag-sourcemaps';
+import {Either, either, toError} from 'fp-ts/lib/Either';
+import {Task} from 'fp-ts/lib/Task';
+import {TaskEither, fromEither, tryCatch} from 'fp-ts/lib/TaskEither';
+import {compose} from 'fp-ts/lib/function';
+import {failure} from 'io-ts/lib/PathReporter';
+import readPkgUp, {Package as RPUPackage} from 'read-pkg-up';
+import {Package} from './decoders';
+import {Program} from './program';
+import {WithTrace, withTrace} from './trace';
 
-const ROOT = root(path.join(__dirname, '../../..'));
-const DEFAULT_BUNDLE = 'app/bundle.js';
+// --- Constants
+const UPLOAD_SERVER = 'https://upload-bugsnag.contactlab.it/';
 
-const pkg = require(path.join(ROOT, 'package.json')); // tslint:disable-line
-const {version, bugsnag} = pkg;
-const {apiKey, minifiedUrl, sourceMap, minifiedFile} = bugsnag;
+// --- Helpers
+const decodePkg = (json: RPUPackage): Either<Error, Package> =>
+  Package.decode(json).mapLeft(errors => new Error(failure(errors).join('\n')));
 
-const OPTIONS: BugsnagSourceMapsConfig = {
-  apiKey,
-  minifiedUrl,
-  endpoint: 'https://upload-bugsnag.contactlab.it/',
+const readPkgUpTE = new TaskEither(
+  new Task(() =>
+    readPkgUp({cwd: process.cwd()}).then(({pkg}) =>
+      either.of<Error, RPUPackage>(pkg)
+    )
+  )
+);
+
+const readPkg = readPkgUpTE.chain(data => fromEither(decodePkg(data)));
+
+const toOptions = ({version, bugsnag}: Package): BugsnagSourceMapsConfig => ({
+  endpoint: UPLOAD_SERVER,
+  apiKey: bugsnag.apiKey,
   appVersion: version,
-  sourceMap: sourceMap || path.join(ROOT, `${DEFAULT_BUNDLE}.map`),
-  minifiedFile: minifiedFile || path.join(ROOT, DEFAULT_BUNDLE),
+  sourceMap: bugsnag.sourceMap,
+  minifiedUrl: bugsnag.minifiedUrl,
+  minifiedFile: bugsnag.minifiedFile,
   overwrite: true
+});
+
+// --- Capabilities
+export interface Capabilities {
+  getPkgInfo: TaskEither<Error, Package>;
+  uploadSourceMap: (opts: BugsnagSourceMapsConfig) => TaskEither<Error, void>;
+  withTrace: WithTrace;
+}
+
+export const capabilities: Capabilities = {
+  getPkgInfo: readPkg,
+  uploadSourceMap: opts => tryCatch(() => upload(opts), toError),
+  withTrace
 };
 
-// --- Run command
-console.log(`BUGSNAG: uploading sourcemap for v${version}`);
-
-upload(OPTIONS)
-  .then(() => console.log('BUGSNAG: Sourcemap was uploaded successfully.'))
-  .catch(err =>
-    console.error(`BUGSNAG: Something went wrong - ${err.message}`)
-  );
+// --- Program
+export const program = (c: Capabilities): Program =>
+  c.getPkgInfo
+    .chain(data =>
+      c.withTrace(
+        data,
+        ({version}) => `BUGSNAG: uploading sourcemap for v${version}`,
+        compose(
+          c.uploadSourceMap,
+          toOptions
+        )
+      )
+    )
+    .map(() => 'BUGSNAG: Sourcemap was uploaded successfully.');
