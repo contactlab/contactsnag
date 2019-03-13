@@ -75,7 +75,6 @@ Add a `bugsnag` node in the root `package.json` of your application to set few p
 
 ```json
 {
-  ...
   "bugsnag": {
     "apiKey": "my-project-api-key",
     "minifiedUrl": "https://my.application.com/bundle.js",
