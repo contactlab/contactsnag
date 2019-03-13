@@ -3,7 +3,7 @@
 import chalk from 'chalk';
 import {TaskEither} from 'fp-ts/lib/TaskEither';
 
-export type Program = TaskEither<Error, string>;
+export type Program<A = string> = TaskEither<Error, A>;
 
 const errorTxt = chalk.bold.redBright;
 const successTxt = chalk.bold.greenBright;
