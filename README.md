@@ -7,7 +7,7 @@
 This package embeds 2 main functionalities:
 
 - **Javascript wrapper for Bugsnag**: importing `ContactSnag` in your frontend code gives you access to a pre-configured Bugsnag browser SDK object wrapper that exposes the same APIs of the original SDK.
-- **CLI sourcemap uploader**: calling `contactsnag` from the command line it will upload your bundle's sourcemap to the Bugsnag dashboard (using the Bugsnag API endpoint) for better error debugging.
+- **CLI sourcemap uploader**: calling `contactsnag upload` from the command line it will upload your bundle's sourcemap to the Bugsnag dashboard (using the Bugsnag API endpoint) for better error debugging.
 
 It is fully written in [Typescript](https://www.typescriptlang.org/docs/home.html) (version >= 3.3.3) and extensively uses [`fp-ts` library](https://github.com/gcanti/fp-ts).
 
@@ -78,17 +78,39 @@ Add a `bugsnag` node in the root `package.json` of your application to set few p
   ...
   "bugsnag": {
     "apiKey": "my-project-api-key",
-    "minifiedUrl": "https://my.application.com/bundle.js"
-    "sourceMap": "./path/to/your/bundle.js.map",
-    "minifiedFile": "./path/to/your/bundle.js"
+    "minifiedUrl": "https://my.application.com/bundle.js",
+    "sourceMap": "./local/path/to/your/bundle.js.map",
+    "minifiedFile": "./local/path/to/your/bundle.js"
   }
 }
 ```
 
 - **apiKey**: is used in order to authenticate calls to the upload API.
 - **minifiedUrl**: [docs here](https://docs.bugsnag.com/api/js-source-map-upload/#uploading-source-maps).
-- **[sourceMap]**: Path to your source map file. Default: `./app/bundle.js.map`.
-- **[minifiedFile]**: Path to your minified bundle file. Default: `./app/bundle.js`.
+- **sourceMap**: Local path to your source map file.
+- **minifiedFile**: Local path to your minified bundle file.
+
+**Note:** all the properties are mandatory
+
+And then you run the uploader from command line:
+
+```sh
+$ npx contactsnag upload
+
+# --- or ---
+
+$ yarn contactsnag upload
+```
+
+or through a script in `package.json` file:
+
+```json
+{
+  "scripts": {
+    "csnag:upload": "contactsnag upload"
+  }
+}
+```
 
 ## JS usage example
 
