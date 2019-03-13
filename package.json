@@ -46,18 +46,18 @@
   },
   "homepage": "https://github.com/contactlab/contactsnag#readme",
   "dependencies": {
-    "bugsnag-js": "3.3.1",
-    "bugsnag-sourcemaps": "1.0.1",
+    "bugsnag-js": "4.7.3",
+    "bugsnag-sourcemaps": "1.1.0",
     "find-root": "1.1.0"
   },
   "devDependencies": {
-    "@contactlab/babelrc": "1.0.0",
-    "ava": "0.23.0",
-    "eslint": "4.10.0",
-    "eslint-config-contactlab": "1.0.0",
+    "@contactlab/babelrc": "4.1.0",
+    "ava": "1.3.1",
+    "eslint": "5.15.1",
+    "eslint-config-contactlab": "2.0.2",
     "mock-browser": "0.92.14",
-    "proxyquire": "1.8.0",
-    "sinon": "4.0.2"
+    "proxyquire": "2.1.0",
+    "sinon": "7.2.7"
   },
   "ava": {
     "files": [
