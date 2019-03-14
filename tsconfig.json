@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "lib": ["esnext"],
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "./lib",
+    "importHelpers": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "types": ["node", "jest"],
+    "typeRoots": ["./typings", "./node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+      "*": ["*", "typings/*"]
+    }
+  },
+  "include": ["./src/**/*", "./test/**/*", "./typings/**/*"]
+}

@@ -5,5 +5,4 @@ coverage
 .nyc_output
 *.log*
 
-dist.js
-bugsnag-*
+/lib
