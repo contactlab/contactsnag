@@ -1,6 +1,6 @@
 # contactsnag
 
-[![Build Status](https://travis-ci.org/contactlab/contactsnag.svg?branch=master)](https://travis-ci.org/contactlab/contactsnag)
+[![Build Status](https://travis-ci.org/contactlab/contactsnag.svg?branch=master)](https://travis-ci.org/contactlab/contactsnag) [![Greenkeeper badge](https://badges.greenkeeper.io/contactlab/contactsnag.svg)](https://greenkeeper.io/)
 
 > [Bugsnag](https://docs.bugsnag.com/platforms/javascript/) utilities for Contactlab's applications.
 
