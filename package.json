@@ -37,9 +37,10 @@
     "pretest": "npm run check && npm run lint",
     "test": "npm run jest",
     "prebuild": "rimraf ./lib",
-    "build": "npm run build:std && npm run build:es6",
+    "build": "npm run build:std && npm run build:es6 && npm run build:bin",
     "build:std": "tsc -p ./tsconfig.build.json",
     "build:es6": "tsc -p ./tsconfig.build-es6.json",
+    "build:bin": "tsc -p ./tsconfig.build-bin.json",
     "prepublishOnly": "npm test && npm run build"
   },
   "dependencies": {

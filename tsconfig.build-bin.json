@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "outDir": "./lib/bin",
+    "declaration": false,
+    "sourceMap": false
+  },
+  "include": ["./src/bin/**/*"]
+}
