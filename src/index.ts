@@ -10,9 +10,9 @@ type KnownKeys<T> = {
   ? U
   : never;
 
-type BugsnagConfig = Pick<Bugsnag.IConfig, KnownKeys<Bugsnag.IConfig>>;
+export type BugsnagConfig = Pick<Bugsnag.IConfig, KnownKeys<Bugsnag.IConfig>>;
 
-type ContactSnagConfig = Omit<BugsnagConfig, 'endpoint' | 'endpoints'> & {
+export type ContactSnagConfig = Omit<BugsnagConfig, 'endpoint' | 'endpoints'> & {
   notifyReleaseStages: NonNullable<BugsnagConfig['notifyReleaseStages']>;
   releaseStage: NonNullable<BugsnagConfig['releaseStage']>;
   appVersion: NonNullable<BugsnagConfig['appVersion']>;
