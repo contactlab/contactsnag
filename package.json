@@ -44,7 +44,7 @@
     "prepublishOnly": "npm test && npm run build"
   },
   "dependencies": {
-    "@bugsnag/js": "6.2.0",
+    "@bugsnag/js": "6.3.0",
     "bugsnag-sourcemaps": "1.2.1",
     "chalk": "2.4.2",
     "fp-ts": "^1.14.3",
