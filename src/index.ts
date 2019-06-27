@@ -1,18 +1,21 @@
 import {Bugsnag, default as bugsnag} from '@bugsnag/js';
 import {IO, io} from 'fp-ts/lib/IO';
-import {IOEither, left, right, tryCatch2v} from 'fp-ts/lib/IOEither';
+import {IOEither, leftIO, rightIO, tryCatch2v} from 'fp-ts/lib/IOEither';
 
 type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 
 type KnownKeys<T> = {
-  [K in keyof T]: string extends K ? never : number extends K ? never : K
+  [K in keyof T]: string extends K ? never : number extends K ? never : K;
 } extends {[_ in keyof T]: infer U}
   ? U
   : never;
 
 export type BugsnagConfig = Pick<Bugsnag.IConfig, KnownKeys<Bugsnag.IConfig>>;
 
-export type ContactSnagConfig = Omit<BugsnagConfig, 'endpoint' | 'endpoints'> & {
+export type ContactSnagConfig = Omit<
+  BugsnagConfig,
+  'endpoint' | 'endpoints'
+> & {
   notifyReleaseStages: NonNullable<BugsnagConfig['notifyReleaseStages']>;
   releaseStage: NonNullable<BugsnagConfig['releaseStage']>;
   appVersion: NonNullable<BugsnagConfig['appVersion']>;
@@ -37,8 +40,8 @@ export type ContactSnagClient = IOEither<Error, Bugsnag.Client>;
 
 export function ContactSnag(conf: ContactSnagConfig): ContactSnagClient {
   return isValid(conf)
-    ? right(new IO(() => bugsnag({...DEFAULT_CONFIG, ...conf})))
-    : left(io.of(new Error(ERRMSG)));
+    ? rightIO(new IO(() => bugsnag({...DEFAULT_CONFIG, ...conf})))
+    : leftIO(io.of(new Error(ERRMSG)));
 }
 
 export function setOptions(
@@ -47,13 +50,13 @@ export function setOptions(
 ): IOEither<Error, void> {
   return isValid(opts)
     ? client.chain(c =>
-        right(
+        rightIO(
           new IO(() => {
             c.setOptions(opts);
           })
         )
       )
-    : left(io.of(new Error(ERRMSG)));
+    : leftIO(io.of(new Error(ERRMSG)));
 }
 
 export function notify(
