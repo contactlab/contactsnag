@@ -1,10 +1,10 @@
 import chalk from 'chalk';
 import {info} from 'fp-ts/lib/Console';
-import {TaskEither, fromIO} from 'fp-ts/lib/TaskEither';
+import {TaskEither, rightIO} from 'fp-ts/lib/TaskEither';
 
 const infoTxt = chalk.cyanBright;
 const trace = (msg: string) => info(infoTxt(`\n> ${msg}`));
-const traceTE = <L>(msg: string): TaskEither<L, void> => fromIO(trace(msg));
+const traceTE = <L>(msg: string): TaskEither<L, void> => rightIO(trace(msg));
 
 export type WithTrace = typeof withTrace;
 

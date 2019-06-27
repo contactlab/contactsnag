@@ -16,7 +16,7 @@ const isAvailableApi = (x: string): x is AvailableCommand =>
   COMMANDS.hasOwnProperty(x);
 
 const getApi = (args: Args): Option<AvailableCommand> =>
-  findFirst(args, isAvailableApi);
+  findFirst(isAvailableApi)(args);
 
 const commandsList = (): string =>
   Object.keys(COMMANDS)

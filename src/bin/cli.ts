@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import {task} from 'fp-ts/lib/Task';
-import {left} from 'fp-ts/lib/TaskEither';
+import {leftTask} from 'fp-ts/lib/TaskEither';
 import * as gateway from './gateway';
 import {Program, main} from './program';
 import * as upload from './upload';
@@ -13,7 +13,7 @@ const program = (): Program =>
       case 'upload':
         return upload.program(upload.capabilities);
       case 'report':
-        return left(task.of(new Error('not yet implemented')));
+        return leftTask(task.of(new Error('not yet implemented')));
     }
   });
 
