@@ -47,7 +47,7 @@
     "@bugsnag/js": "6.3.2",
     "bugsnag-sourcemaps": "1.2.1",
     "chalk": "2.4.2",
-    "fp-ts": "^1.19.0",
+    "fp-ts": "^2.0.1",
     "io-ts": "^1.8.5",
     "read-pkg-up": "5.0.0",
     "tslib": "1.10.0"
