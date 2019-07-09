@@ -2,7 +2,7 @@ import {BugsnagSourceMapsConfig, upload} from 'bugsnag-sourcemaps';
 import {Either, either, toError} from 'fp-ts/lib/Either';
 import {Task} from 'fp-ts/lib/Task';
 import {TaskEither, fromEither, tryCatch} from 'fp-ts/lib/TaskEither';
-import {compose} from 'fp-ts/lib/function';
+import {flow} from 'fp-ts/lib/function';
 import {failure} from 'io-ts/lib/PathReporter';
 import readPkgUp, {Package as RPUPackage} from 'read-pkg-up';
 import {Package} from './decoders';
@@ -56,9 +56,9 @@ export const program = (c: Capabilities): Program =>
       c.withTrace(
         data,
         ({version}) => `BUGSNAG: uploading sourcemap for v${version}`,
-        compose(
-          c.uploadSourceMap,
-          toOptions
+        flow(
+          toOptions,
+          c.uploadSourceMap
         )
       )
     )

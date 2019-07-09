@@ -2,7 +2,7 @@ jest.mock('bugsnag-sourcemaps');
 
 import bugsnagSourcemaps from 'bugsnag-sourcemaps';
 import {task} from 'fp-ts/lib/Task';
-import {left, taskEither} from 'fp-ts/lib/TaskEither';
+import {leftTask, taskEither} from 'fp-ts/lib/TaskEither';
 import {testFailure, testSuccess} from './_helpers';
 
 import {Capabilities, capabilities, program} from '../src/bin/upload';
@@ -56,7 +56,7 @@ test('program() should upload source maps with options taken from package json',
 test('program() should fail if package.json data are wrong', () => {
   const cap: Capabilities = {
     ...testCap,
-    getPkgInfo: left(task.of(new Error('fail')))
+    getPkgInfo: leftTask(task.of(new Error('fail')))
   };
   const spy = jest.spyOn(cap, 'uploadSourceMap');
 
@@ -70,7 +70,7 @@ test('program() should fail if package.json data are wrong', () => {
 test('program() should fail if an error is thrown during upload', () => {
   const cap: Capabilities = {
     ...testCap,
-    uploadSourceMap: _ => left(task.of(new Error('fail')))
+    uploadSourceMap: _ => leftTask(task.of(new Error('fail')))
   };
   const spy = jest.spyOn(cap, 'uploadSourceMap');
 
