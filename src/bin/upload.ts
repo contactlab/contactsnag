@@ -1,10 +1,10 @@
 import {BugsnagSourceMapsConfig, upload} from 'bugsnag-sourcemaps';
-import {Either, either, toError} from 'fp-ts/lib/Either';
+import {Either, either, left, toError} from 'fp-ts/lib/Either';
 import {Task} from 'fp-ts/lib/Task';
 import {TaskEither, fromEither, tryCatch} from 'fp-ts/lib/TaskEither';
 import {flow} from 'fp-ts/lib/function';
 import {failure} from 'io-ts/lib/PathReporter';
-import readPkgUp, {Package as RPUPackage} from 'read-pkg-up';
+import readPkgUp, {NormalizedReadResult as RPUPackage} from 'read-pkg-up';
 import {Package} from './decoders';
 import {Program} from './program';
 import {WithTrace, withTrace} from './trace';
@@ -13,13 +13,15 @@ import {WithTrace, withTrace} from './trace';
 const UPLOAD_SERVER = 'https://upload-bugsnag.contactlab.it/';
 
 // --- Helpers
-const decodePkg = (json: RPUPackage): Either<Error, Package> =>
+const decodePkg = (json: unknown): Either<Error, Package> =>
   Package.decode(json).mapLeft(errors => new Error(failure(errors).join('\n')));
 
-const readPkgUpTE = new TaskEither(
+const readPkgUpTE = new TaskEither<Error, RPUPackage['package']>(
   new Task(() =>
-    readPkgUp({cwd: process.cwd()}).then(({pkg}) =>
-      either.of<Error, RPUPackage>(pkg)
+    readPkgUp({cwd: process.cwd()}).then(result =>
+      typeof result === 'undefined'
+        ? left(new Error('Cannot find a package.json'))
+        : either.of(result.package)
     )
   )
 );

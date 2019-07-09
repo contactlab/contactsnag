@@ -107,7 +107,7 @@ test('capabilities.getPkgInfo should fail if it cannot find a package.json', () 
   // ---
 
   return testFailure(capabilities.getPkgInfo, err => {
-    expect(err.message).toBe('Invalid value undefined supplied to : Package');
+    expect(err.message).toBe('Cannot find a package.json');
   });
 });
 
