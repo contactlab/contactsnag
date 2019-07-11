@@ -1,4 +1,4 @@
-import {/*testFailure,*/ testSuccess} from './_helpers';
+import {result} from './_helpers';
 
 import chalk from 'chalk';
 import {TaskEither, taskEither} from 'fp-ts/lib/TaskEither';
@@ -9,8 +9,9 @@ test('withTrace() should apply an effectful operation with provided data logging
   const msg = (a: string): string => `MSG: ${a}`;
   const effect = (a: string): TaskEither<Error, string> => taskEither.of(a);
 
-  return testSuccess(withTrace('TEST', msg, effect), data => {
-    expect(data).toBe('TEST');
+  return result(withTrace('TEST', msg, effect), data => {
+    expect(data.isRight()).toBe(true);
+    expect(data.value).toBe('TEST');
     expect(spy).toBeCalledTimes(1);
     expect(spy).toBeCalledWith(chalk.cyanBright('\n> MSG: TEST'));
   });
