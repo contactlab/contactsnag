@@ -3,8 +3,8 @@ jest.mock('bugsnag-sourcemaps');
 import bugsnagSourcemaps from 'bugsnag-sourcemaps';
 import {task} from 'fp-ts/lib/Task';
 import {leftTask, taskEither} from 'fp-ts/lib/TaskEither';
-import {Capabilities, capabilities, upload} from '../src/bin/upload';
-import {result} from './_helpers';
+import {Capabilities, capabilities, upload} from '../../src/bin/upload';
+import {result} from '../_helpers';
 
 const bugsnagSourcemapsM: jest.Mocked<
   typeof bugsnagSourcemaps

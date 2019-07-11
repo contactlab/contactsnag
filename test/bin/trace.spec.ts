@@ -1,6 +1,6 @@
 import chalk from 'chalk';
-import {trace} from '../src/bin/trace';
-import {result} from './_helpers';
+import {trace} from '../../src/bin/trace';
+import {result} from '../_helpers';
 
 test('trace() should log a message to the console and return it', () => {
   const spy = jest.spyOn(console, 'info').mockImplementation(() => undefined);

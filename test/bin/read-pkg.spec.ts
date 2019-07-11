@@ -1,8 +1,8 @@
 jest.mock('read-pkg-up');
 
 import readPkgUp from 'read-pkg-up';
-import {readPkg} from '../src/bin/read-pkg';
-import {result} from './_helpers';
+import {readPkg} from '../../src/bin/read-pkg';
+import {result} from '../_helpers';
 
 const readPkgUpM: jest.Mock = readPkgUp as any;
 

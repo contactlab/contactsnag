@@ -1,5 +1,5 @@
-import {gateway} from '../src/bin/gateway';
-import {result} from './_helpers';
+import {gateway} from '../../src/bin/gateway';
+import {result} from '../_helpers';
 
 test('program() should return the first command from arguments', () => {
   const command1 = gateway(['upload', 'report']);
