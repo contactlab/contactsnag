@@ -8,7 +8,7 @@ export type Program<A = string> = TaskEither<Error, A>;
 const errorTxt = chalk.bold.redBright;
 const successTxt = chalk.bold.greenBright;
 
-export const main = (program: Program): Promise<void> =>
+export const run = (program: Program): Promise<void> =>
   program.run().then(result =>
     result.fold(
       err => {
