@@ -1,15 +1,10 @@
 import chalk from 'chalk';
 import {info} from 'fp-ts/lib/Console';
+import {IO} from 'fp-ts/lib/IO';
 import {TaskEither, rightIO} from 'fp-ts/lib/TaskEither';
 
-const infoTxt = chalk.cyanBright;
-const trace = (msg: string) => info(infoTxt(`\n> ${msg}`));
-const traceTE = <L>(msg: string): TaskEither<L, void> => rightIO(trace(msg));
+const log = <A>(msg: A): IO<void> => info(chalk.cyanBright(`\n> ${msg}`));
 
-export type WithTrace = typeof withTrace;
-
-export const withTrace = <L, A, O = A>(
-  a: A,
-  msg: (a: A) => string,
-  effect: (a: A) => TaskEither<L, O>
-): TaskEither<L, O> => traceTE<L>(msg(a)).applySecond(effect(a));
+export type Trace = typeof trace;
+export const trace = <A>(msg: A): TaskEither<Error, A> =>
+  rightIO(log(msg).map(() => msg));

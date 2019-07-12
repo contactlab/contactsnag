@@ -1,35 +1,18 @@
-import {BugsnagSourceMapsConfig, upload} from 'bugsnag-sourcemaps';
-import {Either, either, left, toError} from 'fp-ts/lib/Either';
-import {Task} from 'fp-ts/lib/Task';
-import {TaskEither, fromEither, tryCatch} from 'fp-ts/lib/TaskEither';
-import {flow} from 'fp-ts/lib/function';
-import {failure} from 'io-ts/lib/PathReporter';
-import readPkgUp, {NormalizedReadResult as RPUPackage} from 'read-pkg-up';
+import {
+  BugsnagSourceMapsConfig,
+  upload as uploadSourceMap
+} from 'bugsnag-sourcemaps';
+import {sequenceT} from 'fp-ts/lib/Apply';
+import {toError} from 'fp-ts/lib/Either';
+import {TaskEither, taskEither, tryCatch} from 'fp-ts/lib/TaskEither';
 import {Package} from './decoders';
 import {Program} from './program';
-import {WithTrace, withTrace} from './trace';
+import {ReadPkg, readPkg} from './read-pkg';
+import {Trace, trace} from './trace';
 
-// --- Constants
-const UPLOAD_SERVER = 'https://upload-bugsnag.contactlab.it/';
-
-// --- Helpers
-const decodePkg = (json: unknown): Either<Error, Package> =>
-  Package.decode(json).mapLeft(errors => new Error(failure(errors).join('\n')));
-
-const readPkgUpTE = new TaskEither<Error, RPUPackage['package']>(
-  new Task(() =>
-    readPkgUp({cwd: process.cwd()}).then(result =>
-      typeof result === 'undefined'
-        ? left(new Error('Cannot find a package.json'))
-        : either.of(result.package)
-    )
-  )
-);
-
-const readPkg = readPkgUpTE.chain(data => fromEither(decodePkg(data)));
+const sequenceTE = sequenceT(taskEither);
 
 const toOptions = ({version, bugsnag}: Package): BugsnagSourceMapsConfig => ({
-  endpoint: UPLOAD_SERVER,
   apiKey: bugsnag.apiKey,
   appVersion: version,
   sourceMap: bugsnag.sourceMap,
@@ -40,28 +23,24 @@ const toOptions = ({version, bugsnag}: Package): BugsnagSourceMapsConfig => ({
 
 // --- Capabilities
 export interface Capabilities {
-  getPkgInfo: TaskEither<Error, Package>;
+  readPkg: ReadPkg;
+  trace: Trace;
   uploadSourceMap: (opts: BugsnagSourceMapsConfig) => TaskEither<Error, void>;
-  withTrace: WithTrace;
 }
 
 export const capabilities: Capabilities = {
-  getPkgInfo: readPkg,
-  uploadSourceMap: opts => tryCatch(() => upload(opts), toError),
-  withTrace
+  readPkg,
+  trace,
+  uploadSourceMap: opts => tryCatch(() => uploadSourceMap(opts), toError)
 };
 
 // --- Program
-export const program = (c: Capabilities): Program =>
-  c.getPkgInfo
+export const upload = (c: Capabilities): Program =>
+  c.readPkg
     .chain(data =>
-      c.withTrace(
-        data,
-        ({version}) => `BUGSNAG: uploading sourcemap for v${version}`,
-        flow(
-          toOptions,
-          c.uploadSourceMap
-        )
+      sequenceTE(
+        c.trace(`BUGSNAG: uploading sourcemap for v${data.version}`),
+        c.uploadSourceMap(toOptions(data))
       )
     )
     .map(() => 'BUGSNAG: Sourcemap was uploaded successfully.');

@@ -23,7 +23,7 @@ const commandsList = (): string =>
     .sort((a, b) => a.localeCompare(b))
     .join(' | ');
 
-export const program = (args: Args): Program<AvailableCommand> =>
+export const gateway = (args: Args): Program<AvailableCommand> =>
   fromEither(
     fromOption(new Error(`Use one of available commands: ${commandsList()}`))(
       getApi(args)
