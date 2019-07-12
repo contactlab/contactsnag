@@ -12,13 +12,14 @@ import {Trace, trace} from './trace';
 
 const sequenceTE = sequenceT(taskEither);
 
-const toOptions = ({version, bugsnag}: Package): BugsnagSourceMapsConfig => ({
-  apiKey: bugsnag.apiKey,
-  appVersion: version,
-  sourceMap: bugsnag.sourceMap,
-  minifiedUrl: bugsnag.minifiedUrl,
-  minifiedFile: bugsnag.minifiedFile,
+const DEFAULT_OPTS: Omit<BugsnagSourceMapsConfig, 'apiKey'> = {
   overwrite: true
+};
+
+const toOptions = ({version, bugsnag}: Package): BugsnagSourceMapsConfig => ({
+  ...DEFAULT_OPTS,
+  ...bugsnag.upload,
+  appVersion: version
 });
 
 // --- Capabilities

@@ -6,7 +6,8 @@ import readPkgUp, {NormalizedReadResult as RPUPackage} from 'read-pkg-up';
 import {Package} from './decoders';
 
 const decodePkg = (json: unknown): Either<Error, Package> =>
-  Package.decode(json).mapLeft(errors => new Error(failure(errors).join('\n')));
+  // only takes the first failure in order to not mess error messages
+  Package.decode(json).mapLeft(errors => new Error(failure(errors)[0]));
 
 const readPkgUpTE = new TaskEither<Error, RPUPackage['package']>(
   new Task(() =>

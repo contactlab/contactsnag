@@ -71,7 +71,7 @@ This is lazy and an error is raised if a wrong options object is passed.
 
 ## Uploader
 
-Add a `bugsnag` node in the root `package.json` of your application to set few parameters:
+Add a `bugsnag/upload` node in the root `package.json` of your application to set few parameters:
 
 ```json
 {
@@ -84,12 +84,7 @@ Add a `bugsnag` node in the root `package.json` of your application to set few p
 }
 ```
 
-- **apiKey**: is used in order to authenticate calls to the upload API.
-- **minifiedUrl**: [docs here](https://docs.bugsnag.com/api/js-source-map-upload/#uploading-source-maps).
-- **sourceMap**: Local path to your source map file.
-- **minifiedFile**: Local path to your minified bundle file.
-
-**Note:** all the properties are mandatory
+You can set any [`bugsnag-sourcemap` option](https://docs.bugsnag.com/build-integrations/js/#source-map-uploader), **apiKey** is the only required.
 
 And then you run the uploader from command line:
 
