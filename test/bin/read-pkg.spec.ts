@@ -12,10 +12,12 @@ test('readPkg should retrieve info from package.json', () => {
       name: 'test-pkg',
       version: '0.1.0',
       bugsnag: {
-        apiKey: 'TEST-API-KEY',
-        minifiedUrl: 'https://my.application.com/bundle.js',
-        sourceMap: './path/to/bundle.js.map',
-        minifiedFile: './path/to/bundle.js'
+        upload: {
+          apiKey: 'TEST-API-KEY',
+          minifiedUrl: 'https://my.application.com/bundle.js',
+          sourceMap: './path/to/bundle.js.map',
+          minifiedFile: './path/to/bundle.js'
+        }
       }
     }
   });
@@ -24,10 +26,12 @@ test('readPkg should retrieve info from package.json', () => {
     name: 'test-pkg',
     version: '0.1.0',
     bugsnag: {
-      apiKey: 'TEST-API-KEY',
-      minifiedUrl: 'https://my.application.com/bundle.js',
-      sourceMap: './path/to/bundle.js.map',
-      minifiedFile: './path/to/bundle.js'
+      upload: {
+        apiKey: 'TEST-API-KEY',
+        minifiedUrl: 'https://my.application.com/bundle.js',
+        sourceMap: './path/to/bundle.js.map',
+        minifiedFile: './path/to/bundle.js'
+      }
     }
   });
 });
@@ -41,11 +45,11 @@ test('readPkg should fail if it cannot find a package.json', () => {
 });
 
 test('readPkg should fail if package.json has not valid data', () => {
-  readPkgUpM.mockResolvedValue({package: {version: '1.0.0'}});
+  readPkgUpM.mockResolvedValue({package: {version: '1.0.0', bugsnag: {}}});
 
   return expect(result(readPkg)).rejects.toEqual(
     new Error(
-      'Invalid value undefined supplied to : Package/bugsnag: Bugsnag config in package.json'
+      'Invalid value undefined supplied to : Package/bugsnag: bugsnag/upload: upload/0: { apiKey: string }'
     )
   );
 });

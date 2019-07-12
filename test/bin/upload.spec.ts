@@ -78,10 +78,13 @@ const testCap: Capabilities = {
   readPkg: taskEither.of({
     version: '0.1.0',
     bugsnag: {
-      apiKey: 'TEST-API-KEY',
-      minifiedUrl: 'https://my.application.com/bundle.js',
-      sourceMap: './path/to/bundle.js.map',
-      minifiedFile: './path/to/bundle.js'
+      upload: {
+        apiKey: 'TEST-API-KEY',
+        minifiedUrl: 'https://my.application.com/bundle.js',
+        sourceMap: './path/to/bundle.js.map',
+        minifiedFile: './path/to/bundle.js',
+        directory: './some/path'
+      }
     }
   }),
   uploadSourceMap: jest.fn(_ => taskEither.of(undefined)),
@@ -94,5 +97,6 @@ const OPTS = {
   sourceMap: './path/to/bundle.js.map',
   minifiedUrl: 'https://my.application.com/bundle.js',
   minifiedFile: './path/to/bundle.js',
+  directory: './some/path',
   overwrite: true
 };
