@@ -21,9 +21,7 @@
     "lib",
     "typings"
   ],
-  "bin": {
-    "contactsnag": "./lib/bin/cli.js"
-  },
+  "bin": "./lib/bin/cli.js",
   "keywords": [
     "contactlab",
     "clab",
@@ -34,8 +32,10 @@
     "check": "tsc --noEmit",
     "lint": "tslint -p .",
     "jest": "jest --ci --coverage",
+    "pree2e": "npm run build:bin",
+    "e2e": "ts-node test/e2e/",
     "pretest": "npm run check && npm run lint",
-    "test": "npm run jest",
+    "test": "npm run jest && npm run e2e",
     "prebuild": "rimraf ./lib",
     "build": "npm run build:std && npm run build:es6 && npm run build:bin",
     "build:std": "tsc -p ./tsconfig.build.json",
@@ -58,6 +58,7 @@
     "@types/node": "12.6.1",
     "husky": "3.0.0",
     "jest": "24.8.0",
+    "mitm": "1.7.0",
     "prettier": "1.18.2",
     "pretty-quick": "1.11.1",
     "rimraf": "2.6.3",

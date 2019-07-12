@@ -4,7 +4,7 @@
   "bugsnag": {
     "apiKey": "TEST-API-KEY",
     "minifiedUrl": "https://my.application.com/bundle.js",
-    "sourceMap": "./path/to/bundle.js.map",
-    "minifiedFile": "./path/to/bundle.js"
+    "sourceMap": "bundle.js.map",
+    "minifiedFile": "bundle.js"
   }
 }

@@ -32,15 +32,15 @@ The package exposes a couple of function.
 Receives a configuration object and returns a client:
 
 ```ts
-declare function ContactSnag(conf: ContactSnagConfig): ContactSnagClient;
+declare function ContactSnag(conf: Config): Client;
 ```
 
-[`ContactSnagConfig`](src/index.ts) is a kind of subset of [Bugsnag's configuration options](https://docs.bugsnag.com/platforms/javascript/configuration-options/) which some differences:
+[`Config`](src/index.ts) is a kind of subset of [Bugsnag's configuration options](https://docs.bugsnag.com/platforms/javascript/configuration-options/) which some differences:
 
 - `appVersion`, `notifyReleaseStages`, and `releaseStage` are required properties;
 - `endpoints` and `consoleBreadcrumbsEnabled` cannot be set/overwritten.
 
-[`ContactSnagClient`](src/index.ts) is a `IOEither<Error, Bugsnag.Client>` which guarantees a lazy initialization and that an error is raised if a wrong configuration is passed.
+[`Client`](src/index.ts) is a `IOEither<Error, Bugsnag.Client>` which guarantees a lazy initialization and that an error is raised if a wrong configuration is passed.
 
 ### `notify`
 
@@ -48,7 +48,7 @@ Receives a client, a notifiable error and an optional configuration object and r
 
 ```ts
 declare function notify(
-  client: ContactSnagClient,
+  client: Client,
   error: Bugsnag.NotifiableError,
   opts?: Bugsnag.INotifyOpts
 ): IOEither<Error, void>;
@@ -62,7 +62,7 @@ Receives a client and a configuration object and return a `void` effectful opera
 
 ```ts
 declare function setOptions(
-  client: ContactSnagClient,
+  client: Client,
   opts: Bugsnag.IConfig
 ): IOEither<Error, void>;
 ```
@@ -163,6 +163,20 @@ setTimeout(() => {
     user: {id: 1}
   }).run();
 }, 1000);
+```
+
+## Contributing
+
+Opening issues is always welcome.
+
+Then, fork the repository or create a new branch, write your code and send a pull request.
+
+This project uses [Prettier](https://prettier.io/) (automatically applied as pre-commit hook), [TSLint](https://palantir.github.io/tslint/) and [Jest](https://facebook.github.io/jest/en/).
+
+Tests are run with:
+
+```sh
+$ npm test
 ```
 
 ## License
