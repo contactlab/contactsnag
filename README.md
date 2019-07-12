@@ -165,6 +165,20 @@ setTimeout(() => {
 }, 1000);
 ```
 
+## Contributing
+
+Opening issues is always welcome.
+
+Then, fork the repository or create a new branch, write your code and send a pull request.
+
+This project uses [Prettier](https://prettier.io/) (automatically applied as pre-commit hook), [TSLint](https://palantir.github.io/tslint/) and [Jest](https://facebook.github.io/jest/en/).
+
+Tests are run with:
+
+```sh
+$ npm test
+```
+
 ## License
 
 [Apache 2.0](LICENSE).
