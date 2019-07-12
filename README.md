@@ -76,10 +76,12 @@ Add a `bugsnag/upload` node in the root `package.json` of your application to se
 ```json
 {
   "bugsnag": {
-    "apiKey": "my-project-api-key",
-    "minifiedUrl": "https://my.application.com/bundle.js",
-    "sourceMap": "./local/path/to/your/bundle.js.map",
-    "minifiedFile": "./local/path/to/your/bundle.js"
+    "upload": {
+      "apiKey": "my-project-api-key",
+      "minifiedUrl": "https://my.application.com/bundle.js",
+      "sourceMap": "./local/path/to/your/bundle.js.map",
+      "minifiedFile": "./local/path/to/your/bundle.js"
+    }
   }
 }
 ```
