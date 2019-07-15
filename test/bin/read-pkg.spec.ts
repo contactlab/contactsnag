@@ -12,12 +12,8 @@ test('readPkg should retrieve info from package.json', () => {
       name: 'test-pkg',
       version: '0.1.0',
       bugsnag: {
-        upload: {
-          apiKey: 'TEST-API-KEY',
-          minifiedUrl: 'https://my.application.com/bundle.js',
-          sourceMap: './path/to/bundle.js.map',
-          minifiedFile: './path/to/bundle.js'
-        }
+        apiKey: 'TEST-API-KEY',
+        someOtherData: 'ignored'
       }
     }
   });
@@ -26,12 +22,8 @@ test('readPkg should retrieve info from package.json', () => {
     name: 'test-pkg',
     version: '0.1.0',
     bugsnag: {
-      upload: {
-        apiKey: 'TEST-API-KEY',
-        minifiedUrl: 'https://my.application.com/bundle.js',
-        sourceMap: './path/to/bundle.js.map',
-        minifiedFile: './path/to/bundle.js'
-      }
+      apiKey: 'TEST-API-KEY',
+      someOtherData: 'ignored'
     }
   });
 });
@@ -49,7 +41,7 @@ test('readPkg should fail if package.json has not valid data', () => {
 
   return expect(result(readPkg)).rejects.toEqual(
     new Error(
-      'Invalid value undefined supplied to : Package/bugsnag: bugsnag/upload: upload/0: { apiKey: string }'
+      'Invalid value undefined supplied to : Package/bugsnag: bugsnag/apiKey: string'
     )
   );
 });

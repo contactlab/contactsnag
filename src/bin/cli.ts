@@ -8,9 +8,9 @@ import {capabilities, upload} from './upload';
 
 // --- Program
 const main: Program = gateway(process.argv.slice(2)).chain(command => {
-  switch (command) {
+  switch (command.cmd) {
     case 'upload':
-      return upload(capabilities);
+      return upload(capabilities(command.args));
     case 'report':
       return leftTask(task.of(new Error('not yet implemented')));
   }
