@@ -86,15 +86,17 @@ This is the only required option. `app-version` is automatically taken from `pac
 You can then set any [`bugsnag-sourcemap` option](https://docs.bugsnag.com/build-integrations/js/#source-map-uploader) when run the uploader from the [command line](https://docs.bugsnag.com/build-integrations/js/#cli-source-maps):
 
 ```sh
-$ npx contactsnag upload --minified-url 'http://example.com/assets/example.min.js' \
-    --source-map path/to/example.js.map \
-    --minified-file path/to/example.min.js
+$ npx contactsnag upload \
+  --minified-url 'http://example.com/assets/example.min.js' \
+  --source-map path/to/example.js.map \
+  --minified-file path/to/example.min.js
 
 # --- or ---
 
-$ yarn contactsnag upload --minified-url 'http://example.com/assets/example.min.js' \
-    --source-map path/to/example.js.map \
-    --minified-file path/to/example.min.js
+$ yarn contactsnag upload \
+  --minified-url 'http://example.com/assets/example.min.js' \
+  --source-map path/to/example.js.map \
+  --minified-file path/to/example.min.js
 ```
 
 or through a script in `package.json` file:
