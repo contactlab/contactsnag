@@ -71,31 +71,30 @@ This is lazy and an error is raised if a wrong options object is passed.
 
 ## Uploader
 
-Add a `bugsnag/upload` node in the root `package.json` of your application to set few parameters:
+Add a `bugsnag/apiKey` field in the root `package.json` of your application and set your Bugsnag API key:
 
 ```json
 {
   "bugsnag": {
-    "upload": {
-      "apiKey": "my-project-api-key",
-      "minifiedUrl": "https://my.application.com/bundle.js",
-      "sourceMap": "./local/path/to/your/bundle.js.map",
-      "minifiedFile": "./local/path/to/your/bundle.js"
-    }
+    "apiKey": "my-project-api-key"
   }
 }
 ```
 
-You can set any [`bugsnag-sourcemap` option](https://docs.bugsnag.com/build-integrations/js/#source-map-uploader), **apiKey** is the only required.
+This is the only required option. `app-version` is automatically taken from `package.json` version and `overwrite` is set to `true` by default.
 
-And then you run the uploader from command line:
+You can then set any [`bugsnag-sourcemap` option](https://docs.bugsnag.com/build-integrations/js/#source-map-uploader) when run the uploader from the [command line](https://docs.bugsnag.com/build-integrations/js/#cli-source-maps):
 
 ```sh
-$ npx contactsnag upload
+$ npx contactsnag upload --minified-url 'http://example.com/assets/example.min.js' \
+    --source-map path/to/example.js.map \
+    --minified-file path/to/example.min.js
 
 # --- or ---
 
-$ yarn contactsnag upload
+$ yarn contactsnag upload --minified-url 'http://example.com/assets/example.min.js' \
+    --source-map path/to/example.js.map \
+    --minified-file path/to/example.min.js
 ```
 
 or through a script in `package.json` file:
