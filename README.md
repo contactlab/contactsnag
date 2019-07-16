@@ -104,7 +104,7 @@ or through a script in `package.json` file:
 ```json
 {
   "scripts": {
-    "csnag:upload": "contactsnag upload"
+    "csnag:upload": "contactsnag upload --minified-url 'http://example.com/assets/example.min.js' --source-map path/to/example.js.map --minified-file path/to/example.min.js"
   }
 }
 ```
