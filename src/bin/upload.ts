@@ -1,35 +1,21 @@
-// import {
-//   // BugsnagSourceMapsConfig,
-//   upload as uploadSourceMap
-// } from 'bugsnag-sourcemaps';
 import * as child_process from 'child_process';
 import {sequenceT} from 'fp-ts/lib/Apply';
 import {getMonoid} from 'fp-ts/lib/Array';
 import {left, right} from 'fp-ts/lib/Either';
 import {Task} from 'fp-ts/lib/Task';
-import {TaskEither, taskEither /*, tryCatch*/} from 'fp-ts/lib/TaskEither';
+import {TaskEither, taskEither} from 'fp-ts/lib/TaskEither';
 import {Package} from './decoders';
 import {Program} from './program';
 import {ReadPkg, readPkg} from './read-pkg';
 import {Trace, trace} from './trace';
 
+const sequenceTE = sequenceT(taskEither);
+const concatS = getMonoid<string>().concat;
+
 interface ExecOutput {
   stdout: string;
   stderr: string;
 }
-
-const sequenceTE = sequenceT(taskEither);
-const concatS = getMonoid<string>().concat;
-
-// const DEFAULT_OPTS: Omit<BugsnagSourceMapsConfig, 'apiKey'> = {
-//   overwrite: true
-// };
-
-// const toOptions = ({version, bugsnag}: Package): BugsnagSourceMapsConfig => ({
-//   ...DEFAULT_OPTS,
-//   ...bugsnag.upload,
-//   appVersion: version
-// });
 
 const exec = (cmd: string): TaskEither<Error, ExecOutput> =>
   new TaskEither(

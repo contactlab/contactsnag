@@ -8,8 +8,13 @@ import {result} from '../_helpers';
 
 const childProcessM: jest.Mocked<typeof child_process> = child_process as any;
 
+afterEach(() => {
+  (testCap.uploadSourceMap as any).mockClear();
+  (testCap.trace as any).mockClear();
+});
+
 // --- Program
-test('program() should upload source maps with options taken from package json', () =>
+test('upload() should upload source maps with options taken from package json', () =>
   result(upload(testCap), data => {
     expect(data.isRight()).toBe(true);
     expect(data.value).toBe('BUGSNAG: Sourcemap was uploaded successfully.');
@@ -19,7 +24,7 @@ test('program() should upload source maps with options taken from package json',
     );
   }));
 
-test('program() should fail if package.json data are wrong', () => {
+test('upload() should fail if package.json data are wrong', () => {
   const cap: Capabilities = {
     ...testCap,
     readPkg: leftTask(task.of(new Error('fail')))
@@ -33,7 +38,7 @@ test('program() should fail if package.json data are wrong', () => {
   });
 });
 
-test('program() should fail if an error is thrown during upload', () => {
+test('upload() should fail if an error is thrown during upload', () => {
   const cap: Capabilities = {
     ...testCap,
     uploadSourceMap: _ => leftTask(task.of(new Error('fail')))
@@ -42,7 +47,6 @@ test('program() should fail if an error is thrown during upload', () => {
   return result(upload(cap), err => {
     expect(err.isLeft()).toEqual(true);
     expect(err.value).toEqual(new Error('fail'));
-    expect(cap.uploadSourceMap).toBeCalled();
     expect(cap.trace).toBeCalledWith('BUGSNAG: uploading sourcemap for v0.1.0');
   });
 });
@@ -53,11 +57,11 @@ test('capabilities.uploadSourceMap() should actually upload source map', () => {
 
   return result(capabilities(TEST_ARGS).uploadSourceMap(PKG_DATA), data => {
     expect(data.isRight()).toBe(true);
-    expect(data.value).toBeUndefined();
-    expect(childProcessM.exec).toBeCalledWith(
-      'npx bugsnag-sourcemaps upload --api-key TEST-API-KEY --app-version 0.1.0 --overwrite --source-map ./dist/bundle.js.map --minified-file ./dist/bundle.js',
-      {encoding: 'utf8'}
+    expect(data.value).toEqual({stdout: '', stderr: ''});
+    expect(childProcessM.exec.mock.calls[0][0]).toBe(
+      'npx bugsnag-sourcemaps upload --api-key TEST-API-KEY --app-version 0.1.0 --overwrite --source-map ./dist/bundle.js.map --minified-file ./dist/bundle.js'
     );
+    expect(childProcessM.exec.mock.calls[0][1]).toEqual({encoding: 'utf-8'});
 
     childProcessM.exec.mockReset();
   });
