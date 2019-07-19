@@ -4,7 +4,7 @@ import {IOEither, fromEither, rightIO} from 'fp-ts/lib/IOEither';
 import {Client} from './client';
 import {validate} from './validate';
 
-type AnyBugsnagConfig = Partial<Bugsnag.IConfig>;
+export type AnyBugsnagConfig = Partial<Bugsnag.IConfig>;
 
 export function setOptions(
   client: Client,
