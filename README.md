@@ -61,13 +61,15 @@ This is lazy and prevents that your program/application would crash if the under
 Receives a client and a configuration object and return a `void` effectful operation:
 
 ```ts
+type AnyBugsnagConfig = Partial<Bugsnag.IConfig>;
+
 declare function setOptions(
   client: Client,
-  opts: Bugsnag.IConfig
+  opts: AnyBugsnagConfig
 ): IOEither<Error, void>;
 ```
 
-This is lazy and an error is raised if a wrong options object is passed.
+This is lazy and an error is raised if a wrong options object is passed. `opts` are merged with client's current configuration ([see](https://github.com/bugsnag/bugsnag-js/blob/master/packages/core/client.js#L63)).
 
 ## Uploader
 

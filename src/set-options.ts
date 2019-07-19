@@ -1,21 +1,22 @@
 import {Bugsnag} from '@bugsnag/js';
-import {sequenceT} from 'fp-ts/lib/Apply';
 import {IO} from 'fp-ts/lib/IO';
-import {IOEither, fromEither, ioEither, rightIO} from 'fp-ts/lib/IOEither';
+import {IOEither, fromEither, rightIO} from 'fp-ts/lib/IOEither';
 import {Client} from './client';
 import {validate} from './validate';
 
-const sequenceIOE = sequenceT(ioEither);
+type AnyBugsnagConfig = Partial<Bugsnag.IConfig>;
 
 export function setOptions(
   client: Client,
-  opts: Bugsnag.IConfig
+  opts: AnyBugsnagConfig
 ): IOEither<Error, void> {
-  return sequenceIOE(fromEither(validate(opts)), client).chain(([o, c]) =>
-    rightIO(
-      new IO(() => {
-        c.setOptions(o);
-      })
+  return client.chain(c =>
+    fromEither(validate(Object.assign({}, c.config, opts))).chain(o =>
+      rightIO(
+        new IO(() => {
+          c.setOptions(o);
+        })
+      )
     )
   );
 }

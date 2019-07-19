@@ -10,6 +10,15 @@ test('setOptions() should set options on client without errors', () => {
   expect(spySetOptions).toBeCalledWith({apiKey: 'ABCD', user: {id: 123}});
 });
 
+test('setOptions() should set options, even without `apiKey` field, on client without errors', () => {
+  const spySetOptions = jest.fn();
+  const client = createClient(spySetOptions);
+  const result = setOptions(client, {user: {id: 123}}).run();
+
+  expect(result.isRight()).toBe(true);
+  expect(spySetOptions).toBeCalledWith({user: {id: 123}});
+});
+
 test('setOptions() should fail if opts are not valid', () => {
   const spySetOptions = jest.fn();
   const client = createClient(spySetOptions);
