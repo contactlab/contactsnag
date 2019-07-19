@@ -1,20 +1,7 @@
 #!/usr/bin/env node
 
-import {task} from 'fp-ts/lib/Task';
-import {leftTask} from 'fp-ts/lib/TaskEither';
-import {gateway} from './gateway';
-import {Program, run} from './program';
-import {capabilities, upload} from './upload';
-
-// --- Program
-const main: Program = gateway(process.argv.slice(2)).chain(command => {
-  switch (command) {
-    case 'upload':
-      return upload(capabilities);
-    case 'report':
-      return leftTask(task.of(new Error('not yet implemented')));
-  }
-});
+import {main} from './main';
+import {run} from './program';
 
 // --- Run command
-run(main);
+run(main());

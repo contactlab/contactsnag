@@ -27,7 +27,7 @@ export function result<L, A>(
       .then(r => r.fold(e => Promise.reject(e), v => Promise.resolve(v)));
   }
 
-  return te.run().then();
+  return te.run().then(fn);
 }
 
 // --- Really unsafe - just for testing effects
