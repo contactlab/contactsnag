@@ -4,10 +4,11 @@
 
 > [Bugsnag](https://docs.bugsnag.com/platforms/javascript/) utilities for Contactlab's applications.
 
-This package embeds 2 main functionalities:
+This package embeds 3 main functionalities:
 
-- **Javascript wrapper for Bugsnag**: importing `ContactSnag` in your frontend code gives you access to a pre-configured Bugsnag browser SDK object wrapper that exposes the same APIs of the original SDK.
+- **Javascript wrapper for Bugsnag**: importing `ContactSnag` in your code gives you access to a "lazy" and "side-effect aware" Bugsnag client that exposes the same APIs of the original SDK.
 - **CLI sourcemap uploader**: calling `contactsnag upload` from the command line it will upload your bundle's sourcemap to the Bugsnag dashboard (using the Bugsnag API endpoint) for better error debugging.
+- **CLI build reporter**: calling `contactsnag report` from the command line it will report the current build to enable source code linking from Bugsnag dashboard.
 
 It is fully written in [Typescript](https://www.typescriptlang.org/docs/home.html) (version >= 3.3.3) and extensively uses [`fp-ts` library](https://github.com/gcanti/fp-ts).
 
@@ -71,47 +72,7 @@ declare function setOptions(
 
 This is lazy and an error is raised if a wrong options object is passed. `opts` are merged with client's current configuration ([see](https://github.com/bugsnag/bugsnag-js/blob/master/packages/core/client.js#L63)).
 
-## Uploader
-
-Add a `bugsnag/apiKey` field in the root `package.json` of your application and set your Bugsnag API key:
-
-```json
-{
-  "bugsnag": {
-    "apiKey": "my-project-api-key"
-  }
-}
-```
-
-This is the only required option. `app-version` is automatically taken from `package.json` version and `overwrite` is set to `true` by default.
-
-You can then set any [`bugsnag-sourcemap` option](https://docs.bugsnag.com/build-integrations/js/#source-map-uploader) when run the uploader from the [command line](https://docs.bugsnag.com/build-integrations/js/#cli-source-maps):
-
-```sh
-$ npx contactsnag upload \
-  --minified-url 'http://example.com/assets/example.min.js' \
-  --source-map path/to/example.js.map \
-  --minified-file path/to/example.min.js
-
-# --- or ---
-
-$ yarn contactsnag upload \
-  --minified-url 'http://example.com/assets/example.min.js' \
-  --source-map path/to/example.js.map \
-  --minified-file path/to/example.min.js
-```
-
-or through a script in `package.json` file:
-
-```json
-{
-  "scripts": {
-    "csnag:upload": "contactsnag upload --minified-url 'http://example.com/assets/example.min.js' --source-map path/to/example.js.map --minified-file path/to/example.min.js"
-  }
-}
-```
-
-## JS usage example
+#### JS usage example
 
 Notify Bugsnag with a custom error message:
 
@@ -163,6 +124,74 @@ setTimeout(() => {
     user: {id: 1}
   }).run();
 }, 1000);
+```
+
+## CLI
+
+Add a `bugsnag/apiKey` field in the root `package.json` of your application and set your Bugsnag API key:
+
+```json
+{
+  "bugsnag": {
+    "apiKey": "my-project-api-key"
+  }
+}
+```
+
+This is the only required option. `app-version` is automatically taken from `package.json`
+
+### Uploader
+
+You can then set any [`bugsnag-sourcemap` option](https://docs.bugsnag.com/build-integrations/js/#source-map-uploader) (`overwrite` is set to `true` by default) when run the uploader from the [command line](https://docs.bugsnag.com/build-integrations/js/#cli-source-maps):
+
+```sh
+$ npx contactsnag upload \
+  --minified-url 'http://example.com/assets/example.min.js' \
+  --source-map path/to/example.js.map \
+  --minified-file path/to/example.min.js
+
+# --- or ---
+
+$ yarn contactsnag upload \
+  --minified-url 'http://example.com/assets/example.min.js' \
+  --source-map path/to/example.js.map \
+  --minified-file path/to/example.min.js
+```
+
+or through a script in `package.json` file:
+
+```json
+{
+  "scripts": {
+    "csnag:upload": "contactsnag upload --minified-url 'http://example.com/assets/example.min.js' --source-map path/to/example.js.map --minified-file path/to/example.min.js"
+  }
+}
+```
+
+### Reporter
+
+You can then set any [`bugsnag-build-reporter` option](https://docs.bugsnag.com/build-integrations/js/#build-reporter) (`release-stage` is set to `production` by default) when run the reporter from the [command line](https://docs.bugsnag.com/build-integrations/js/#cli-build-reporter):
+
+```sh
+$ npx contactsnag report \
+  --builder-name user.name \
+  --source-control-revision ABCDEFGH1234567
+
+# --- or ---
+
+$ yarn contactsnag report \
+  --builder-name user.name \
+  --source-control-revision ABCDEFGH1234567
+```
+
+or through a script in `package.json` file:
+
+```json
+{
+  "scripts": {
+    "csnag:report": "contactsnag report --builder-name user.name --source-control-revision ABCDEFGH1234567"
+  }
+}
 ```
 
 ## Contributing
