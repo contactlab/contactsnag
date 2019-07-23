@@ -1,16 +1,18 @@
-jest.mock('child_process');
+// --- Mock exec
+jest.mock('../../src/bin/exec');
 
-import * as child_process from 'child_process';
+import * as Exec from '../../src/bin/exec';
+
+const execM: jest.Mocked<typeof Exec> = Exec as any;
+// ---
+
 import {task} from 'fp-ts/lib/Task';
-import {leftTask, taskEither} from 'fp-ts/lib/TaskEither';
+import {left2v, leftTask, right2v, taskEither} from 'fp-ts/lib/TaskEither';
 import {Capabilities, capabilities, upload} from '../../src/bin/upload';
 import {result} from '../_helpers';
 
-const childProcessM: jest.Mocked<typeof child_process> = child_process as any;
-
 afterEach(() => {
-  (testCap.uploadSourceMap as any).mockClear();
-  (testCap.trace as any).mockClear();
+  jest.clearAllMocks();
 });
 
 // --- Program
@@ -53,28 +55,23 @@ test('upload() should fail if an error is thrown during upload', () => {
 
 // --- Capabilities
 test('capabilities.uploadSourceMap() should actually upload source map', () => {
-  childProcessM.exec.mockImplementation(mockExecOK);
+  execM.exec.mockReturnValueOnce(right2v({stdout: '', stderr: ''}));
 
   return result(capabilities(TEST_ARGS).uploadSourceMap(PKG_DATA), data => {
     expect(data.isRight()).toBe(true);
     expect(data.value).toEqual({stdout: '', stderr: ''});
-    expect(childProcessM.exec.mock.calls[0][0]).toBe(
+    expect(execM.exec).toBeCalledWith(
       'npx bugsnag-sourcemaps upload --api-key TEST-API-KEY --app-version 0.1.0 --overwrite --source-map ./dist/bundle.js.map --minified-file ./dist/bundle.js'
     );
-    expect(childProcessM.exec.mock.calls[0][1]).toEqual({encoding: 'utf-8'});
-
-    childProcessM.exec.mockReset();
   });
 });
 
 test('capabilities.uploadSourceMap() should fail if upload fails', () => {
-  childProcessM.exec.mockImplementation(mockExecKO);
+  execM.exec.mockReturnValueOnce(left2v(new Error('fail')));
 
   return result(capabilities(TEST_ARGS).uploadSourceMap(PKG_DATA), data => {
     expect(data.isLeft()).toBe(true);
     expect(data.value).toEqual(new Error('fail'));
-
-    childProcessM.exec.mockReset();
   });
 });
 
@@ -101,8 +98,3 @@ const testCap: Capabilities = {
   uploadSourceMap: jest.fn(_ => taskEither.of(EXEC_OUTPUT)),
   trace: jest.fn(a => taskEither.of(a))
 };
-
-// Mocking sucks...
-const mockExecOK: any = (_: any, __: any, cb: any) => cb(null, '', '');
-const mockExecKO: any = (_: any, __: any, cb: any) =>
-  cb(new Error('fail'), '', '');
