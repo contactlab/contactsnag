@@ -1,10 +1,14 @@
-jest.mock('child_process');
+// --- Mock exec
+jest.mock('../../src/bin/exec');
 
-import * as child_process from 'child_process';
+import * as Exec from '../../src/bin/exec';
+
+const execM: jest.Mocked<typeof Exec> = Exec as any;
+// ---
+
+import {right2v} from 'fp-ts/lib/TaskEither';
 import {main} from '../../src/bin/main';
 import {result} from '../_helpers';
-
-const childProcessM: jest.Mocked<typeof child_process> = child_process as any;
 
 let oriCwd: string;
 let oriArgv: string[];
@@ -18,6 +22,7 @@ beforeEach(() => {
 afterEach(() => {
   process.chdir(oriCwd);
   process.argv = oriArgv;
+  jest.resetAllMocks();
 });
 
 test('main() should execute "upload"', () => {
@@ -32,7 +37,7 @@ test('main() should execute "upload"', () => {
     'bundle.js'
   );
 
-  childProcessM.exec.mockImplementation(mockExecOK);
+  execM.exec.mockReturnValue(right2v({stdout: '', stderr: ''}));
 
   return result(main(), data => {
     expect(data.isRight()).toBe(true);
@@ -42,11 +47,19 @@ test('main() should execute "upload"', () => {
 
 test('main() should execute "report"', () => {
   process.chdir(__dirname);
-  process.argv.push('report');
+  process.argv.push(
+    'report',
+    '--builder-name',
+    'user.name',
+    '--source-control-revision',
+    'ABCDEFGH1234567'
+  );
+
+  execM.exec.mockReturnValue(right2v({stdout: '', stderr: ''}));
 
   return result(main(), data => {
-    expect(data.isLeft()).toBe(true);
-    expect(data.value).toEqual(new Error('not yet implemented'));
+    expect(data.isRight()).toBe(true);
+    expect(data.value).toBe('BUGSNAG: Build was reported successfully.');
   });
 });
 
@@ -73,8 +86,3 @@ test('main() should fail with wrong commands - position', () => {
     );
   });
 });
-
-// --- Mocking
-const mockExecOK: any = (_: any, __: any, cb: any) => cb(null, '', '');
-// const mockExecKO: any = (_: any, __: any, cb: any) =>
-//   cb(new Error('fail'), '', '');

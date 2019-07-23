@@ -15,7 +15,7 @@ const prepareOpts = (pkg: Package, args: string[]): string =>
     [
       `--api-key ${pkg.bugsnag.apiKey}`,
       `--app-version ${pkg.version}`,
-      '--overwrite'
+      '--release-stage production'
     ],
     args
   ).join(' ');
@@ -24,23 +24,23 @@ const prepareOpts = (pkg: Package, args: string[]): string =>
 export interface Capabilities {
   readPkg: ReadPkg;
   trace: Trace;
-  uploadSourceMap: (pkg: Package) => TaskEither<Error, ExecOutput>;
+  reportBuild: (pkg: Package) => TaskEither<Error, ExecOutput>;
 }
 
 export const capabilities = (args: string[]): Capabilities => ({
   readPkg,
   trace,
-  uploadSourceMap: pkg =>
-    exec(`npx bugsnag-sourcemaps upload ${prepareOpts(pkg, args)}`)
+  reportBuild: pkg =>
+    exec(`npx bugsnag-build-reporter ${prepareOpts(pkg, args)}`)
 });
 
 // --- Program
-export const upload = (c: Capabilities): Program =>
+export const report = (c: Capabilities): Program =>
   c.readPkg
     .chain(data =>
       sequenceTE(
-        c.trace(`BUGSNAG: uploading sourcemap for v${data.version}`),
-        c.uploadSourceMap(data)
+        c.trace(`BUGSNAG: reporting build for v${data.version}`),
+        c.reportBuild(data)
       )
     )
-    .map(() => 'BUGSNAG: Sourcemap was uploaded successfully.');
+    .map(() => 'BUGSNAG: Build was reported successfully.');
