@@ -1,6 +1,9 @@
+// --- Mock Bugsnag
 jest.mock('@bugsnag/js');
 
 import bugsnag, {Bugsnag} from '@bugsnag/js';
+// ---
+
 import {constUndefined} from 'fp-ts/lib/function';
 import {ContactSnag} from '../src/index';
 import {CONFIG} from './_helpers';
