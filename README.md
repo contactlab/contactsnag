@@ -4,11 +4,12 @@
 
 > [Bugsnag](https://docs.bugsnag.com/platforms/javascript/) utilities for Contactlab's applications.
 
-This package embeds 3 main functionalities:
+This package embeds 4 main functionalities:
 
 - **Javascript wrapper for Bugsnag**: importing `ContactSnag` in your code gives you access to a "lazy" and "side-effect aware" Bugsnag client that exposes the same APIs of the original SDK.
 - **CLI sourcemap uploader**: calling `contactsnag upload` from the command line it will upload your bundle's sourcemap to the Bugsnag dashboard (using the Bugsnag API endpoint) for better error debugging.
 - **CLI build reporter**: calling `contactsnag report` from the command line it will report the current build to enable source code linking from Bugsnag dashboard.
+- **Webpack plugin**: ContactSnag exposes (as dependecy) the [`webpack-bugsnag-plugins`](https://github.com/bugsnag/webpack-bugsnag-plugins) in order to upload sourcemaps and report builds using Webpack (take a look [here](https://docs.bugsnag.com/build-integrations/webpack/#configuration) for available configuration).
 
 It is fully written in [Typescript](https://www.typescriptlang.org/docs/home.html) (version >= 3.3.3) and extensively uses [`fp-ts` library](https://github.com/gcanti/fp-ts).
 
