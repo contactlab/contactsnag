@@ -1,6 +1,6 @@
 {
   "name": "contactsnag",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Bugsnag utilities for Contactlab's applications",
   "main": "lib/index.js",
   "module": "lib/es6/index.js",
@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@bugsnag/js": "6.3.2",
+    "@types/webpack-bugsnag-plugins": "^1.4.0",
     "bugsnag-sourcemaps": "1.2.1",
     "chalk": "2.4.2",
     "fp-ts": "^1.19.0",

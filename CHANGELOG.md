@@ -11,6 +11,12 @@
 > - [_Feature_](https://github.com/contactlab/contactsnag/labels/feature)
 > - [_Polish_](https://github.com/contactlab/contactsnag/labels/polish)
 
+## [3.0.1](https://github.com/contactlab/gluex/releases/tag/v3.0.1)
+
+**Dependencies:**
+
+- `[feature]` Add and expose webpack plugin typings (#126)
+
 ## [3.0.0](https://github.com/contactlab/gluex/releases/tag/v3.0.0)
 
 **Feature:**
