@@ -1,4 +1,4 @@
-# contactsnag
+# ContactSnag
 
 [![Build Status](https://clab-dev.visualstudio.com/OSS/_apis/build/status/contactlab.contactsnag?branchName=master)](https://clab-dev.visualstudio.com/OSS/_build/latest?definitionId=33&branchName=master)
 
@@ -25,60 +25,99 @@ $ npm install contactsnag --save
 $ yarn add contactsnag
 ```
 
-## SDK
+## ContactSnag Client
 
-The package exposes a couple of function.
+The package exposes a single `ContactSnag` function.
 
-### `ContactSnag`
-
-Receives a configuration object and returns a client:
+This receives a configuration object and returns a ContactSnag client:
 
 ```ts
 declare function ContactSnag(conf: Config): Client;
 ```
 
-[`Config`](src/index.ts) is a kind of subset of [Bugsnag's configuration options](https://docs.bugsnag.com/platforms/javascript/configuration-options/) which some differences:
+[`Config`](src/validate.ts) is a kind of subset of [Bugsnag's configuration options](https://docs.bugsnag.com/platforms/javascript/configuration-options/) with some differences:
 
 - `appVersion`, `notifyReleaseStages`, and `releaseStage` are required properties;
 - `endpoints` and `consoleBreadcrumbsEnabled` cannot be set/overwritten.
 
-[`Client`](src/index.ts) is a `IOEither<Error, Bugsnag.Client>` which guarantees a lazy initialization and that an error is raised if a wrong configuration is passed.
-
-### `notify`
-
-Receives a client, a notifiable error and an optional configuration object and returns a `void` effectful operation:
+[`Client`](src/client.ts) is a custom data structure which embeds some `Bugsnag.Client` features, guarantees a lazy initialization and that an error is raised if a wrong configuration is passed.
 
 ```ts
-declare function notify(
-  client: Client,
-  error: Bugsnag.NotifiableError,
-  opts?: Bugsnag.INotifyOpts
-): IOEither<Error, void>;
+interface Client {
+  readonly client: () => ActualClient;
+
+  readonly start: () => void;
+
+  readonly notify: (
+    error: Bugsnag.NotifiableError,
+    opts?: Bugsnag.INotifyOpts
+  ) => IOEither<Error, void>;
+
+  readonly setOptions: (
+    opts: AnyBugsnagConfig
+  ) => IOEither<Error, Bugsnag.Client>;
+}
 ```
 
-This is lazy and prevents that your program/application would crash if the underlying Bugsnag's `notify()` method throwns an error.
-
-### `setOptions`
-
-Receives a client and a configuration object and return a `void` effectful operation:
+The `ActualClient` type encodes the three different states of the ContactSnag client:
 
 ```ts
-type AnyBugsnagConfig = Partial<Bugsnag.IConfig>;
-
-declare function setOptions(
-  client: Client,
-  opts: AnyBugsnagConfig
-): IOEither<Error, void>;
+type ActualClient = ConfigError | Still | Started;
 ```
 
-This is lazy and an error is raised if a wrong options object is passed. `opts` are merged with client's current configuration ([see](https://github.com/bugsnag/bugsnag-js/blob/master/packages/core/client.js#L63)).
+`ConfigError` represents a not valid configuration provided to the client's creation function:
 
-#### JS usage example
+```ts
+interface ConfigError {
+  readonly type: 'ConfigError';
+  readonly error: Error;
+}
+```
+
+`Still` represents a not started client:
+
+```ts
+interface Still {
+  readonly type: 'Still';
+  readonly config: Config;
+}
+```
+
+`Started` represents a started client:
+
+```ts
+interface Started {
+  readonly type: 'Started';
+  readonly bugsnag: Bugsnag.Client;
+}
+```
+
+Each time a `Client`'s method is called, it will internally check (a.k.a. _fold_) the current state and execute an operation.
+
+### `client()`
+
+Returns the current `ActualClient`.
+
+### `start()`
+
+Starts the client if it's in the `Still` state, otherwise it does nothing.
+
+### `notify()`
+
+Returns a `void` effectful operation that can fail (`IOEither`).
+
+When the `IO` is ran:
+
+- if the client is in the `Started` state, it will notify an error to Bugsnag or will fail if the Bugsnag client raises an exception;
+- if the client is in the `ConfigError` state, it will return a `Left<Error>` (_"configuration error"_);
+- if the client is in the `Still` state, it will return a `Left<Error>` (_"not yet started error"_).
+
+#### Usage example
 
 Notify Bugsnag with a custom error message:
 
 ```ts
-import {ContactSnag, notify} from 'contactsnag';
+import {ContactSnag} from 'contactsnag';
 
 const client = ContactSnag({
   apiKey: 'TEST-API-KEY',
@@ -87,26 +126,37 @@ const client = ContactSnag({
   releaseStage: 'production'
 });
 
-const notification = notify(client, 'Custom error message', {
-  user: {id: 1},
-  metaData: {
-    custom: 'My error name'
-  }
-});
-
 // Set notification on button click
-document
-  .getElementById('btn')
-  .addEventListener('click', () => notification.run());
+document.getElementById('btn').addEventListener('click', () =>
+  client
+    .notify(new Error('Custom error message'), {
+      metaData: {custom: 'My error name'}
+    })
+    .run()
+);
 
 // Start Bugsnag
-client.run();
+client.start();
 ```
+
+### `setOptions()`
+
+Returns an effectful operation that can fail (`IOEither`), carrying the underlyng Bugsnag client.
+
+When the `IO` is ran:
+
+- if the client is in the `Started` state, it will set the provided options on the Bugsnag client or will fail if the options are not valid;
+- if the client is in the `ConfigError` state, it will return a `Left<Error>` (_"configuration error"_);
+- if the client is in the `Still` state, it will return a `Left<Error>` (_"not yet started error"_).
+
+Options are merged with client's current configuration ([see](https://github.com/bugsnag/bugsnag-js/blob/master/packages/core/client.js#L63)).
+
+#### Usage example
 
 Set a user for the entire session:
 
 ```ts
-import {ContactSnag, setOptions} from 'contactsnag';
+import {ContactSnag} from 'contactsnag';
 
 const client = ContactSnag({
   apiKey: 'TEST-API-KEY',
@@ -116,14 +166,11 @@ const client = ContactSnag({
 });
 
 // Start Bugsnag
-client.run();
+client.start();
 
 // Set user after 1 second
 setTimeout(() => {
-  setOptions(client, {
-    apiKey: 'TEST-API-KEY',
-    user: {id: 1}
-  }).run();
+  client.setOptions({user: {id: 1}}).run();
 }, 1000);
 ```
 

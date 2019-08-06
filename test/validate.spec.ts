@@ -1,10 +1,23 @@
 import {validate} from '../src/validate';
 
 test('validate() should return Right<Config>', () => {
-  const result = validate({apiKey: 'abcd', user: {id: 123}});
+  const result1 = validate({apiKey: 'abcd', user: {id: 123}});
 
-  expect(result.isRight()).toBe(true);
-  expect(result.value).toEqual({apiKey: 'abcd', user: {id: 123}});
+  expect(result1.isRight()).toBe(true);
+  expect(result1.value).toEqual({apiKey: 'abcd', user: {id: 123}});
+
+  const result2 = validate({
+    apiKey: 'abcd',
+    user: {id: 123},
+    consoleBreadcrumbsEnabled: false
+  });
+
+  expect(result2.isRight()).toBe(true);
+  expect(result2.value).toEqual({
+    apiKey: 'abcd',
+    user: {id: 123},
+    consoleBreadcrumbsEnabled: false
+  });
 });
 
 test('validate() should return Left<Error>', () => {
