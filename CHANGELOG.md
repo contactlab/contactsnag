@@ -11,6 +11,12 @@
 > - [_Feature_](https://github.com/contactlab/contactsnag/labels/feature)
 > - [_Polish_](https://github.com/contactlab/contactsnag/labels/polish)
 
+## [4.0.0](https://github.com/contactlab/gluex/releases/tag/v4.0.0)
+
+**Breaking:**
+
+- `[bug]` Wrong API, should be rewritten (#128) - check [README.md](README.md) for further information
+
 ## [3.0.1](https://github.com/contactlab/gluex/releases/tag/v3.0.1)
 
 **Dependencies:**
