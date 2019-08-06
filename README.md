@@ -112,19 +112,7 @@ When the `IO` is ran:
 - if the client is in the `ConfigError` state, it will return a `Left<Error>` (_"configuration error"_);
 - if the client is in the `Still` state, it will return a `Left<Error>` (_"not yet started error"_).
 
-### `setOptions()`
-
-Returns an effectful operation that can fail (`IOEither`), carrying the underlyng Bugsnag client.
-
-When the `IO` is ran:
-
-- if the client is in the `Started` state, it will set the provided options on the Bugsnag client or will fail if the options are not valid;
-- if the client is in the `ConfigError` state, it will return a `Left<Error>` (_"configuration error"_);
-- if the client is in the `Still` state, it will return a `Left<Error>` (_"not yet started error"_).
-
-Options are merged with client's current configuration ([see](https://github.com/bugsnag/bugsnag-js/blob/master/packages/core/client.js#L63)).
-
-#### JS usage example
+#### Usage example
 
 Notify Bugsnag with a custom error message:
 
@@ -150,6 +138,20 @@ document.getElementById('btn').addEventListener('click', () =>
 // Start Bugsnag
 client.start();
 ```
+
+### `setOptions()`
+
+Returns an effectful operation that can fail (`IOEither`), carrying the underlyng Bugsnag client.
+
+When the `IO` is ran:
+
+- if the client is in the `Started` state, it will set the provided options on the Bugsnag client or will fail if the options are not valid;
+- if the client is in the `ConfigError` state, it will return a `Left<Error>` (_"configuration error"_);
+- if the client is in the `Still` state, it will return a `Left<Error>` (_"not yet started error"_).
+
+Options are merged with client's current configuration ([see](https://github.com/bugsnag/bugsnag-js/blob/master/packages/core/client.js#L63)).
+
+#### Usage example
 
 Set a user for the entire session:
 
