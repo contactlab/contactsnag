@@ -1,10 +1,10 @@
 import {default as bugsnag} from '@bugsnag/js';
-import {client} from './client';
+import {create} from './client';
 
 // --- Re-exports
-export {Client, Config} from './client';
-export {notify} from './notify';
-export {AnyBugsnagConfig, setOptions} from './set-options';
+export {Client} from './client';
+export {Config} from './validate';
+export {AnyBugsnagConfig} from './bugsnag';
 
 // --- Define an actual `Client` function with Bugsnag client creator
-export const ContactSnag = client(bugsnag);
+export const ContactSnag = create(bugsnag);

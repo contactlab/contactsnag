@@ -15,11 +15,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "types": ["node", "jest"],
-    "typeRoots": ["./typings", "./node_modules/@types"],
-    "baseUrl": ".",
-    "paths": {
-      "*": ["*", "typings/*"]
-    }
+    "baseUrl": "."
   },
-  "include": ["./src/**/*", "./test/**/*", "./typings/**/*"]
+  "include": ["./src/**/*", "./test/**/*"]
 }
