@@ -1,14 +1,8 @@
 import {toError} from 'fp-ts/lib/Either';
 import {IO} from 'fp-ts/lib/IO';
-import {
-  IOEither,
-  fromEither,
-  ioEither,
-  rightIO,
-  tryCatch2v
-} from 'fp-ts/lib/IOEither';
-import {constUndefined as undef} from 'fp-ts/lib/function';
-import {AnyBugsnagConfig, Bugsnag, BugsnagClientCreator} from './bugsnag';
+import {IOEither, ioEither, rightIO, tryCatch2v} from 'fp-ts/lib/IOEither';
+import {constVoid as undef} from 'fp-ts/lib/function';
+import {Bugsnag, BugsnagClientCreator} from './bugsnag';
 import {Config, validate} from './validate';
 
 // --- Constants
@@ -48,6 +42,47 @@ const started = (client: Bugsnag.Client): Started => ({
   bugsnag: client
 });
 
+// --- Client
+export interface Client {
+  readonly client: () => ActualClient;
+
+  readonly start: () => void;
+
+  readonly notify: (
+    error: Bugsnag.NotifiableError,
+    opts?: Bugsnag.INotifyOpts
+  ) => IOEither<Error, void>;
+
+  readonly setUser: (user: object) => IOEither<Error, void>;
+}
+
+export const create = (creator: BugsnagClientCreator) => (
+  config: Config
+): Client => {
+  let actualClient = validate(config).fold<ActualClient>(configError, conf =>
+    still(merge(DEFAULT_CONFIG, conf))
+  );
+
+  const starter = (s: Still) => {
+    actualClient = started(creator(s.config));
+  };
+
+  const c: Client = {
+    client: () => actualClient,
+
+    start: () => fold(actualClient, undef, starter, undef),
+
+    notify: (error, opts) =>
+      fold(actualClient, configErrorThrows, stillThrows, notify(error, opts)),
+
+    setUser: user =>
+      fold(actualClient, configErrorThrows, stillThrows, setUser(user))
+  };
+
+  return c;
+};
+
+// --- Helpers
 function fold<R>(
   value: ActualClient,
   whenError: (v: ConfigError) => R,
@@ -66,47 +101,6 @@ function fold<R>(
   }
 }
 
-// --- Client
-export interface Client {
-  readonly client: () => ActualClient;
-
-  readonly start: () => void;
-
-  readonly notify: (
-    error: Bugsnag.NotifiableError,
-    opts?: Bugsnag.INotifyOpts
-  ) => IOEither<Error, void>;
-
-  readonly setOptions: (
-    opts: AnyBugsnagConfig
-  ) => IOEither<Error, Bugsnag.Client>;
-}
-
-export const create = (creator: BugsnagClientCreator) => (
-  config: Config
-): Client => {
-  let actualClient = validate(config).fold<ActualClient>(configError, conf =>
-    still(merge(DEFAULT_CONFIG, conf))
-  );
-
-  const starter = (s: Still) => (actualClient = started(creator(s.config)));
-
-  const c: Client = {
-    client: () => actualClient,
-
-    start: () => fold(actualClient, undef, starter, undef),
-
-    notify: (error, opts) =>
-      fold(actualClient, configErrorThrows, stillThrows, notify(error, opts)),
-
-    setOptions: opts =>
-      fold(actualClient, configErrorThrows, stillThrows, setOptions(opts))
-  };
-
-  return c;
-};
-
-// --- Helpers
 function merge<A, B>(a: A, b: B): A & B {
   return Object.assign({}, a, b);
 }
@@ -126,11 +120,11 @@ function notify(
   return v => tryCatch2v(() => v.bugsnag.notify(error, opts), toError);
 }
 
-function setOptions(
-  opts: AnyBugsnagConfig
-): (client: Started) => IOEither<Error, Bugsnag.Client> {
+function setUser(user: object): (client: Started) => IOEither<Error, void> {
   return v =>
-    fromEither(validate({apiKey: v.bugsnag.config.apiKey, ...opts})).chain(o =>
-      rightIO(new IO(() => v.bugsnag.setOptions(o)))
+    rightIO(
+      new IO(() => {
+        v.bugsnag.user = user;
+      })
     );
 }

@@ -53,9 +53,7 @@ interface Client {
     opts?: Bugsnag.INotifyOpts
   ) => IOEither<Error, void>;
 
-  readonly setOptions: (
-    opts: AnyBugsnagConfig
-  ) => IOEither<Error, Bugsnag.Client>;
+  readonly setUser: (user: object) => IOEither<Error, void>;
 }
 ```
 
@@ -139,17 +137,15 @@ document.getElementById('btn').addEventListener('click', () =>
 client.start();
 ```
 
-### `setOptions()`
+### `setUser()`
 
-Returns an effectful operation that can fail (`IOEither`), carrying the underlyng Bugsnag client.
+Returns a `void` effectful operation that can fail (`IOEither`).
 
 When the `IO` is ran:
 
-- if the client is in the `Started` state, it will set the provided options on the Bugsnag client or will fail if the options are not valid;
+- if the client is in the `Started` state, it will set the provided user on the Bugsnag client;
 - if the client is in the `ConfigError` state, it will return a `Left<Error>` (_"configuration error"_);
 - if the client is in the `Still` state, it will return a `Left<Error>` (_"not yet started error"_).
-
-Options are merged with client's current configuration ([see](https://github.com/bugsnag/bugsnag-js/blob/master/packages/core/client.js#L63)).
 
 #### Usage example
 
@@ -170,7 +166,7 @@ client.start();
 
 // Set user after 1 second
 setTimeout(() => {
-  client.setOptions({user: {id: 1}}).run();
+  client.setUser({id: 1}).run();
 }, 1000);
 ```
 

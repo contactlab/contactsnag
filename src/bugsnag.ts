@@ -13,8 +13,6 @@ type KnownKeys<T> = {
 
 export type BugsnagConfig = Pick<Bugsnag.IConfig, KnownKeys<Bugsnag.IConfig>>;
 
-export type AnyBugsnagConfig = Partial<Bugsnag.IConfig>;
-
 export interface BugsnagClientCreator {
   (config: Bugsnag.IConfig): Bugsnag.Client;
 }

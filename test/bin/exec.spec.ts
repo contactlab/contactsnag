@@ -7,7 +7,7 @@ const childProcessM: jest.Mocked<typeof child_process> = child_process as any;
 // ---
 
 import {exec} from '../../src/bin/exec';
-import {result} from '../_helpers';
+import {result} from './_helpers';
 
 afterEach(() => {
   jest.resetAllMocks();

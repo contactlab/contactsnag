@@ -8,7 +8,7 @@ const execM: jest.Mocked<typeof Exec> = Exec as any;
 
 import {right2v} from 'fp-ts/lib/TaskEither';
 import {main} from '../../src/bin/main';
-import {result} from '../_helpers';
+import {result} from './_helpers';
 
 let oriCwd: string;
 let oriArgv: string[];
