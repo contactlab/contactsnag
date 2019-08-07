@@ -41,6 +41,7 @@ test('Client.start() should start the Bugsnag client', () => {
 
   expect(actualClient.type).toBe('Started');
   expect(actualClient.bugsnag.config).toEqual({
+    ...DEFAULT_CONFIG,
     ...CONFIG,
     consoleBreadcrumbsEnabled: false
   });
@@ -162,48 +163,40 @@ test('Client.setOptions() should fail when Client is `Still`', () => {
 });
 
 test('Client.setOptions() should set options on client without errors when Client is `Started`', () => {
-  const testClient = TestClient();
-  const client = create(testClient.create)(CONFIG);
-
-  client.start();
-
-  // --- First time
-  const result = client.setOptions({apiKey: 'ABCD', user: {id: 123}}).run();
-  const expectedConfig = {
+  const EXPECTED_CONFIG = {
+    ...DEFAULT_CONFIG,
     ...CONFIG,
     consoleBreadcrumbsEnabled: false,
     user: {id: 123}
   };
 
-  expect(result.isRight()).toBe(true);
-  expect(testClient.spySetOptions).toBeCalledWith(expectedConfig);
-  expect((client.client() as any).bugsnag.config).toEqual(expectedConfig);
+  const testClient = TestClient();
+  const client = create(testClient.create)(CONFIG);
 
-  // --- Second time (update the same client);
+  client.start();
+
+  // --- First time (api key is not required - see below)
+  const result = client.setOptions({apiKey: 'ABCD', user: {id: 123}}).run();
+
+  expect(result.isRight()).toBe(true);
+  expect(testClient.spySetOptions).toBeCalledWith({
+    apiKey: 'ABCD',
+    user: {id: 123}
+  });
+  expect((client.client() as any).bugsnag.config).toEqual(EXPECTED_CONFIG);
+
+  // --- Second time (update the same client)
   const result2 = client.setOptions({user: {id: 456}}).run();
-  const expectedConfig2 = {...expectedConfig, user: {id: 456}};
 
   expect(result2.isRight()).toBe(true);
-  expect(testClient.spySetOptions).toBeCalledWith(expectedConfig2);
-  expect((client.client() as any).bugsnag.config).toEqual(expectedConfig2);
-});
-
-test('Client.setOptions() should set options, even without `apiKey` field, on client without errors when Client is `Started`', () => {
-  const testClient = TestClient();
-  const client = create(testClient.create)(CONFIG);
-
-  client.start();
-
-  const result = client.setOptions({user: {id: 123}}).run();
-  const expectedConfig = {
-    ...CONFIG,
-    consoleBreadcrumbsEnabled: false,
-    user: {id: 123}
-  };
-
-  expect(result.isRight()).toBe(true);
-  expect(testClient.spySetOptions).toBeCalledWith(expectedConfig);
-  expect((client.client() as any).bugsnag.config).toEqual(expectedConfig);
+  expect(testClient.spySetOptions).toBeCalledWith({
+    apiKey: 'ABCD',
+    user: {id: 456}
+  });
+  expect((client.client() as any).bugsnag.config).toEqual({
+    ...EXPECTED_CONFIG,
+    user: {id: 456}
+  });
 });
 
 test('Client.setOptions() should fail if opts are not valid when Client is `Started`', () => {
@@ -235,13 +228,35 @@ const CONFIG = {
 
 const BAD_CONFIG = {...CONFIG, consoleBreadcrumbsEnabled: true} as any; // just for testing purpose
 
+// taken from https://github.com/bugsnag/bugsnag-js/blob/next/packages/core/config.js#L4
+const DEFAULT_CONFIG = {
+  apiKey: null,
+  appVersion: null,
+  appType: null,
+  autoNotify: true,
+  beforeSend: [],
+  endpoints: {
+    notify: 'https://notify.bugsnag.com',
+    sessions: 'https://sessions.bugsnag.com'
+  },
+  autoCaptureSessions: true,
+  notifyReleaseStages: null,
+  releaseStage: 'production',
+  maxBreadcrumbs: 20,
+  autoBreadcrumbs: true,
+  user: null,
+  metaData: null,
+  logger: undefined,
+  filters: ['password']
+};
+
 const TestClient = () => {
   const spySetOptions = jest.fn();
   const spyNotify = jest.fn();
   const spyCreate = jest.fn(
     (configuration: Bugsnag.IConfig): Bugsnag.Client => {
       const client = ({
-        config: configuration,
+        config: {...DEFAULT_CONFIG, ...configuration},
 
         setOptions: spySetOptions.mockImplementation(opts => {
           client.config = {...client.config, ...opts};

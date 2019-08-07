@@ -130,7 +130,7 @@ function setOptions(
   opts: AnyBugsnagConfig
 ): (client: Started) => IOEither<Error, Bugsnag.Client> {
   return v =>
-    fromEither(validate(merge(v.bugsnag.config, opts))).chain(o =>
+    fromEither(validate({apiKey: v.bugsnag.config.apiKey, ...opts})).chain(o =>
       rightIO(new IO(() => v.bugsnag.setOptions(o)))
     );
 }
