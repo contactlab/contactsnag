@@ -9,7 +9,7 @@ const execM: jest.Mocked<typeof Exec> = Exec as any;
 import {task} from 'fp-ts/lib/Task';
 import {left2v, leftTask, right2v, taskEither} from 'fp-ts/lib/TaskEither';
 import {Capabilities, capabilities, report} from '../../src/bin/report';
-import {result} from '../_helpers';
+import {result} from './_helpers';
 
 afterEach(() => {
   jest.clearAllMocks();

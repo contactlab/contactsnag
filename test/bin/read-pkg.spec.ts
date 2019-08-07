@@ -7,7 +7,7 @@ const readPkgUpM: jest.Mock = readPkgUp as any;
 // ---
 
 import {readPkg} from '../../src/bin/read-pkg';
-import {result} from '../_helpers';
+import {result} from './_helpers';
 
 test('readPkg should retrieve info from package.json', () => {
   readPkgUpM.mockResolvedValue({

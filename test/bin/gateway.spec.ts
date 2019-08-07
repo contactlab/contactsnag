@@ -1,5 +1,5 @@
 import {gateway} from '../../src/bin/gateway';
-import {result} from '../_helpers';
+import {result} from './_helpers';
 
 test('gateway() should return Command from arguments', () => {
   const T1 = gateway(['upload', '--some=kind', '-o', '-f', 'arg']);
