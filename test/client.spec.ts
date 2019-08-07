@@ -40,13 +40,8 @@ test('Client.start() should start the Bugsnag client', () => {
   const actualClient = client.client() as any;
 
   expect(actualClient.type).toBe('Started');
-  expect(actualClient.bugsnag.config).toEqual({
-    ...DEFAULT_CONFIG,
-    ...CONFIG,
-    consoleBreadcrumbsEnabled: false
-  });
+  expect(actualClient.bugsnag.user).toEqual(DEFAULT_USER);
   expect(actualClient.bugsnag).toHaveProperty('notify');
-  expect(actualClient.bugsnag).toHaveProperty('setOptions');
   expect(testClient.create).toBeCalledTimes(1);
 });
 
@@ -133,14 +128,14 @@ test('Client.notify() should fail if client.notify throws error', () => {
   });
 });
 
-// --- Set options
-test('Client.setOptions() should fail when Client is `ConfigError`', () => {
+// --- Set user
+test('Client.setUser() should fail when Client is `ConfigError`', () => {
   const testClient = TestClient();
   const client = create(testClient.create)(BAD_CONFIG);
 
   client.start();
 
-  const result = client.setOptions({apiKey: 'ABCD', user: {id: 123}}).run();
+  const result = client.setUser({id: 1234}).run();
 
   expect(result.isLeft()).toBe(true);
   expect(result.value).toEqual(
@@ -148,74 +143,30 @@ test('Client.setOptions() should fail when Client is `ConfigError`', () => {
       '"endpoints" and "consoleBreadcrumbsEnabled" properties are not allowed in ContactSnag configuration object'
     )
   );
-  expect(testClient.spySetOptions).not.toBeCalled();
 });
 
-test('Client.setOptions() should fail when Client is `Still`', () => {
+test('Client.setUser() should fail when Client is `Still`', () => {
   const testClient = TestClient();
   const client = create(testClient.create)(CONFIG);
 
-  const result = client.setOptions({apiKey: 'ABCD', user: {id: 123}}).run();
+  const result = client.setUser({id: 1234}).run();
 
   expect(result.isLeft()).toBe(true);
   expect(result.value).toEqual(new Error('Client not yet started'));
-  expect(testClient.spySetOptions).not.toBeCalled();
 });
 
-test('Client.setOptions() should set options on client without errors when Client is `Started`', () => {
-  const EXPECTED_CONFIG = {
-    ...DEFAULT_CONFIG,
-    ...CONFIG,
-    consoleBreadcrumbsEnabled: false,
-    user: {id: 123}
-  };
-
+test('Client.setUser() should set a session user on client when Client is `Started`', () => {
   const testClient = TestClient();
   const client = create(testClient.create)(CONFIG);
 
   client.start();
 
-  // --- First time (api key is not required - see below)
-  const result = client.setOptions({apiKey: 'ABCD', user: {id: 123}}).run();
+  const result = client.setUser({id: 1234}).run();
 
   expect(result.isRight()).toBe(true);
-  expect(testClient.spySetOptions).toBeCalledWith({
-    apiKey: 'ABCD',
-    user: {id: 123}
+  expect((client.client() as any).bugsnag.user).toEqual({
+    id: 1234
   });
-  expect((client.client() as any).bugsnag.config).toEqual(EXPECTED_CONFIG);
-
-  // --- Second time (update the same client)
-  const result2 = client.setOptions({user: {id: 456}}).run();
-
-  expect(result2.isRight()).toBe(true);
-  expect(testClient.spySetOptions).toBeCalledWith({
-    apiKey: 'ABCD',
-    user: {id: 456}
-  });
-  expect((client.client() as any).bugsnag.config).toEqual({
-    ...EXPECTED_CONFIG,
-    user: {id: 456}
-  });
-});
-
-test('Client.setOptions() should fail if opts are not valid when Client is `Started`', () => {
-  const testClient = TestClient();
-  const client = create(testClient.create)(CONFIG);
-
-  client.start();
-
-  const result = client
-    .setOptions({endpoints: {notify: 'http://notify-server'}})
-    .run();
-
-  expect(result.isLeft()).toBe(true);
-  expect(result.value).toEqual(
-    new Error(
-      '"endpoints" and "consoleBreadcrumbsEnabled" properties are not allowed in ContactSnag configuration object'
-    )
-  );
-  expect(testClient.spySetOptions).not.toBeCalled();
 });
 
 // --- Helpers
@@ -228,40 +179,14 @@ const CONFIG = {
 
 const BAD_CONFIG = {...CONFIG, consoleBreadcrumbsEnabled: true} as any; // just for testing purpose
 
-// taken from https://github.com/bugsnag/bugsnag-js/blob/next/packages/core/config.js#L4
-const DEFAULT_CONFIG = {
-  apiKey: null,
-  appVersion: null,
-  appType: null,
-  autoNotify: true,
-  beforeSend: [],
-  endpoints: {
-    notify: 'https://notify.bugsnag.com',
-    sessions: 'https://sessions.bugsnag.com'
-  },
-  autoCaptureSessions: true,
-  notifyReleaseStages: null,
-  releaseStage: 'production',
-  maxBreadcrumbs: 20,
-  autoBreadcrumbs: true,
-  user: null,
-  metaData: null,
-  logger: undefined,
-  filters: ['password']
-};
+const DEFAULT_USER = {};
 
 const TestClient = () => {
-  const spySetOptions = jest.fn();
   const spyNotify = jest.fn();
   const spyCreate = jest.fn(
-    (configuration: Bugsnag.IConfig): Bugsnag.Client => {
+    (_: Bugsnag.IConfig): Bugsnag.Client => {
       const client = ({
-        config: {...DEFAULT_CONFIG, ...configuration},
-
-        setOptions: spySetOptions.mockImplementation(opts => {
-          client.config = {...client.config, ...opts};
-          return client;
-        }),
+        user: DEFAULT_USER,
 
         notify: spyNotify
       } as unknown) as Bugsnag.Client;
@@ -271,7 +196,6 @@ const TestClient = () => {
   );
 
   return {
-    spySetOptions,
     spyNotify,
     create: spyCreate
   };
