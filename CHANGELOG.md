@@ -11,6 +11,12 @@
 > - [_Feature_](https://github.com/contactlab/contactsnag/labels/feature)
 > - [_Polish_](https://github.com/contactlab/contactsnag/labels/polish)
 
+## [5.0.1](https://github.com/contactlab/gluex/releases/tag/v5.0.1)
+
+**Dependencies:**
+
+- Bump [`@bugsnag/js`](https://github.com/bugsnag/bugsnag-js) from 6.3.2 to 6.4.0 (#142)
+
 ## [5.0.0](https://github.com/contactlab/gluex/releases/tag/v5.0.0)
 
 **Breaking:**
