@@ -1,4 +1,5 @@
-import {Bugsnag} from '@bugsnag/js';
+import {isLeft, isRight} from 'fp-ts/lib/Either';
+import {Bugsnag} from '../src/bugsnag';
 import {create} from '../src/client';
 
 // --- Creation
@@ -65,12 +66,12 @@ test('Client.notify() should fail when Client is `ConfigError`', () => {
 
   client.start();
 
-  const result = client
-    .notify(new Error('Something happened'), {severity: 'warning'})
-    .run();
+  const result = client.notify(new Error('Something happened'), {
+    severity: 'warning'
+  })();
 
-  expect(result.isLeft()).toBe(true);
-  expect(result.value).toEqual(
+  expect(isLeft(result)).toBe(true);
+  expect((result as any).left).toEqual(
     new Error(
       '"endpoints" and "consoleBreadcrumbsEnabled" properties are not allowed in ContactSnag configuration object'
     )
@@ -82,12 +83,12 @@ test('Client.notify() should fail when Client is `Still`', () => {
   const testClient = TestClient();
   const client = create(testClient.create)(CONFIG);
 
-  const result = client
-    .notify(new Error('Something happened'), {severity: 'warning'})
-    .run();
+  const result = client.notify(new Error('Something happened'), {
+    severity: 'warning'
+  })();
 
-  expect(result.isLeft()).toBe(true);
-  expect(result.value).toEqual(new Error('Client not yet started'));
+  expect(isLeft(result)).toBe(true);
+  expect((result as any).left).toEqual(new Error('Client not yet started'));
   expect(testClient.spyNotify).not.toBeCalled();
 });
 
@@ -97,11 +98,11 @@ test('Client.notify() should notify error with client when Client is `Started`',
 
   client.start();
 
-  const result = client
-    .notify(new Error('Something happened'), {severity: 'warning'})
-    .run();
+  const result = client.notify(new Error('Something happened'), {
+    severity: 'warning'
+  })();
 
-  expect(result.isRight()).toBe(true);
+  expect(isRight(result)).toBe(true);
   expect(testClient.spyNotify).toBeCalledWith(new Error('Something happened'), {
     severity: 'warning'
   });
@@ -117,12 +118,12 @@ test('Client.notify() should fail if client.notify throws error', () => {
 
   client.start();
 
-  const result = client
-    .notify(new Error('Something happened'), {severity: 'warning'})
-    .run();
+  const result = client.notify(new Error('Something happened'), {
+    severity: 'warning'
+  })();
 
-  expect(result.isLeft()).toBe(true);
-  expect(result.value).toEqual(new Error('boom'));
+  expect(isLeft(result)).toBe(true);
+  expect((result as any).left).toEqual(new Error('boom'));
   expect(testClient.spyNotify).toBeCalledWith(new Error('Something happened'), {
     severity: 'warning'
   });
@@ -135,10 +136,10 @@ test('Client.setUser() should fail when Client is `ConfigError`', () => {
 
   client.start();
 
-  const result = client.setUser({id: 1234}).run();
+  const result = client.setUser({id: 1234})();
 
-  expect(result.isLeft()).toBe(true);
-  expect(result.value).toEqual(
+  expect(isLeft(result)).toBe(true);
+  expect((result as any).left).toEqual(
     new Error(
       '"endpoints" and "consoleBreadcrumbsEnabled" properties are not allowed in ContactSnag configuration object'
     )
@@ -149,10 +150,10 @@ test('Client.setUser() should fail when Client is `Still`', () => {
   const testClient = TestClient();
   const client = create(testClient.create)(CONFIG);
 
-  const result = client.setUser({id: 1234}).run();
+  const result = client.setUser({id: 1234})();
 
-  expect(result.isLeft()).toBe(true);
-  expect(result.value).toEqual(new Error('Client not yet started'));
+  expect(isLeft(result)).toBe(true);
+  expect((result as any).left).toEqual(new Error('Client not yet started'));
 });
 
 test('Client.setUser() should set a session user on client when Client is `Started`', () => {
@@ -161,9 +162,9 @@ test('Client.setUser() should set a session user on client when Client is `Start
 
   client.start();
 
-  const result = client.setUser({id: 1234}).run();
+  const result = client.setUser({id: 1234})();
 
-  expect(result.isRight()).toBe(true);
+  expect(isRight(result)).toBe(true);
   expect((client.client() as any).bugsnag.user).toEqual({
     id: 1234
   });

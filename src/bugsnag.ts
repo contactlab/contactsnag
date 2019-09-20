@@ -1,6 +1,6 @@
 import {Bugsnag} from '@bugsnag/js';
 
-export {Bugsnag} from '@bugsnag/js';
+export {Bugsnag, default as bugsnag} from '@bugsnag/js';
 
 /**
  * @description Keep only known keys and remove indexable types from T
