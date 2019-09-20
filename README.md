@@ -126,11 +126,9 @@ const client = ContactSnag({
 
 // Set notification on button click
 document.getElementById('btn').addEventListener('click', () =>
-  client
-    .notify(new Error('Custom error message'), {
-      metaData: {custom: 'My error name'}
-    })
-    .run()
+  client.notify(new Error('Custom error message'), {
+    metaData: {custom: 'My error name'}
+  })()
 );
 
 // Start Bugsnag
@@ -166,7 +164,7 @@ client.start();
 
 // Set user after 1 second
 setTimeout(() => {
-  client.setUser({id: 1}).run();
+  client.setUser({id: 1})();
 }, 1000);
 ```
 
