@@ -46,8 +46,8 @@
     "@types/webpack-bugsnag-plugins": "^1.4.0",
     "bugsnag-sourcemaps": "1.2.1",
     "chalk": "2.4.2",
-    "fp-ts": "^1.19.0",
-    "io-ts": "^1.8.5",
+    "fp-ts": "^2.0.5",
+    "io-ts": "^2.0.1",
     "read-pkg-up": "6.0.0",
     "tslib": "1.10.0",
     "webpack-bugsnag-plugins": "^1.4.0"
@@ -65,7 +65,35 @@
     "ts-node": "8.3.0",
     "tslint": "5.19.0",
     "tslint-config-prettier": "1.18.0",
-    "typescript": "3.5.3"
+    "typescript": "^3.6.3"
+  },
+  "jest": {
+    "automock": false,
+    "bail": true,
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/test/_helpers.ts",
+      "<rootDir>/node_modules/"
+    ],
+    "coverageReporters": [
+      "text"
+    ],
+    "roots": [
+      "<rootDir>/test/"
+    ],
+    "testRegex": "(\\.|/)spec\\.ts$",
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "node",
+      "ts"
+    ],
+    "globals": {
+      "ts-jest": {
+        "diagnostics": true
+      }
+    },
+    "preset": "ts-jest",
+    "testMatch": null
   },
   "husky": {
     "hooks": {
