@@ -71,7 +71,7 @@
     "automock": false,
     "bail": true,
     "coveragePathIgnorePatterns": [
-      "<rootDir>/test/_helpers.ts",
+      "<rootDir>/test/bin/_helpers.ts",
       "<rootDir>/node_modules/"
     ],
     "coverageReporters": [

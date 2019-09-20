@@ -1,13 +1,13 @@
 // --- Mock exec
+import {mocked} from 'ts-jest/utils';
 jest.mock('../../src/bin/exec');
-
 import * as Exec from '../../src/bin/exec';
-
-const execM: jest.Mocked<typeof Exec> = Exec as any;
+const execM = mocked(Exec);
 // ---
 
+import {isLeft, isRight} from 'fp-ts/lib/Either';
 import {task} from 'fp-ts/lib/Task';
-import {left2v, leftTask, right2v, taskEither} from 'fp-ts/lib/TaskEither';
+import {left, leftTask, right, taskEither} from 'fp-ts/lib/TaskEither';
 import {Capabilities, capabilities, report} from '../../src/bin/report';
 import {result} from './_helpers';
 
@@ -18,8 +18,10 @@ afterEach(() => {
 // --- Program
 test('report() should report build with options taken from package json', () =>
   result(report(testCap), data => {
-    expect(data.isRight()).toBe(true);
-    expect(data.value).toBe('BUGSNAG: Build was reported successfully.');
+    expect(isRight(data)).toBe(true);
+    expect((data as any).right).toBe(
+      'BUGSNAG: Build was reported successfully.'
+    );
     expect(testCap.reportBuild).toBeCalledWith(PKG_DATA);
     expect(testCap.trace).toBeCalledWith('BUGSNAG: reporting build for v0.1.0');
   }));
@@ -31,8 +33,8 @@ test('report() should fail if package.json data are wrong', () => {
   };
 
   return result(report(cap), err => {
-    expect(err.isLeft()).toEqual(true);
-    expect(err.value).toEqual(new Error('fail'));
+    expect(isLeft(err)).toEqual(true);
+    expect((err as any).left).toEqual(new Error('fail'));
     expect(cap.reportBuild).not.toBeCalled();
     expect(cap.trace).not.toBeCalled();
   });
@@ -45,19 +47,19 @@ test('report() should fail if an error is thrown during report', () => {
   };
 
   return result(report(cap), err => {
-    expect(err.isLeft()).toEqual(true);
-    expect(err.value).toEqual(new Error('fail'));
+    expect(isLeft(err)).toEqual(true);
+    expect((err as any).left).toEqual(new Error('fail'));
     expect(cap.trace).toBeCalledWith('BUGSNAG: reporting build for v0.1.0');
   });
 });
 
 // --- Capabilities
 test('capabilities.reportBuild() should actually report build', () => {
-  execM.exec.mockReturnValueOnce(right2v({stdout: '', stderr: ''}));
+  execM.exec.mockReturnValueOnce(right({stdout: '', stderr: ''}));
 
   return result(capabilities(TEST_ARGS).reportBuild(PKG_DATA), data => {
-    expect(data.isRight()).toBe(true);
-    expect(data.value).toEqual({stdout: '', stderr: ''});
+    expect(isRight(data)).toBe(true);
+    expect((data as any).right).toEqual({stdout: '', stderr: ''});
     expect(execM.exec).toBeCalledWith(
       'npx bugsnag-build-reporter --api-key TEST-API-KEY --app-version 0.1.0 --release-stage production --builder-name user.name --source-control-revision ABCDEFGH1234567'
     );
@@ -65,11 +67,11 @@ test('capabilities.reportBuild() should actually report build', () => {
 });
 
 test('capabilities.reportBuild() should fail if reporting fails', () => {
-  execM.exec.mockReturnValueOnce(left2v(new Error('fail')));
+  execM.exec.mockReturnValueOnce(left(new Error('fail')));
 
   return result(capabilities(TEST_ARGS).reportBuild(PKG_DATA), data => {
-    expect(data.isLeft()).toBe(true);
-    expect(data.value).toEqual(new Error('fail'));
+    expect(isLeft(data)).toBe(true);
+    expect((data as any).left).toEqual(new Error('fail'));
   });
 });
 

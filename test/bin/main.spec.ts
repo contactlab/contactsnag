@@ -1,12 +1,12 @@
 // --- Mock exec
+import {mocked} from 'ts-jest/utils';
 jest.mock('../../src/bin/exec');
-
 import * as Exec from '../../src/bin/exec';
-
-const execM: jest.Mocked<typeof Exec> = Exec as any;
+const execM = mocked(Exec);
 // ---
 
-import {right2v} from 'fp-ts/lib/TaskEither';
+import {isLeft, isRight} from 'fp-ts/lib/Either';
+import {right} from 'fp-ts/lib/TaskEither';
 import {main} from '../../src/bin/main';
 import {result} from './_helpers';
 
@@ -37,11 +37,13 @@ test('main() should execute "upload"', () => {
     'bundle.js'
   );
 
-  execM.exec.mockReturnValue(right2v({stdout: '', stderr: ''}));
+  execM.exec.mockReturnValue(right({stdout: '', stderr: ''}));
 
   return result(main(), data => {
-    expect(data.isRight()).toBe(true);
-    expect(data.value).toBe('BUGSNAG: Sourcemap was uploaded successfully.');
+    expect(isRight(data)).toBe(true);
+    expect((data as any).right).toBe(
+      'BUGSNAG: Sourcemap was uploaded successfully.'
+    );
   });
 });
 
@@ -55,11 +57,13 @@ test('main() should execute "report"', () => {
     'ABCDEFGH1234567'
   );
 
-  execM.exec.mockReturnValue(right2v({stdout: '', stderr: ''}));
+  execM.exec.mockReturnValue(right({stdout: '', stderr: ''}));
 
   return result(main(), data => {
-    expect(data.isRight()).toBe(true);
-    expect(data.value).toBe('BUGSNAG: Build was reported successfully.');
+    expect(isRight(data)).toBe(true);
+    expect((data as any).right).toBe(
+      'BUGSNAG: Build was reported successfully.'
+    );
   });
 });
 
@@ -68,8 +72,8 @@ test('main() should fail with wrong commands - name', () => {
   process.argv.push('not-a-command', '--and', 'other', '-a=rgs');
 
   return result(main(), data => {
-    expect(data.isLeft()).toBe(true);
-    expect(data.value).toEqual(
+    expect(isLeft(data)).toBe(true);
+    expect((data as any).left).toEqual(
       new Error('Use one of available commands: upload | report')
     );
   });
@@ -80,8 +84,8 @@ test('main() should fail with wrong commands - position', () => {
   process.argv.push('--other', '-a=rgs', '-and', 'upload');
 
   return result(main(), data => {
-    expect(data.isLeft()).toBe(true);
-    expect(data.value).toEqual(
+    expect(isLeft(data)).toBe(true);
+    expect((data as any).left).toEqual(
       new Error('Use one of available commands: upload | report')
     );
   });

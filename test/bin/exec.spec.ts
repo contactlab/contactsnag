@@ -1,11 +1,11 @@
 // --- Mock child_process
+import {mocked} from 'ts-jest/utils';
 jest.mock('child_process');
-
 import * as child_process from 'child_process';
-
-const childProcessM: jest.Mocked<typeof child_process> = child_process as any;
+const childProcessM = mocked(child_process);
 // ---
 
+import {isLeft, isRight} from 'fp-ts/lib/Either';
 import {exec} from '../../src/bin/exec';
 import {result} from './_helpers';
 
@@ -17,8 +17,8 @@ test('exec() should execute command and lift it into TaskEither - success', () =
   childProcessM.exec.mockImplementation(mockExecOK);
 
   return result(exec('npm run command --first-arg=foo -b --ar'), data => {
-    expect(data.isRight()).toBe(true);
-    expect(data.value).toEqual({
+    expect(isRight(data)).toBe(true);
+    expect((data as any).right).toEqual({
       stdout: '',
       stderr: ''
     });
@@ -34,8 +34,8 @@ test('exec() should execute command and lift it into TaskEither - fail', () => {
   childProcessM.exec.mockImplementation(mockExecKO);
 
   return result(exec('npm run command --first-arg=foo -b --ar'), data => {
-    expect(data.isLeft()).toBe(true);
-    expect(data.value).toEqual(new Error('fail'));
+    expect(isLeft(data)).toBe(true);
+    expect((data as any).left).toEqual(new Error('fail'));
   });
 });
 
