@@ -1,4 +1,4 @@
-import {default as bugsnag} from '@bugsnag/js';
+import {bugsnag} from './bugsnag';
 import {create} from './client';
 
 // --- Re-exports

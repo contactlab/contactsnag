@@ -1,14 +1,15 @@
 import {sequenceT} from 'fp-ts/lib/Apply';
-import {getMonoid} from 'fp-ts/lib/Array';
-import {TaskEither, taskEither} from 'fp-ts/lib/TaskEither';
+import * as A from 'fp-ts/lib/Array';
+import * as TE from 'fp-ts/lib/TaskEither';
+import {pipe} from 'fp-ts/lib/pipeable';
 import {Package} from './decoders';
 import {ExecOutput, exec} from './exec';
 import {Program} from './program';
 import {ReadPkg, readPkg} from './read-pkg';
 import {Trace, trace} from './trace';
 
-const sequenceTE = sequenceT(taskEither);
-const concatS = getMonoid<string>().concat;
+const sequenceTE = sequenceT(TE.taskEither);
+const concatS = A.getMonoid<string>().concat;
 
 const prepareOpts = (pkg: Package, args: string[]): string =>
   concatS(
@@ -24,7 +25,7 @@ const prepareOpts = (pkg: Package, args: string[]): string =>
 export interface Capabilities {
   readPkg: ReadPkg;
   trace: Trace;
-  reportBuild: (pkg: Package) => TaskEither<Error, ExecOutput>;
+  reportBuild: (pkg: Package) => TE.TaskEither<Error, ExecOutput>;
 }
 
 export const capabilities = (args: string[]): Capabilities => ({
@@ -36,11 +37,13 @@ export const capabilities = (args: string[]): Capabilities => ({
 
 // --- Program
 export const report = (c: Capabilities): Program =>
-  c.readPkg
-    .chain(data =>
+  pipe(
+    c.readPkg,
+    TE.chain(data =>
       sequenceTE(
         c.trace(`BUGSNAG: reporting build for v${data.version}`),
         c.reportBuild(data)
       )
-    )
-    .map(() => 'BUGSNAG: Build was reported successfully.');
+    ),
+    TE.map(() => 'BUGSNAG: Build was reported successfully.')
+  );

@@ -1,10 +1,11 @@
+import {isLeft, isRight} from 'fp-ts/lib/Either';
 import {validate} from '../src/validate';
 
 test('validate() should return Right<Config>', () => {
   const result1 = validate({apiKey: 'abcd', user: {id: 123}});
 
-  expect(result1.isRight()).toBe(true);
-  expect(result1.value).toEqual({apiKey: 'abcd', user: {id: 123}});
+  expect(isRight(result1)).toBe(true);
+  expect((result1 as any).right).toEqual({apiKey: 'abcd', user: {id: 123}});
 
   const result2 = validate({
     apiKey: 'abcd',
@@ -12,8 +13,8 @@ test('validate() should return Right<Config>', () => {
     consoleBreadcrumbsEnabled: false
   });
 
-  expect(result2.isRight()).toBe(true);
-  expect(result2.value).toEqual({
+  expect(isRight(result2)).toBe(true);
+  expect((result2 as any).right).toEqual({
     apiKey: 'abcd',
     user: {id: 123},
     consoleBreadcrumbsEnabled: false
@@ -26,8 +27,8 @@ test('validate() should return Left<Error>', () => {
     endpoints: {notify: 'http://notify-server'}
   });
 
-  expect(result1.isLeft()).toBe(true);
-  expect(result1.value).toEqual(
+  expect(isLeft(result1)).toBe(true);
+  expect((result1 as any).left).toEqual(
     new Error(
       '"endpoints" and "consoleBreadcrumbsEnabled" properties are not allowed in ContactSnag configuration object'
     )
@@ -38,8 +39,8 @@ test('validate() should return Left<Error>', () => {
     consoleBreadcrumbsEnabled: true
   });
 
-  expect(result2.isLeft()).toBe(true);
-  expect(result2.value).toEqual(
+  expect(isLeft(result2)).toBe(true);
+  expect((result2 as any).left).toEqual(
     new Error(
       '"endpoints" and "consoleBreadcrumbsEnabled" properties are not allowed in ContactSnag configuration object'
     )

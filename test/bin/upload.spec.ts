@@ -1,13 +1,13 @@
 // --- Mock exec
+import {mocked} from 'ts-jest/utils';
 jest.mock('../../src/bin/exec');
-
 import * as Exec from '../../src/bin/exec';
-
-const execM: jest.Mocked<typeof Exec> = Exec as any;
+const execM = mocked(Exec);
 // ---
 
+import {isLeft, isRight} from 'fp-ts/lib/Either';
 import {task} from 'fp-ts/lib/Task';
-import {left2v, leftTask, right2v, taskEither} from 'fp-ts/lib/TaskEither';
+import {left, leftTask, right, taskEither} from 'fp-ts/lib/TaskEither';
 import {Capabilities, capabilities, upload} from '../../src/bin/upload';
 import {result} from './_helpers';
 
@@ -18,8 +18,10 @@ afterEach(() => {
 // --- Program
 test('upload() should upload source maps with options taken from package json', () =>
   result(upload(testCap), data => {
-    expect(data.isRight()).toBe(true);
-    expect(data.value).toBe('BUGSNAG: Sourcemap was uploaded successfully.');
+    expect(isRight(data)).toBe(true);
+    expect((data as any).right).toBe(
+      'BUGSNAG: Sourcemap was uploaded successfully.'
+    );
     expect(testCap.uploadSourceMap).toBeCalledWith(PKG_DATA);
     expect(testCap.trace).toBeCalledWith(
       'BUGSNAG: uploading sourcemap for v0.1.0'
@@ -33,8 +35,8 @@ test('upload() should fail if package.json data are wrong', () => {
   };
 
   return result(upload(cap), err => {
-    expect(err.isLeft()).toEqual(true);
-    expect(err.value).toEqual(new Error('fail'));
+    expect(isLeft(err)).toEqual(true);
+    expect((err as any).left).toEqual(new Error('fail'));
     expect(cap.uploadSourceMap).not.toBeCalled();
     expect(cap.trace).not.toBeCalled();
   });
@@ -47,19 +49,19 @@ test('upload() should fail if an error is thrown during upload', () => {
   };
 
   return result(upload(cap), err => {
-    expect(err.isLeft()).toEqual(true);
-    expect(err.value).toEqual(new Error('fail'));
+    expect(isLeft(err)).toEqual(true);
+    expect((err as any).left).toEqual(new Error('fail'));
     expect(cap.trace).toBeCalledWith('BUGSNAG: uploading sourcemap for v0.1.0');
   });
 });
 
 // --- Capabilities
 test('capabilities.uploadSourceMap() should actually upload source map', () => {
-  execM.exec.mockReturnValueOnce(right2v({stdout: '', stderr: ''}));
+  execM.exec.mockReturnValueOnce(right({stdout: '', stderr: ''}));
 
   return result(capabilities(TEST_ARGS).uploadSourceMap(PKG_DATA), data => {
-    expect(data.isRight()).toBe(true);
-    expect(data.value).toEqual({stdout: '', stderr: ''});
+    expect(isRight(data)).toBe(true);
+    expect((data as any).right).toEqual({stdout: '', stderr: ''});
     expect(execM.exec).toBeCalledWith(
       'npx bugsnag-sourcemaps upload --api-key TEST-API-KEY --app-version 0.1.0 --overwrite --source-map ./dist/bundle.js.map --minified-file ./dist/bundle.js'
     );
@@ -67,11 +69,11 @@ test('capabilities.uploadSourceMap() should actually upload source map', () => {
 });
 
 test('capabilities.uploadSourceMap() should fail if upload fails', () => {
-  execM.exec.mockReturnValueOnce(left2v(new Error('fail')));
+  execM.exec.mockReturnValueOnce(left(new Error('fail')));
 
   return result(capabilities(TEST_ARGS).uploadSourceMap(PKG_DATA), data => {
-    expect(data.isLeft()).toBe(true);
-    expect(data.value).toEqual(new Error('fail'));
+    expect(isLeft(data)).toBe(true);
+    expect((data as any).left).toEqual(new Error('fail'));
   });
 });
 

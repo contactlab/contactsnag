@@ -1,15 +1,10 @@
 # Changelog
 
-> **Tags:**
->
-> - [_Breaking_](https://github.com/contactlab/contactsnag/labels/breaking)
-> - [_Bug Fix_](https://github.com/contactlab/contactsnag/labels/bug)
-> - [_Dependencies_](https://github.com/contactlab/contactsnag/labels/dependencies)
-> - [_Deprecation_](https://github.com/contactlab/contactsnag/labels/deprecation)
-> - [_Documentation_](https://github.com/contactlab/contactsnag/labels/documentation)
-> - [_Internal_](https://github.com/contactlab/contactsnag/labels/internal)
-> - [_Feature_](https://github.com/contactlab/contactsnag/labels/feature)
-> - [_Polish_](https://github.com/contactlab/contactsnag/labels/polish)
+## [6.0.0](https://github.com/contactlab/gluex/releases/tag/v6.0.0)
+
+**Breaking:**
+
+- `[dependencies][documentation]` Move to fp-ts version 2.x (#158)
 
 ## [5.0.1](https://github.com/contactlab/gluex/releases/tag/v5.0.1)
 
