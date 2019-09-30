@@ -14,11 +14,11 @@ const decodePkg = (json: unknown): Either<Error, Package> =>
     mapLeft(errors => new Error(failure(errors)[0]))
   );
 
-const readPkgUpTE: TaskEither<Error, RPUPackage['package']> = () =>
+const readPkgUpTE: TaskEither<Error, RPUPackage['packageJson']> = () =>
   readPkgUp({cwd: process.cwd()}).then(result =>
     typeof result === 'undefined'
       ? left(new Error('Cannot find a package.json'))
-      : either.of(result.package)
+      : either.of(result.packageJson)
   );
 
 export type ReadPkg = typeof readPkg;

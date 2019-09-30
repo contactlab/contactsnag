@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.0.1](https://github.com/contactlab/gluex/releases/tag/v6.0.1)
+
+**Dependencies:**
+
+- Bump `@bugsnag/js` from 6.4.0 to 6.4.1 (#162)
+- Bump `read-pkg-up` from 6.0.0 to 7.0.0 (#161)
+
 ## [6.0.0](https://github.com/contactlab/gluex/releases/tag/v6.0.0)
 
 **Breaking:**
