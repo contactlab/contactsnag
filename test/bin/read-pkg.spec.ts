@@ -10,7 +10,7 @@ import {result} from './_helpers';
 
 test('readPkg should retrieve info from package.json', () => {
   readPkgUpM.mockResolvedValue(({
-    package: {
+    packageJson: {
       name: 'test-pkg',
       version: '0.1.0',
       bugsnag: {
@@ -40,7 +40,7 @@ test('readPkg should fail if it cannot find a package.json', () => {
 
 test('readPkg should fail if package.json has not valid data', () => {
   readPkgUpM.mockResolvedValue(({
-    package: {version: '1.0.0', bugsnag: {}}
+    packageJson: {version: '1.0.0', bugsnag: {}}
   } as unknown) as readPkgUp.ReadResult);
 
   return expect(result(readPkg)).rejects.toEqual(
