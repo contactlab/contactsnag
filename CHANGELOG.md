@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.0.2](https://github.com/contactlab/gluex/releases/tag/v6.0.2)
+
+**Dependencies:**
+
+- Bump `@types/node` from 12.7.8 to 12.7.11 (#167)
+- Bump `husky` from 3.0.7 to 3.0.8 (#166)
+- Bump `fp-ts` from 2.0.5 to 2.1.0 (#165)
+
 ## [6.0.1](https://github.com/contactlab/gluex/releases/tag/v6.0.1)
 
 **Dependencies:**
