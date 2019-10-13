@@ -42,7 +42,7 @@
     "prepublishOnly": "npm test && npm run build"
   },
   "dependencies": {
-    "@bugsnag/js": "6.4.1",
+    "@bugsnag/js": "6.4.2",
     "@types/webpack-bugsnag-plugins": "^1.4.0",
     "bugsnag-sourcemaps": "1.2.1",
     "chalk": "2.4.2",
