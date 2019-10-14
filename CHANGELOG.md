@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.0.2](https://github.com/contactlab/gluex/releases/tag/v6.0.2)
+
+**Dependencies:**
+
+- Bump `@bugsnag/js` from 6.4.1 to 6.4.2 (#170)
+- Bump `typescript` from 3.6.3 to 3.6.4 (#171)
+
 ## [6.0.1](https://github.com/contactlab/gluex/releases/tag/v6.0.1)
 
 **Dependencies:**
