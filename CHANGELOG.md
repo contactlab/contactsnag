@@ -1,5 +1,15 @@
 # Changelog
 
+## [6.0.3](https://github.com/contactlab/gluex/releases/tag/v6.0.3)
+
+**Dependencies:**
+
+- Bump `@bugsnag/js` from 6.4.2 to 6.4.3 (#180)
+- Bump `bugsnag-sourcemaps` from 1.2.1 to 1.2.2 (#182)
+- Bump `fp-ts` from 2.1.0 to 2.1.1 (#177)
+- Bump `@types/jest` from 24.0.18 to 24.0.21 (#183 - #179 - #176)
+- Bump `@types/node` from 12.7.12 to 12.12.5 (#181 - #178 - #175)
+
 ## [6.0.2](https://github.com/contactlab/gluex/releases/tag/v6.0.2)
 
 **Dependencies:**
