@@ -45,7 +45,7 @@
     "@bugsnag/js": "6.4.3",
     "@types/webpack-bugsnag-plugins": "^1.4.0",
     "bugsnag-sourcemaps": "1.2.2",
-    "chalk": "2.4.2",
+    "chalk": "3.0.0",
     "fp-ts": "^2.0.5",
     "io-ts": "^2.0.1",
     "read-pkg-up": "7.0.0",
