@@ -1,5 +1,14 @@
 # Changelog
 
+## [6.0.4](https://github.com/contactlab/gluex/releases/tag/v6.0.4)
+
+**Dependencies:**
+
+- Bump `@bugsnag/js` from 6.4.3 to 6.5.0 (#207)
+- [Security] Bump `handlebars` from 4.1.2 to 4.5.3 (#211)
+- Bump `read-pkg-up` from 7.0.0 to 7.0.1 (#203)
+- Bump `chalk` from 2.4.2 to 3.0.0 (#191)
+
 ## [6.0.3](https://github.com/contactlab/gluex/releases/tag/v6.0.3)
 
 **Dependencies:**
