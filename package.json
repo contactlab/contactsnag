@@ -1,6 +1,6 @@
 {
   "name": "contactsnag",
-  "version": "6.0.4",
+  "version": "6.0.5",
   "description": "Bugsnag utilities for Contactlab's applications",
   "main": "lib/index.js",
   "module": "lib/es6/index.js",
