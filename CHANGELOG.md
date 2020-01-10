@@ -1,5 +1,11 @@
 # Changelog
 
+## [6.0.5](https://github.com/contactlab/gluex/releases/tag/v6.0.5)
+
+**Internal:**
+
+- use caret range for `tslib`
+
 ## [6.0.4](https://github.com/contactlab/gluex/releases/tag/v6.0.4)
 
 **Dependencies:**
