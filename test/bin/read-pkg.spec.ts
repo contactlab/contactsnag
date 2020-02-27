@@ -1,12 +1,13 @@
 // --- Mock read-pkg-up
-import {mocked} from 'ts-jest/utils';
 jest.mock('read-pkg-up');
-import readPkgUp from 'read-pkg-up';
-const readPkgUpM = mocked(readPkgUp);
 // ---
 
+import readPkgUp from 'read-pkg-up';
+import {mocked} from 'ts-jest/utils';
 import {readPkg} from '../../src/bin/read-pkg';
 import {result} from './_helpers';
+
+const readPkgUpM = mocked(readPkgUp);
 
 test('readPkg should retrieve info from package.json', () => {
   readPkgUpM.mockResolvedValue(({

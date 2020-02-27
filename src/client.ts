@@ -64,7 +64,7 @@ export const create = (creator: BugsnagClientCreator) => (
 ): Client => {
   let actualClient = foldValidation(validate(config));
 
-  const starter = (s: Still) => {
+  const starter = (s: Still): void => {
     actualClient = started(creator(s.config));
   };
 
@@ -106,11 +106,11 @@ function merge<A, B>(a: A, b: B): A & B {
   return Object.assign({}, a, b);
 }
 
-function configErrorThrows(client: ConfigError): IOE.IOEither<Error, any> {
+function configErrorThrows(client: ConfigError): IOE.IOEither<Error, void> {
   return IOE.ioEither.throwError(client.error);
 }
 
-function stillThrows(_: Still): IOE.IOEither<Error, any> {
+function stillThrows(_: Still): IOE.IOEither<Error, void> {
   return IOE.ioEither.throwError(new Error(NOT_STARTED_ERR_MSG));
 }
 

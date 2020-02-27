@@ -1,4 +1,4 @@
-import * as child_process from 'child_process';
+import * as childProcess from 'child_process';
 import {left, right} from 'fp-ts/lib/Either';
 import {TaskEither} from 'fp-ts/lib/TaskEither';
 
@@ -9,7 +9,7 @@ export interface ExecOutput {
 
 export const exec = (cmd: string): TaskEither<Error, ExecOutput> => () =>
   new Promise(resolve =>
-    child_process.exec(cmd, {encoding: 'utf-8'}, (err, stdout, stderr) =>
+    childProcess.exec(cmd, {encoding: 'utf-8'}, (err, stdout, stderr) =>
       err !== null ? resolve(left(err)) : resolve(right({stdout, stderr}))
     )
   );

@@ -1,13 +1,14 @@
 // --- Mock child_process
-import {mocked} from 'ts-jest/utils';
 jest.mock('child_process');
-import * as child_process from 'child_process';
-const childProcessM = mocked(child_process);
 // ---
 
+import * as childProcess from 'child_process';
 import {isLeft, isRight} from 'fp-ts/lib/Either';
+import {mocked} from 'ts-jest/utils';
 import {exec} from '../../src/bin/exec';
 import {result} from './_helpers';
+
+const childProcessM = mocked(childProcess);
 
 afterEach(() => {
   jest.resetAllMocks();
