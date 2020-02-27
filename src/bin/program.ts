@@ -1,4 +1,4 @@
-/*tslint:disable no-console*/
+/* eslint-disable no-console */
 
 import chalk from 'chalk';
 import {fold} from 'fp-ts/lib/Either';

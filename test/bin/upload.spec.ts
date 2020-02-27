@@ -1,15 +1,16 @@
 // --- Mock exec
-import {mocked} from 'ts-jest/utils';
 jest.mock('../../src/bin/exec');
-import * as Exec from '../../src/bin/exec';
-const execM = mocked(Exec);
 // ---
 
 import {isLeft, isRight} from 'fp-ts/lib/Either';
 import {task} from 'fp-ts/lib/Task';
 import {left, leftTask, right, taskEither} from 'fp-ts/lib/TaskEither';
+import {mocked} from 'ts-jest/utils';
+import * as Exec from '../../src/bin/exec';
 import {Capabilities, capabilities, upload} from '../../src/bin/upload';
 import {result} from './_helpers';
+
+const execM = mocked(Exec);
 
 afterEach(() => {
   jest.clearAllMocks();

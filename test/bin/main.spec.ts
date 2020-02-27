@@ -1,14 +1,15 @@
 // --- Mock exec
-import {mocked} from 'ts-jest/utils';
 jest.mock('../../src/bin/exec');
-import * as Exec from '../../src/bin/exec';
-const execM = mocked(Exec);
 // ---
 
 import {isLeft, isRight} from 'fp-ts/lib/Either';
 import {right} from 'fp-ts/lib/TaskEither';
+import {mocked} from 'ts-jest/utils';
+import * as Exec from '../../src/bin/exec';
 import {main} from '../../src/bin/main';
 import {result} from './_helpers';
+
+const execM = mocked(Exec);
 
 let oriCwd: string;
 let oriArgv: string[];
