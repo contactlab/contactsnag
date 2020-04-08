@@ -1,5 +1,21 @@
 # Changelog
 
+## [6.1.0](https://github.com/contactlab/gluex/releases/tag/v6.1.0)
+
+**Internal:**
+
+- Drop support for Nodejs v8.x
+
+**Dependencies:**
+
+- Bump bugsnag-sourcemaps from 1.2.2 to 1.3.0 (#263)
+- Bump chalk from 3.0.0 to 4.0.0 (#261)
+- remove Node v8 from CI
+- [Security] Bump acorn from 6.4.0 to 6.4.1 (#255)
+- Switch to eslint (#252)
+- Bump @bugsnag/js from 6.5.0 to 6.5.2 (#241)
+- use range version for dev dependencies (#240)
+
 ## [6.0.5](https://github.com/contactlab/gluex/releases/tag/v6.0.5)
 
 **Internal:**
