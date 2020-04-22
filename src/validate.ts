@@ -1,29 +1,33 @@
+import * as BS from '@bugsnag/js';
 import * as E from 'fp-ts/lib/Either';
-import {Bugsnag, BugsnagConfig} from './bugsnag';
 
-type NonNullableConfig = Required<
-  Pick<BugsnagConfig, 'notifyReleaseStages' | 'releaseStage' | 'appVersion'>
+type ValidConfig = Omit<BS.Config, 'endpoints'>;
+
+type RequiredConfig = Required<
+  Pick<ValidConfig, 'enabledReleaseStages' | 'releaseStage' | 'appVersion'>
 >;
 
-type ValidConfig = Omit<BugsnagConfig, 'endpoint' | 'endpoints'>;
-
-interface AllowedConfig {
-  consoleBreadcrumbsEnabled?: false;
+interface RedefinedConfig {
+  enabledBreadcrumbTypes?: Array<Exclude<BS.BreadcrumbType, 'log'>>;
 }
 
-export type Config = ValidConfig & NonNullableConfig & AllowedConfig;
+export type Config = ValidConfig & RequiredConfig & RedefinedConfig;
 
 const ERRMSG =
-  '"endpoints" and "consoleBreadcrumbsEnabled" properties are not allowed in ContactSnag configuration object';
+  '"endpoints" and "enabledBreadcrumbTypes" properties are not allowed in ContactSnag configuration object';
 
-export function validate(a: Bugsnag.IConfig): E.Either<Error, Config> {
-  return isValid(a) ? E.right(a) : E.left(new Error(ERRMSG));
+export function validate(c: BS.Config): E.Either<Error, Config> {
+  return isValid(c) ? E.right(c) : E.left(new Error(ERRMSG));
 }
 
-function isValid(a: Bugsnag.IConfig): a is Config {
+function isValid(c: BS.Config): c is Config {
+  return typeof c.endpoints === 'undefined' && isBreadcrumbValid(c);
+}
+
+function isBreadcrumbValid(c: BS.Config): boolean {
   return (
-    typeof a.endpoints === 'undefined' &&
-    (typeof a.consoleBreadcrumbsEnabled === 'undefined' ||
-      a.consoleBreadcrumbsEnabled === false)
+    c.enabledBreadcrumbTypes !== null &&
+    (typeof c.enabledBreadcrumbTypes === 'undefined' ||
+      c.enabledBreadcrumbTypes.indexOf('log') < 0)
   );
 }

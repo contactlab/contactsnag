@@ -1,12 +1,21 @@
+import * as BS from '@bugsnag/js';
 import * as E from 'fp-ts/lib/Either';
 import * as IOE from 'fp-ts/lib/IOEither';
 import {constVoid as undef} from 'fp-ts/lib/function';
-import {Bugsnag, BugsnagClientCreator} from './bugsnag';
+import {pipe} from 'fp-ts/lib/pipeable';
 import {Config, validate} from './validate';
 
 // --- Constants
-const DEFAULT_CONFIG = {
-  consoleBreadcrumbsEnabled: false
+const DEFAULT_CONFIG: Partial<Config> = {
+  enabledBreadcrumbTypes: [
+    'error',
+    'manual',
+    'navigation',
+    'process',
+    'request',
+    'state',
+    'user'
+  ]
 };
 
 const NOT_STARTED_ERR_MSG = 'Client not yet started';
@@ -19,7 +28,7 @@ interface ConfigError {
   readonly error: Error;
 }
 
-const configError = (error: Error): ConfigError => ({
+const ConfigError = (error: Error): ConfigError => ({
   type: 'ConfigError',
   error
 });
@@ -29,21 +38,17 @@ interface Still {
   readonly config: Config;
 }
 
-const still = (config: Config): Still => ({type: 'Still', config});
+const Still = (config: Config): Still => ({type: 'Still', config});
 
 interface Started {
   readonly type: 'Started';
-  readonly bugsnag: Bugsnag.Client;
+  readonly bugsnag: BS.Client;
 }
 
-const started = (client: Bugsnag.Client): Started => ({
+const Started = (bugsnag: BS.Client): Started => ({
   type: 'Started',
-  bugsnag: client
+  bugsnag
 });
-
-const foldValidation = E.fold<Error, Config, ActualClient>(configError, conf =>
-  still(merge(DEFAULT_CONFIG, conf))
-);
 
 // --- Client
 export interface Client {
@@ -52,47 +57,58 @@ export interface Client {
   readonly start: () => void;
 
   readonly notify: (
-    error: Bugsnag.NotifiableError,
-    opts?: Bugsnag.INotifyOpts
+    error: BS.NotifiableError,
+    onError?: BS.OnErrorCallback
   ) => IOE.IOEither<Error, void>;
 
-  readonly setUser: (user: object) => IOE.IOEither<Error, void>;
+  readonly setUser: (user: BS.User) => IOE.IOEither<Error, void>;
 }
 
-export const create = (creator: BugsnagClientCreator) => (
+export const create = (creator: BS.BugsnagStatic) => (
   config: Config
 ): Client => {
-  let actualClient = foldValidation(validate(config));
-
-  const starter = (s: Still): void => {
-    actualClient = started(creator(s.config));
-  };
+  let actualClient = pipe(
+    validate(config),
+    E.map(withDefaults),
+    E.fold<Error, Config, ActualClient>(ConfigError, Still)
+  );
 
   const c: Client = {
     client: () => actualClient,
 
-    start: () => fold(actualClient, undef, starter, undef),
+    start: () =>
+      match(
+        actualClient,
+        undef,
+        s => (actualClient = Started(creator.start(s.config))),
+        undef
+      ),
 
-    notify: (error, opts) =>
-      fold(actualClient, configErrorThrows, stillThrows, notify(error, opts)),
+    notify: (error, onError) =>
+      match(
+        actualClient,
+        configErrorThrows,
+        stillThrows,
+        notify(error, onError)
+      ),
 
     setUser: user =>
-      fold(actualClient, configErrorThrows, stillThrows, setUser(user))
+      match(actualClient, configErrorThrows, stillThrows, setUser(user))
   };
 
   return c;
 };
 
 // --- Helpers
-function fold<R>(
+function match<R>(
   value: ActualClient,
-  whenError: (v: ConfigError) => R,
+  whenConfigError: (v: ConfigError) => R,
   whenStill: (v: Still) => R,
   whenStarted: (v: Started) => R
 ): R {
   switch (value.type) {
     case 'ConfigError':
-      return whenError(value);
+      return whenConfigError(value);
 
     case 'Still':
       return whenStill(value);
@@ -102,8 +118,8 @@ function fold<R>(
   }
 }
 
-function merge<A, B>(a: A, b: B): A & B {
-  return Object.assign({}, a, b);
+function withDefaults(c: Config): Config {
+  return Object.assign({}, DEFAULT_CONFIG, c);
 }
 
 function configErrorThrows(client: ConfigError): IOE.IOEither<Error, void> {
@@ -114,18 +130,17 @@ function stillThrows(_: Still): IOE.IOEither<Error, void> {
   return IOE.ioEither.throwError(new Error(NOT_STARTED_ERR_MSG));
 }
 
-type ExecuteOnStarted = (client: Started) => IOE.IOEither<Error, void>;
+type ExecWhenIsStarted = (client: Started) => IOE.IOEither<Error, void>;
 
 function notify(
-  error: Bugsnag.NotifiableError,
-  opts?: Bugsnag.INotifyOpts
-): ExecuteOnStarted {
-  return v => IOE.tryCatch(() => v.bugsnag.notify(error, opts), E.toError);
+  error: BS.NotifiableError,
+  onError?: BS.OnErrorCallback
+): ExecWhenIsStarted {
+  return ({bugsnag}) =>
+    IOE.tryCatch(() => bugsnag.notify(error, onError), E.toError);
 }
 
-function setUser(user: object): ExecuteOnStarted {
-  return v =>
-    IOE.rightIO(() => {
-      v.bugsnag.user = user;
-    });
+function setUser(user: BS.User): ExecWhenIsStarted {
+  return ({bugsnag}) =>
+    IOE.rightIO(() => bugsnag.setUser(user.id, user.email, user.name));
 }
