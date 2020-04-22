@@ -6,10 +6,15 @@ import {pipe} from 'fp-ts/lib/pipeable';
 
 const log = <A>(msg: A): IO<void> => info(chalk.cyanBright(`\n> ${msg}`));
 
-export type Trace = typeof trace;
-export const trace = <A>(msg: A): TaskEither<Error, A> =>
-  pipe(
-    log(msg),
-    map(() => msg),
-    rightIO
-  );
+export interface Trace {
+  log: <A>(msg: A) => TaskEither<Error, A>;
+}
+
+export const traceConsole: Trace = {
+  log: msg =>
+    pipe(
+      log(msg),
+      map(() => msg),
+      rightIO
+    )
+};

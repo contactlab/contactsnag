@@ -71,7 +71,7 @@
     "bail": true,
     "collectCoverage": true,
     "coveragePathIgnorePatterns": [
-      "<rootDir>/test/bin/_helpers.ts",
+      "<rootDir>/test/bin/_data.ts",
       "<rootDir>/node_modules/"
     ],
     "coverageReporters": [

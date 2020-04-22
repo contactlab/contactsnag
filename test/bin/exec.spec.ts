@@ -3,10 +3,9 @@ jest.mock('child_process');
 // ---
 
 import * as childProcess from 'child_process';
-import {isLeft, isRight} from 'fp-ts/lib/Either';
+import {right, left} from 'fp-ts/lib/Either';
 import {mocked} from 'ts-jest/utils';
-import {exec} from '../../src/bin/exec';
-import {result} from './_helpers';
+import {execNode} from '../../src/bin/exec';
 
 const childProcessM = mocked(childProcess);
 
@@ -14,30 +13,29 @@ afterEach(() => {
   jest.resetAllMocks();
 });
 
-test('exec() should execute command and lift it into TaskEither - success', () => {
+test('exec() should execute command and lift it into TaskEither - success', async () => {
   childProcessM.exec.mockImplementation(mockExecOK);
 
-  return result(exec('npm run command --first-arg=foo -b --ar'), data => {
-    expect(isRight(data)).toBe(true);
-    expect((data as any).right).toEqual({
-      stdout: '',
-      stderr: ''
-    });
+  const result = await execNode.exec(
+    'npm run command --first-arg=foo -b --ar'
+  )();
 
-    const callParams = childProcessM.exec.mock.calls[0];
+  expect(result).toEqual(right({stdout: '', stderr: ''}));
 
-    expect(callParams[0]).toBe('npm run command --first-arg=foo -b --ar');
-    expect(callParams[1]).toEqual({encoding: 'utf-8'});
-  });
+  const params = childProcessM.exec.mock.calls[0];
+
+  expect(params[0]).toBe('npm run command --first-arg=foo -b --ar');
+  expect(params[1]).toEqual({encoding: 'utf-8'});
 });
 
-test('exec() should execute command and lift it into TaskEither - fail', () => {
+test('exec() should execute command and lift it into TaskEither - fail', async () => {
   childProcessM.exec.mockImplementation(mockExecKO);
 
-  return result(exec('npm run command --first-arg=foo -b --ar'), data => {
-    expect(isLeft(data)).toBe(true);
-    expect((data as any).left).toEqual(new Error('fail'));
-  });
+  const result = await execNode.exec(
+    'npm run command --first-arg=foo -b --ar'
+  )();
+
+  expect(result).toEqual(left(new Error('fail')));
 });
 
 // --- Helpers
