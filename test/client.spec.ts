@@ -1,54 +1,67 @@
-import {isLeft, isRight} from 'fp-ts/lib/Either';
-import {Bugsnag} from '../src/bugsnag';
+import * as BS from '@bugsnag/js';
+import {left, right, isRight} from 'fp-ts/lib/Either';
 import {create} from '../src/client';
+import {Config} from '../src/validate';
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
 
 // --- Creation
 test('create() should return a `Still` Client when provided configuration is valid', () => {
-  const client = create(TestClient().create)(CONFIG);
+  const client = create(CREATOR)(CONFIG);
 
-  expect(client.client().type).toBe('Still');
+  expect(CREATOR.start).not.toBeCalled();
+  expect(client.client()).toEqual({
+    type: 'Still',
+    config: {
+      ...CONFIG,
+      enabledBreadcrumbTypes: [
+        'error',
+        'manual',
+        'navigation',
+        'process',
+        'request',
+        'state',
+        'user'
+      ]
+    }
+  });
 });
 
 test('create() should return a `ConfigError` Client when provided configuration is not valid', () => {
-  const client = create(TestClient().create)(BAD_CONFIG);
-  const actualClient = client.client() as any;
+  const client = create(CREATOR)(BAD_CONFIG);
 
-  expect(actualClient.type).toBe('ConfigError');
-  expect(actualClient.error).toEqual(
-    new Error(
-      '"endpoints" and "consoleBreadcrumbsEnabled" properties are not allowed in ContactSnag configuration object'
-    )
-  );
+  expect(CREATOR.start).not.toBeCalled();
+  expect(client.client()).toEqual({
+    type: 'ConfigError',
+    error: new Error(ERR)
+  });
 });
 
 // --- Start
 test('Client.start() should do nothing when Client is `ConfigError`', () => {
-  const testClient = TestClient();
-  const client = create(testClient.create)(BAD_CONFIG);
+  const client = create(CREATOR)(BAD_CONFIG);
 
   client.start();
 
   expect(client.client().type).toBe('ConfigError');
-  expect(testClient.create).not.toBeCalled();
+  expect(CREATOR.start).not.toBeCalled();
 });
 
 test('Client.start() should start the Bugsnag client', () => {
-  const testClient = TestClient();
-  const client = create(testClient.create)(CONFIG);
+  const client = create(CREATOR)(CONFIG);
 
   client.start();
 
   const actualClient = client.client() as any;
 
-  expect(actualClient.type).toBe('Started');
-  expect(actualClient.bugsnag.user).toEqual(DEFAULT_USER);
-  expect(actualClient.bugsnag).toHaveProperty('notify');
-  expect(testClient.create).toBeCalledTimes(1);
+  expect(actualClient).toEqual({type: 'Started', bugsnag: BS_CLIENT});
+  expect(CREATOR.start).toBeCalledTimes(1);
 });
 
 test('Client.start() should do nothing when Client is `Started`', () => {
-  const testClient = TestClient();
-  const client = create(testClient.create)(CONFIG);
+  const client = create(CREATOR)(CONFIG);
 
   client.start();
 
@@ -56,148 +69,124 @@ test('Client.start() should do nothing when Client is `Started`', () => {
 
   client.start();
 
-  expect(testClient.create).toBeCalledTimes(1);
+  expect(CREATOR.start).toBeCalledTimes(1);
 });
 
 // --- Notify
 test('Client.notify() should fail when Client is `ConfigError`', () => {
-  const testClient = TestClient();
-  const client = create(testClient.create)(BAD_CONFIG);
+  const client = create(CREATOR)(BAD_CONFIG);
 
   client.start();
 
-  const result = client.notify(new Error('Something happened'), {
-    severity: 'warning'
+  const result = client.notify(new Error('Something happened'), event => {
+    event.severity = 'warning';
   })();
 
-  expect(isLeft(result)).toBe(true);
-  expect((result as any).left).toEqual(
-    new Error(
-      '"endpoints" and "consoleBreadcrumbsEnabled" properties are not allowed in ContactSnag configuration object'
-    )
-  );
-  expect(testClient.spyNotify).not.toBeCalled();
+  expect(result).toEqual(left(new Error(ERR)));
+
+  expect(BS_CLIENT.notify).not.toBeCalled();
 });
 
 test('Client.notify() should fail when Client is `Still`', () => {
-  const testClient = TestClient();
-  const client = create(testClient.create)(CONFIG);
+  const client = create(CREATOR)(CONFIG);
 
-  const result = client.notify(new Error('Something happened'), {
-    severity: 'warning'
+  const result = client.notify(new Error('Something happened'), event => {
+    event.severity = 'warning';
   })();
 
-  expect(isLeft(result)).toBe(true);
-  expect((result as any).left).toEqual(new Error('Client not yet started'));
-  expect(testClient.spyNotify).not.toBeCalled();
+  expect(result).toEqual(left(new Error('Client not yet started')));
+
+  expect(BS_CLIENT.notify).not.toBeCalled();
 });
 
 test('Client.notify() should notify error with client when Client is `Started`', () => {
-  const testClient = TestClient();
-  const client = create(testClient.create)(CONFIG);
+  const client = create(CREATOR)(CONFIG);
 
   client.start();
 
-  const result = client.notify(new Error('Something happened'), {
-    severity: 'warning'
-  })();
+  const onError: BS.OnErrorCallback = event => {
+    event.severity = 'warning';
+  };
 
-  expect(isRight(result)).toBe(true);
-  expect(testClient.spyNotify).toBeCalledWith(new Error('Something happened'), {
-    severity: 'warning'
-  });
+  const result = client.notify(new Error('Something happened'), onError)();
+
+  expect(result).toEqual(right(undefined));
+  expect(BS_CLIENT.notify).toBeCalledWith(
+    new Error('Something happened'),
+    onError
+  );
 });
 
 test('Client.notify() should fail if client.notify throws error', () => {
-  const testClient = TestClient();
-  testClient.spyNotify.mockImplementationOnce(() => {
+  (BS_CLIENT.notify as any).mockImplementationOnce(() => {
     throw new Error('boom');
   });
 
-  const client = create(testClient.create)(CONFIG);
+  const client = create(CREATOR)(CONFIG);
 
   client.start();
 
-  const result = client.notify(new Error('Something happened'), {
-    severity: 'warning'
-  })();
+  const onError: BS.OnErrorCallback = event => {
+    event.severity = 'warning';
+  };
 
-  expect(isLeft(result)).toBe(true);
-  expect((result as any).left).toEqual(new Error('boom'));
-  expect(testClient.spyNotify).toBeCalledWith(new Error('Something happened'), {
-    severity: 'warning'
-  });
+  const result = client.notify(new Error('Something happened'), onError)();
+
+  expect(result).toEqual(left(new Error('boom')));
+  expect(BS_CLIENT.notify).toBeCalledWith(
+    new Error('Something happened'),
+    onError
+  );
 });
 
 // --- Set user
 test('Client.setUser() should fail when Client is `ConfigError`', () => {
-  const testClient = TestClient();
-  const client = create(testClient.create)(BAD_CONFIG);
+  const client = create(CREATOR)(BAD_CONFIG);
 
   client.start();
 
-  const result = client.setUser({id: 1234})();
+  const result = client.setUser({id: '1234'})();
 
-  expect(isLeft(result)).toBe(true);
-  expect((result as any).left).toEqual(
-    new Error(
-      '"endpoints" and "consoleBreadcrumbsEnabled" properties are not allowed in ContactSnag configuration object'
-    )
-  );
+  expect(result).toEqual(left(new Error(ERR)));
 });
 
 test('Client.setUser() should fail when Client is `Still`', () => {
-  const testClient = TestClient();
-  const client = create(testClient.create)(CONFIG);
+  const client = create(CREATOR)(CONFIG);
 
-  const result = client.setUser({id: 1234})();
+  const result = client.setUser({id: '1234'})();
 
-  expect(isLeft(result)).toBe(true);
-  expect((result as any).left).toEqual(new Error('Client not yet started'));
+  expect(result).toEqual(left(new Error('Client not yet started')));
 });
 
 test('Client.setUser() should set a session user on client when Client is `Started`', () => {
-  const testClient = TestClient();
-  const client = create(testClient.create)(CONFIG);
+  const client = create(CREATOR)(CONFIG);
 
   client.start();
 
-  const result = client.setUser({id: 1234})();
+  const result = client.setUser({id: '1234'})();
 
   expect(isRight(result)).toBe(true);
-  expect((client.client() as any).bugsnag.user).toEqual({
-    id: 1234
-  });
+  expect(BS_CLIENT.setUser).toBeCalledWith('1234', undefined, undefined);
 });
 
 // --- Helpers
-const CONFIG = {
+const ERR =
+  '"endpoints" and "enabledBreadcrumbTypes" properties are not allowed in ContactSnag configuration object';
+
+const BS_CLIENT: BS.Client = {
+  notify: jest.fn(),
+  setUser: jest.fn()
+} as any; // just for testing purpose
+
+const CONFIG: Config = {
   apiKey: 'ABCD',
-  notifyReleaseStages: ['production'],
+  enabledReleaseStages: ['production'],
   releaseStage: 'production',
   appVersion: '1.0.0'
 };
 
-const BAD_CONFIG = {...CONFIG, consoleBreadcrumbsEnabled: true} as any; // just for testing purpose
+const BAD_CONFIG: Config = {...CONFIG, enabledBreadcrumbTypes: ['log']} as any; // just for testing purpose
 
-const DEFAULT_USER = {};
-
-const TestClient = () => {
-  const spyNotify = jest.fn();
-  const spyCreate = jest.fn(
-    (_: Bugsnag.IConfig): Bugsnag.Client => {
-      const client = ({
-        user: DEFAULT_USER,
-
-        notify: spyNotify
-      } as unknown) as Bugsnag.Client;
-
-      return client;
-    }
-  );
-
-  return {
-    spyNotify,
-    create: spyCreate
-  };
-};
+const CREATOR: BS.BugsnagStatic = {
+  start: jest.fn().mockReturnValue(BS_CLIENT)
+} as any;

@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import {fold} from 'fp-ts/lib/Either';
 import {TaskEither} from 'fp-ts/lib/TaskEither';
 
-export type Program<A = string> = TaskEither<Error, A>;
+export interface Program<A = string> extends TaskEither<Error, A> {}
 
 const errorTxt = chalk.bold.redBright;
 const successTxt = chalk.bold.greenBright;

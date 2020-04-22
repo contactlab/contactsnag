@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import {taskEither} from 'fp-ts/lib/TaskEither';
+import {right, left} from 'fp-ts/lib/TaskEither';
 import {constUndefined} from 'fp-ts/lib/function';
 import {Program, run} from '../../src/bin/program';
 
@@ -7,7 +7,7 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-test('run() should execute Program and exit with code 0', () => {
+test('run() should execute Program and exit with code 0', async () => {
   const spyConsole = jest
     .spyOn(console, 'log')
     .mockImplementation(constUndefined);
@@ -16,15 +16,15 @@ test('run() should execute Program and exit with code 0', () => {
     .spyOn(process, 'exit')
     .mockImplementation(() => undefined as never);
 
-  const program: Program = taskEither.of('success');
+  const program: Program = right('success');
 
-  return run(program).then(() => {
-    expect(spyConsole).toBeCalledWith(chalk.bold.greenBright('\n🗸 success\n'));
-    expect(spyExit).toBeCalledWith(0);
-  });
+  await run(program);
+
+  expect(spyConsole).toBeCalledWith(chalk.bold.greenBright('\n🗸 success\n'));
+  expect(spyExit).toBeCalledWith(0);
 });
 
-test('run() should execute Program and exit with code 1', () => {
+test('run() should execute Program and exit with code 1', async () => {
   const spyConsole = jest
     .spyOn(console, 'error')
     .mockImplementation(constUndefined);
@@ -33,10 +33,10 @@ test('run() should execute Program and exit with code 1', () => {
     .spyOn(process, 'exit')
     .mockImplementation(() => undefined as never);
 
-  const program: Program = taskEither.throwError(new Error('fail'));
+  const program: Program = left(new Error('fail'));
 
-  return run(program).then(() => {
-    expect(spyConsole).toBeCalledWith(chalk.bold.redBright('\n🗴 fail\n'));
-    expect(spyExit).toBeCalledWith(1);
-  });
+  await run(program);
+
+  expect(spyConsole).toBeCalledWith(chalk.bold.redBright('\n🗴 fail\n'));
+  expect(spyExit).toBeCalledWith(1);
 });

@@ -1,48 +1,44 @@
-import {isLeft, isRight} from 'fp-ts/lib/Either';
+import {right, left} from 'fp-ts/lib/Either';
 import {validate} from '../src/validate';
 
 test('validate() should return Right<Config>', () => {
   const result1 = validate({apiKey: 'abcd', user: {id: 123}});
 
-  expect(isRight(result1)).toBe(true);
-  expect((result1 as any).right).toEqual({apiKey: 'abcd', user: {id: 123}});
+  expect(result1).toEqual(right({apiKey: 'abcd', user: {id: 123}}));
 
   const result2 = validate({
     apiKey: 'abcd',
     user: {id: 123},
-    consoleBreadcrumbsEnabled: false
+    enabledBreadcrumbTypes: ['error', 'navigation']
   });
 
-  expect(isRight(result2)).toBe(true);
-  expect((result2 as any).right).toEqual({
-    apiKey: 'abcd',
-    user: {id: 123},
-    consoleBreadcrumbsEnabled: false
-  });
+  expect(result2).toEqual(
+    right({
+      apiKey: 'abcd',
+      user: {id: 123},
+      enabledBreadcrumbTypes: ['error', 'navigation']
+    })
+  );
 });
 
 test('validate() should return Left<Error>', () => {
+  const ERR =
+    '"endpoints" and "enabledBreadcrumbTypes" properties are not allowed in ContactSnag configuration object';
+
   const result1 = validate({
     apiKey: 'abcd',
-    endpoints: {notify: 'http://notify-server'}
+    endpoints: {
+      notify: 'http://notify-server',
+      sessions: 'http://sessions-server'
+    }
   });
 
-  expect(isLeft(result1)).toBe(true);
-  expect((result1 as any).left).toEqual(
-    new Error(
-      '"endpoints" and "consoleBreadcrumbsEnabled" properties are not allowed in ContactSnag configuration object'
-    )
-  );
+  expect(result1).toEqual(left(new Error(ERR)));
 
   const result2 = validate({
     apiKey: 'abcd',
-    consoleBreadcrumbsEnabled: true
+    enabledBreadcrumbTypes: ['error', 'log']
   });
 
-  expect(isLeft(result2)).toBe(true);
-  expect((result2 as any).left).toEqual(
-    new Error(
-      '"endpoints" and "consoleBreadcrumbsEnabled" properties are not allowed in ContactSnag configuration object'
-    )
-  );
+  expect(result2).toEqual(left(new Error(ERR)));
 });

@@ -37,8 +37,8 @@ declare function ContactSnag(conf: Config): Client;
 
 [`Config`](src/validate.ts) is a kind of subset of [Bugsnag's configuration options](https://docs.bugsnag.com/platforms/javascript/configuration-options/) with some differences:
 
-- `appVersion`, `notifyReleaseStages`, and `releaseStage` are required properties;
-- `endpoints` and `consoleBreadcrumbsEnabled` cannot be set/overwritten.
+- `appVersion`, `enabledReleaseStages`, and `releaseStage` are required properties;
+- `endpoints` and `enabledBreadcrumbTypes` cannot be set/overwritten.
 
 [`Client`](src/client.ts) is a custom data structure which embeds some `Bugsnag.Client` features, guarantees a lazy initialization and that an error is raised if a wrong configuration is passed.
 
@@ -50,10 +50,10 @@ interface Client {
 
   readonly notify: (
     error: Bugsnag.NotifiableError,
-    opts?: Bugsnag.INotifyOpts
+    onError?: Bugsnag.OnErrorCallback
   ) => IOEither<Error, void>;
 
-  readonly setUser: (user: object) => IOEither<Error, void>;
+  readonly setUser: (user: Bugsnag.User) => IOEither<Error, void>;
 }
 ```
 
@@ -120,14 +120,14 @@ import {ContactSnag} from 'contactsnag';
 const client = ContactSnag({
   apiKey: 'TEST-API-KEY',
   appVersion: '1.2.3',
-  notifyReleaseStages: ['production'],
+  enabledReleaseStages: ['production'],
   releaseStage: 'production'
 });
 
 // Set notification on button click
 document.getElementById('btn').addEventListener('click', () =>
-  client.notify(new Error('Custom error message'), {
-    metaData: {custom: 'My error name'}
+  client.notify(new Error('Custom error message'), event => {
+    event.addMetadata('custom', 'errname', 'My error name');
   })()
 );
 
@@ -155,7 +155,7 @@ import {ContactSnag} from 'contactsnag';
 const client = ContactSnag({
   apiKey: 'TEST-API-KEY',
   appVersion: '1.2.3',
-  notifyReleaseStages: ['production'],
+  enabledReleaseStages: ['production'],
   releaseStage: 'production'
 });
 
@@ -164,7 +164,7 @@ client.start();
 
 // Set user after 1 second
 setTimeout(() => {
-  client.setUser({id: 1})();
+  client.setUser({id: '1'})();
 }, 1000);
 ```
 

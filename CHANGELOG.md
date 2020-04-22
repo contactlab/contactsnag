@@ -1,5 +1,11 @@
 # Changelog
 
+## [7.0.0](https://github.com/contactlab/gluex/releases/tag/v7.0.0)
+
+**Breaking:**
+
+- `[dependencies]` Upgrade Bugsnag to version 7.0.0 (#272)
+
 ## [6.1.0](https://github.com/contactlab/gluex/releases/tag/v6.1.0)
 
 **Internal:**

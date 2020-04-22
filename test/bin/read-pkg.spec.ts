@@ -2,14 +2,14 @@
 jest.mock('read-pkg-up');
 // ---
 
+import {right, left} from 'fp-ts/lib/Either';
 import readPkgUp from 'read-pkg-up';
 import {mocked} from 'ts-jest/utils';
 import {readPkg} from '../../src/bin/read-pkg';
-import {result} from './_helpers';
 
 const readPkgUpM = mocked(readPkgUp);
 
-test('readPkg should retrieve info from package.json', () => {
+test('readPkg should retrieve info from package.json', async () => {
   readPkgUpM.mockResolvedValue(({
     packageJson: {
       name: 'test-pkg',
@@ -21,32 +21,40 @@ test('readPkg should retrieve info from package.json', () => {
     }
   } as unknown) as readPkgUp.ReadResult);
 
-  return expect(result(readPkg)).resolves.toEqual({
-    name: 'test-pkg',
-    version: '0.1.0',
-    bugsnag: {
-      apiKey: 'TEST-API-KEY',
-      someOtherData: 'ignored'
-    }
-  });
-});
+  const result = await readPkg.read();
 
-test('readPkg should fail if it cannot find a package.json', () => {
-  readPkgUpM.mockResolvedValue(undefined);
-
-  return expect(result(readPkg)).rejects.toEqual(
-    new Error('Cannot find a package.json')
+  expect(result).toEqual(
+    right({
+      name: 'test-pkg',
+      version: '0.1.0',
+      bugsnag: {
+        apiKey: 'TEST-API-KEY',
+        someOtherData: 'ignored'
+      }
+    })
   );
 });
 
-test('readPkg should fail if package.json has not valid data', () => {
+test('readPkg should fail if it cannot find a package.json', async () => {
+  readPkgUpM.mockResolvedValue(undefined);
+
+  const result = await readPkg.read();
+
+  expect(result).toEqual(left(new Error('Cannot find a package.json')));
+});
+
+test('readPkg should fail if package.json has not valid data', async () => {
   readPkgUpM.mockResolvedValue(({
     packageJson: {version: '1.0.0', bugsnag: {}}
   } as unknown) as readPkgUp.ReadResult);
 
-  return expect(result(readPkg)).rejects.toEqual(
-    new Error(
-      'Invalid value undefined supplied to : Package/bugsnag: bugsnag/apiKey: string'
+  const result = await readPkg.read();
+
+  expect(result).toEqual(
+    left(
+      new Error(
+        'Invalid value undefined supplied to : Package/bugsnag: bugsnag/apiKey: string'
+      )
     )
   );
 });

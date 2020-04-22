@@ -1,24 +1,38 @@
+import {right, left} from 'fp-ts/lib/Either';
 import {gateway} from '../../src/bin/gateway';
-import {result} from './_helpers';
 
-test('gateway() should return Command from arguments', () => {
-  const T1 = gateway(['upload', '--some=kind', '-o', '-f', 'arg']);
-  const T2 = gateway(['report', '--some=kind', '-o', '-f', 'arg']);
+test('gateway() should return Command from arguments', async () => {
+  const result1 = await gateway(['upload', '--some=kind', '-o', '-f', 'arg'])();
 
-  return expect(Promise.all([result(T1), result(T2)])).resolves.toEqual([
-    {cmd: 'upload', args: ['--some=kind', '-o', '-f', 'arg']},
-    {cmd: 'report', args: ['--some=kind', '-o', '-f', 'arg']}
-  ]);
+  expect(result1).toEqual(
+    right({cmd: 'upload', args: ['--some=kind', '-o', '-f', 'arg']})
+  );
+
+  const result2 = await gateway(['report', '--some=kind', '-o', '-f', 'arg'])();
+  expect(result2).toEqual(
+    right({cmd: 'report', args: ['--some=kind', '-o', '-f', 'arg']})
+  );
 });
 
-test('gateway() should fail if no available command from arguments', () =>
-  expect(result(gateway(['args', 'and', 'other', '--tail']))).rejects.toEqual(
-    new Error('Use one of available commands: upload | report')
-  ));
+test('gateway() should fail if no available command from arguments', async () => {
+  const result = await gateway(['args', 'and', 'other', '--tail'])();
 
-test('gateway() should fail if no available command from arguments - wrong position', () =>
-  expect(
-    result(gateway(['other', 'upload', '--some=kind', '-o', '-f', 'arg']))
-  ).rejects.toEqual(
-    new Error('Use one of available commands: upload | report')
-  ));
+  expect(result).toEqual(
+    left(new Error('Use one of available commands: upload | report'))
+  );
+});
+
+test('gateway() should fail if no available command from arguments - wrong position', async () => {
+  const result = await gateway([
+    'other',
+    'upload',
+    '--some=kind',
+    '-o',
+    '-f',
+    'arg'
+  ])();
+
+  expect(result).toEqual(
+    left(new Error('Use one of available commands: upload | report'))
+  );
+});

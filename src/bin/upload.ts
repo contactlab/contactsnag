@@ -3,10 +3,10 @@ import * as A from 'fp-ts/lib/Array';
 import * as TE from 'fp-ts/lib/TaskEither';
 import {pipe} from 'fp-ts/lib/pipeable';
 import {Package} from './decoders';
-import {ExecOutput, exec} from './exec';
+import {Exec} from './exec';
 import {Program} from './program';
-import {ReadPkg, readPkg} from './read-pkg';
-import {Trace, trace} from './trace';
+import {ReadPkg} from './read-pkg';
+import {Trace} from './trace';
 
 const sequenceTE = sequenceT(TE.taskEither);
 const concatS = A.getMonoid<string>().concat;
@@ -22,27 +22,16 @@ const prepareOpts = (pkg: Package, args: string[]): string =>
   ).join(' ');
 
 // --- Capabilities
-export interface Capabilities {
-  readPkg: ReadPkg;
-  trace: Trace;
-  uploadSourceMap: (pkg: Package) => TE.TaskEither<Error, ExecOutput>;
-}
-
-export const capabilities = (args: string[]): Capabilities => ({
-  readPkg,
-  trace,
-  uploadSourceMap: pkg =>
-    exec(`npx bugsnag-sourcemaps upload ${prepareOpts(pkg, args)}`)
-});
+export interface Capabilities extends Exec, ReadPkg, Trace {}
 
 // --- Program
-export const upload = (c: Capabilities): Program =>
+export const upload = (C: Capabilities) => (args: string[]): Program =>
   pipe(
-    c.readPkg,
+    C.read,
     TE.chain(data =>
       sequenceTE(
-        c.trace(`BUGSNAG: uploading sourcemap for v${data.version}`),
-        c.uploadSourceMap(data)
+        C.log(`BUGSNAG: uploading sourcemap for v${data.version}`),
+        C.exec(`npx bugsnag-sourcemaps upload ${prepareOpts(data, args)}`)
       )
     ),
     TE.map(() => 'BUGSNAG: Sourcemap was uploaded successfully.')
