@@ -1,6 +1,6 @@
 # ContactSnag
 
-[![Build Status](https://clab-dev.visualstudio.com/OSS/_apis/build/status/contactlab.contactsnag?branchName=master)](https://clab-dev.visualstudio.com/OSS/_build/latest?definitionId=33&branchName=master)
+![Node CI](https://github.com/contactlab/contactsnag/workflows/Node%20CI/badge.svg)
 
 > [Bugsnag](https://docs.bugsnag.com/platforms/javascript/) utilities for Contactlab's applications.
 
