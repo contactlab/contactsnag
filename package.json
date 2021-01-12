@@ -14,7 +14,7 @@
   },
   "homepage": "https://contactlab.github.io/contactsnag",
   "engines": {
-    "node": ">=10.0 <13.0",
+    "node": ">=10.0",
     "npm": ">=6.0"
   },
   "files": [
@@ -24,7 +24,6 @@
   "bin": "./lib/bin/cli.js",
   "keywords": [
     "contactlab",
-    "clab",
     "bugsnag",
     "wrapper"
   ],
@@ -52,7 +51,7 @@
     "chalk": "4.1.0",
     "read-pkg-up": "7.0.1",
     "tslib": "^2.0.0",
-    "webpack-bugsnag-plugins": "^1.4.0"
+    "webpack-bugsnag-plugins": "^1.6.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
@@ -61,6 +60,7 @@
     "eslint-config-contactlab": "^6.1.0",
     "eslint-config-prettier": "^7.1.0",
     "fp-ts": "^2.8.0",
+    "globalthis": "^1.0.1",
     "husky": "^5.0.6",
     "io-ts": "^2.2.10",
     "jest": "^26.6.3",
@@ -83,22 +83,22 @@
     "coverageReporters": [
       "text"
     ],
-    "roots": [
-      "<rootDir>/test/"
-    ],
-    "testRegex": "(\\.|/)spec\\.ts$",
+    "globals": {
+      "ts-jest": {
+        "diagnostics": true
+      }
+    },
     "moduleFileExtensions": [
       "js",
       "json",
       "node",
       "ts"
     ],
-    "globals": {
-      "ts-jest": {
-        "diagnostics": true
-      }
-    },
     "preset": "ts-jest",
-    "testMatch": null
+    "roots": [
+      "<rootDir>/test/"
+    ],
+    "testMatch": null,
+    "testRegex": "(\\.|/)spec\\.ts$"
   }
 }
