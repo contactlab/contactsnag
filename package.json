@@ -14,7 +14,7 @@
   },
   "homepage": "https://contactlab.github.io/contactsnag",
   "engines": {
-    "node": ">=10.0 <13.0",
+    "node": ">=12.0",
     "npm": ">=6.0"
   },
   "files": [
@@ -71,5 +71,34 @@
     "ts-jest": "^26.4.4",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3"
+  },
+  "jest": {
+    "automock": false,
+    "bail": true,
+    "collectCoverage": true,
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/test/bin/_data.ts",
+      "<rootDir>/node_modules/"
+    ],
+    "coverageReporters": [
+      "text"
+    ],
+    "globals": {
+      "ts-jest": {
+        "diagnostics": true
+      }
+    },
+    "moduleFileExtensions": [
+      "js2",
+      "json",
+      "node",
+      "ts"
+    ],
+    "preset": "ts-jest",
+    "roots": [
+      "<rootDir>/test/"
+    ],
+    "testMatch": null,
+    "testRegex": "(\\.|/)spec\\.ts$"
   }
 }
