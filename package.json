@@ -52,7 +52,7 @@
     "chalk": "4.1.0",
     "read-pkg-up": "7.0.1",
     "tslib": "^2.0.0",
-    "webpack-bugsnag-plugins": "^1.4.0"
+    "webpack-bugsnag-plugins": "^1.6.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
