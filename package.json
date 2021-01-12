@@ -24,7 +24,6 @@
   "bin": "./lib/bin/cli.js",
   "keywords": [
     "contactlab",
-    "clab",
     "bugsnag",
     "wrapper"
   ],
@@ -71,34 +70,5 @@
     "ts-jest": "^26.4.4",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3"
-  },
-  "jest": {
-    "automock": false,
-    "bail": true,
-    "collectCoverage": true,
-    "coveragePathIgnorePatterns": [
-      "<rootDir>/test/bin/_data.ts",
-      "<rootDir>/node_modules/"
-    ],
-    "coverageReporters": [
-      "text"
-    ],
-    "roots": [
-      "<rootDir>/test/"
-    ],
-    "testRegex": "(\\.|/)spec\\.ts$",
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "node",
-      "ts"
-    ],
-    "globals": {
-      "ts-jest": {
-        "diagnostics": true
-      }
-    },
-    "preset": "ts-jest",
-    "testMatch": null
   }
 }
