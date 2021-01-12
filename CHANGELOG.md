@@ -1,5 +1,11 @@
 # Changelog
 
+## [8.0.1](https://github.com/contactlab/gluex/releases/tag/v8.0.1)
+
+**Bug fix:**
+
+- fix husky install on postinstall (#348)
+
 ## [8.0.0](https://github.com/contactlab/gluex/releases/tag/v8.0.0)
 
 **Breaking:**
@@ -94,7 +100,7 @@
 
 ## [4.0.1](https://github.com/contactlab/gluex/releases/tag/v4.0.1)
 
-**Bug:**
+**Bug fix:**
 
 - `[internal]` Fix set options validation (#134)
 
