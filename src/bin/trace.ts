@@ -1,8 +1,8 @@
 import chalk from 'chalk';
-import {info} from 'fp-ts/lib/Console';
-import {IO, map} from 'fp-ts/lib/IO';
-import {TaskEither, rightIO} from 'fp-ts/lib/TaskEither';
-import {pipe} from 'fp-ts/lib/pipeable';
+import {info} from 'fp-ts/Console';
+import {IO, map} from 'fp-ts/IO';
+import {TaskEither, rightIO} from 'fp-ts/TaskEither';
+import {pipe} from 'fp-ts/function';
 
 const log = <A>(msg: A): IO<void> => info(chalk.cyanBright(`\n> ${msg}`));
 

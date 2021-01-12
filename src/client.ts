@@ -1,8 +1,8 @@
 import * as BS from '@bugsnag/js';
-import * as E from 'fp-ts/lib/Either';
-import * as IOE from 'fp-ts/lib/IOEither';
-import {constVoid as undef} from 'fp-ts/lib/function';
-import {pipe} from 'fp-ts/lib/pipeable';
+import * as E from 'fp-ts/Either';
+import * as IOE from 'fp-ts/IOEither';
+import {constVoid as undef} from 'fp-ts/function';
+import {pipe} from 'fp-ts/function';
 import {Config, validate} from './validate';
 
 // --- Constants

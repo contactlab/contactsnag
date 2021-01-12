@@ -1,5 +1,5 @@
 import * as BS from '@bugsnag/js';
-import {left, right, isRight} from 'fp-ts/lib/Either';
+import {left, right, isRight} from 'fp-ts/Either';
 import {create} from '../src/client';
 import {Config} from '../src/validate';
 

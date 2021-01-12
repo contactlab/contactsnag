@@ -1,5 +1,5 @@
 import * as childProcess from 'child_process';
-import {left, right} from 'fp-ts/lib/Either';
+import {left, right} from 'fp-ts/Either';
 import {Program} from './program';
 
 export interface ExecOutput {

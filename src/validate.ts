@@ -1,5 +1,5 @@
 import * as BS from '@bugsnag/js';
-import * as E from 'fp-ts/lib/Either';
+import * as E from 'fp-ts/Either';
 
 type ValidConfig = Omit<BS.Config, 'endpoints'>;
 

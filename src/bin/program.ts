@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 
 import chalk from 'chalk';
-import {fold} from 'fp-ts/lib/Either';
-import {TaskEither} from 'fp-ts/lib/TaskEither';
+import {fold} from 'fp-ts/Either';
+import {TaskEither} from 'fp-ts/TaskEither';
 
 export interface Program<A = string> extends TaskEither<Error, A> {}
 

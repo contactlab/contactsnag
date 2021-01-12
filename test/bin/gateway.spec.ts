@@ -1,4 +1,4 @@
-import {right, left} from 'fp-ts/lib/Either';
+import {right, left} from 'fp-ts/Either';
 import {gateway} from '../../src/bin/gateway';
 
 test('gateway() should return Command from arguments', async () => {

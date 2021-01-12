@@ -1,7 +1,7 @@
-import {sequenceT} from 'fp-ts/lib/Apply';
-import * as A from 'fp-ts/lib/Array';
-import * as TE from 'fp-ts/lib/TaskEither';
-import {pipe} from 'fp-ts/lib/pipeable';
+import {sequenceT} from 'fp-ts/Apply';
+import * as A from 'fp-ts/Array';
+import * as TE from 'fp-ts/TaskEither';
+import {pipe} from 'fp-ts/function';
 import {Package} from './decoders';
 import {Exec} from './exec';
 import {Program} from './program';

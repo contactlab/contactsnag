@@ -1,5 +1,5 @@
-import * as TE from 'fp-ts/lib/TaskEither';
-import {pipe} from 'fp-ts/lib/pipeable';
+import * as TE from 'fp-ts/TaskEither';
+import {pipe} from 'fp-ts/function';
 import {gateway} from './gateway';
 import {Program} from './program';
 import * as Report from './report';

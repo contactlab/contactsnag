@@ -1,5 +1,5 @@
-import {right, left} from 'fp-ts/lib/Either';
-import * as TE from 'fp-ts/lib/TaskEither';
+import {right, left} from 'fp-ts/Either';
+import * as TE from 'fp-ts/TaskEither';
 import {Capabilities, report} from '../../src/bin/report';
 import {READPKG, TRACE, EXEC} from './_data';
 

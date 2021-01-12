@@ -1,4 +1,4 @@
-import * as TE from 'fp-ts/lib/TaskEither';
+import * as TE from 'fp-ts/TaskEither';
 import {ExecOutput, Exec} from '../../src/bin/exec';
 import {ReadPkg} from '../../src/bin/read-pkg';
 import {Trace} from '../../src/bin/trace';

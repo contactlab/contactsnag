@@ -1,6 +1,6 @@
 import chalk from 'chalk';
-import {right, left} from 'fp-ts/lib/TaskEither';
-import {constUndefined} from 'fp-ts/lib/function';
+import {right, left} from 'fp-ts/TaskEither';
+import {constUndefined} from 'fp-ts/function';
 import {Program, run} from '../../src/bin/program';
 
 afterEach(() => {

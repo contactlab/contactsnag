@@ -2,7 +2,7 @@
 jest.mock('read-pkg-up');
 // ---
 
-import {right, left} from 'fp-ts/lib/Either';
+import {right, left} from 'fp-ts/Either';
 import readPkgUp from 'read-pkg-up';
 import {mocked} from 'ts-jest/utils';
 import {readPkg} from '../../src/bin/read-pkg';
