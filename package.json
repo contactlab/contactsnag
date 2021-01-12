@@ -89,7 +89,7 @@
       }
     },
     "moduleFileExtensions": [
-      "js2",
+      "js",
       "json",
       "node",
       "ts"
