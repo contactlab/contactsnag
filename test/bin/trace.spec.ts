@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import {right} from 'fp-ts/lib/Either';
+import {right} from 'fp-ts/Either';
 import {traceConsole} from '../../src/bin/trace';
 
 test('trace() should log a message to the console and return it', async () => {

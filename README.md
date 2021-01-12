@@ -1,6 +1,6 @@
 # ContactSnag
 
-![Node CI](https://github.com/contactlab/contactsnag/workflows/Node%20CI/badge.svg)
+![Node CI](https://github.com/contactlab/contactsnag/workflows/Node%20CI/badge.svg) ![npm (scoped)](https://img.shields.io/npm/v/contactsnag?logo=npm) ![node-current (scoped)](https://img.shields.io/node/v/contactsnag) ![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/contactlab/contactsnag/dev/typescript) ![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/contactlab/contactsnag/dev/fp-ts) ![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/contactlab/contactsnag/dev/io-ts) ![GitHub](https://img.shields.io/github/license/contactlab/contactsnag)
 
 > [Bugsnag](https://docs.bugsnag.com/platforms/javascript/) utilities for Contactlab's applications.
 
@@ -11,18 +11,24 @@ This package embeds 4 main functionalities:
 - **CLI build reporter**: calling `contactsnag report` from the command line it will report the current build to enable source code linking from Bugsnag dashboard.
 - **Webpack plugin**: ContactSnag exposes (as dependecy) the [`webpack-bugsnag-plugins`](https://github.com/bugsnag/webpack-bugsnag-plugins) in order to upload sourcemaps and report builds using Webpack (take a look [here](https://docs.bugsnag.com/build-integrations/webpack/#configuration) for available configuration).
 
-It is fully written in [Typescript](https://www.typescriptlang.org/docs/home.html) (version >= 3.3.3) and extensively uses [`fp-ts` library](https://github.com/gcanti/fp-ts).
+It is fully written in [TypeScript](https://www.typescriptlang.org/docs/home.html) and extensively uses [`fp-ts` library](https://github.com/gcanti/fp-ts).
+
+## Requirements
+
+- [TypeScript](https://www.typescriptlang.org/docs/home.html) >= v4.1.0
+- [`fp-ts`](https://github.com/gcanti/fp-ts) >= v2.8.0
+- [`io-ts`](https://github.com/gcanti/io-ts) >= v2.2.10
 
 ## Installation
 
 Get the latest version from NPM registry:
 
 ```sh
-$ npm install contactsnag --save
+$ npm install contactsnag fp-ts io-ts --save
 
 # -- or --
 
-$ yarn add contactsnag
+$ yarn add contactsnag fp-ts io-ts
 ```
 
 ## ContactSnag Client

@@ -3,7 +3,7 @@ jest.mock('child_process');
 // ---
 
 import * as childProcess from 'child_process';
-import {right, left} from 'fp-ts/lib/Either';
+import {right, left} from 'fp-ts/Either';
 import {mocked} from 'ts-jest/utils';
 import {execNode} from '../../src/bin/exec';
 

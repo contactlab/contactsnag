@@ -1,4 +1,4 @@
-import {right, left} from 'fp-ts/lib/Either';
+import {right, left} from 'fp-ts/Either';
 import {Capabilities, main} from '../../src/bin/main';
 import {READPKG, TRACE, EXEC} from './_data';
 

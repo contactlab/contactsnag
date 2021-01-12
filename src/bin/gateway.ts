@@ -1,9 +1,9 @@
-import * as E from 'fp-ts/lib/Either';
-import * as NEA from 'fp-ts/lib/NonEmptyArray';
-import * as O from 'fp-ts/lib/Option';
-import * as TE from 'fp-ts/lib/TaskEither';
-import {flow} from 'fp-ts/lib/function';
-import {pipe} from 'fp-ts/lib/pipeable';
+import * as E from 'fp-ts/Either';
+import * as NEA from 'fp-ts/NonEmptyArray';
+import * as O from 'fp-ts/Option';
+import * as TE from 'fp-ts/TaskEither';
+import {flow} from 'fp-ts/function';
+import {pipe} from 'fp-ts/function';
 import {Program} from './program';
 
 const ERR_MSG = 'Use one of available commands: upload | report';

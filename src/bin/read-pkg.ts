@@ -1,6 +1,6 @@
-import {Either, left, mapLeft, right} from 'fp-ts/lib/Either';
-import * as TE from 'fp-ts/lib/TaskEither';
-import {pipe} from 'fp-ts/lib/pipeable';
+import {Either, left, mapLeft, right} from 'fp-ts/Either';
+import * as TE from 'fp-ts/TaskEither';
+import {pipe} from 'fp-ts/function';
 import {failure} from 'io-ts/lib/PathReporter';
 import readPkgUp, {NormalizedReadResult as RPUPackage} from 'read-pkg-up';
 import {Package} from './decoders';

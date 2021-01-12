@@ -1,4 +1,4 @@
-import {right, left} from 'fp-ts/lib/Either';
+import {right, left} from 'fp-ts/Either';
 import {validate} from '../src/validate';
 
 test('validate() should return Right<Config>', () => {
