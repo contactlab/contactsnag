@@ -1,5 +1,18 @@
 # Changelog
 
+## [8.0.0](https://github.com/contactlab/gluex/releases/tag/v8.0.0)
+
+**Breaking:**
+
+- `[dependencies][documentation]` Remove uploader and reporter CLI commands (#344)
+- `[dependencies]` fp-ts and io-ts as peer dependencies (#342)
+
+**Dependencies:**
+
+- Upgrade webpack-bugsnag-plugins to support Webpack 5 (#341)
+- Bump @bugsnag/js from 7.0.0 to 7.5.4 (#331, #322, #318, #316, #309, #305, #301, #296, #288, #287, #279, #334)
+- [Security] Bump ini from 1.3.5 to 1.3.7 (#332)
+
 ## [7.0.0](https://github.com/contactlab/gluex/releases/tag/v7.0.0)
 
 **Breaking:**
