@@ -5,6 +5,7 @@ const config: Config.InitialOptions = {
   bail: true,
   collectCoverage: true,
   coveragePathIgnorePatterns: [
+    '<rootDir>/test/_setup.ts',
     '<rootDir>/test/bin/_data.ts',
     '<rootDir>/node_modules/'
   ],
@@ -17,6 +18,7 @@ const config: Config.InitialOptions = {
   moduleFileExtensions: ['js', 'json', 'node', 'ts'],
   preset: 'ts-jest',
   roots: ['<rootDir>/test/'],
+  setupFiles: ['<rootDir>/test/_setup.ts'],
   testMatch: undefined,
   testRegex: '(\\.|/)spec\\.ts$'
 };
