@@ -18,10 +18,8 @@
     "npm": ">=6.0"
   },
   "files": [
-    "lib",
-    "typings"
+    "lib"
   ],
-  "bin": "./lib/bin/cli.js",
   "keywords": [
     "contactlab",
     "bugsnag",
@@ -33,11 +31,10 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "pretest": "npm run check && npm run lint",
     "test": "jest",
-    "prebuild": "rimraf ./lib",
-    "build": "npm run build:std && npm run build:es6 && npm run build:bin",
-    "build:std": "tsc -p ./tsconfig.build.json",
+    "prebuild": "rm -rf ./lib",
+    "build": "npm run build:cjs && npm run build:es6",
+    "build:cjs": "tsc -p ./tsconfig.build.json",
     "build:es6": "tsc -p ./tsconfig.build-es6.json",
-    "build:bin": "tsc -p ./tsconfig.build-bin.json",
     "prepublishOnly": "npm test && npm run build"
   },
   "peerDependencies": {
@@ -47,9 +44,6 @@
   "dependencies": {
     "@bugsnag/js": "7.5.4",
     "@types/webpack-bugsnag-plugins": "^1.4.0",
-    "bugsnag-sourcemaps": "1.3.0",
-    "chalk": "4.1.0",
-    "read-pkg-up": "7.0.1",
     "tslib": "^2.0.0",
     "webpack-bugsnag-plugins": "^1.6.0"
   },
@@ -60,14 +54,12 @@
     "eslint-config-contactlab": "^6.1.0",
     "eslint-config-prettier": "^7.1.0",
     "fp-ts": "^2.8.0",
-    "globalthis": "^1.0.1",
     "husky": "^5.0.6",
     "io-ts": "^2.2.10",
     "jest": "^26.6.3",
     "pinst": "^2.1.1",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.0.0",
-    "rimraf": "^3.0.2",
     "ts-jest": "^26.4.4",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3"
