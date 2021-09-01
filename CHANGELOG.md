@@ -1,5 +1,17 @@
 # Changelog
 
+## [8.0.2](https://github.com/contactlab/gluex/releases/tag/v8.0.2)
+
+**Dependencies:**
+
+- [Security] Bump path-parse from 1.0.6 to 1.0.7 (#462)
+- Bump @bugsnag/js from 7.5.4 to 7.11.0 (#351, #353, #371, #378, #389, #397, #421, #427, #444, #449, #459)
+- Bump webpack-bugsnag-plugins from 1.7.0 to 1.8.0 (#448)
+- [Security] Bump glob-parent from 5.1.1 to 5.1.2 (#433)
+- [Security] Bump ws from 7.4.2 to 7.4.6 (#424)
+- [Security] Bump hosted-git-info from 2.8.8 to 2.8.9 (#416)
+- [Security] Bump lodash from 4.17.20 to 4.17.21 (#409)
+
 ## [8.0.1](https://github.com/contactlab/gluex/releases/tag/v8.0.1)
 
 **Bug fix:**
