@@ -64,40 +64,40 @@ export interface Client {
   readonly setUser: (user: BS.User) => IOE.IOEither<Error, void>;
 }
 
-export const create = (creator: BS.BugsnagStatic) => (
-  config: Config
-): Client => {
-  let actualClient = pipe(
-    validate(config),
-    E.map(withDefaults),
-    E.fold<Error, Config, ActualClient>(ConfigError, Still)
-  );
+export const create =
+  (creator: BS.BugsnagStatic) =>
+  (config: Config): Client => {
+    let actualClient = pipe(
+      validate(config),
+      E.map(withDefaults),
+      E.fold<Error, Config, ActualClient>(ConfigError, Still)
+    );
 
-  const c: Client = {
-    client: () => actualClient,
+    const c: Client = {
+      client: () => actualClient,
 
-    start: () =>
-      match(
-        actualClient,
-        undef,
-        s => (actualClient = Started(creator.start(s.config))),
-        undef
-      ),
+      start: () =>
+        match(
+          actualClient,
+          undef,
+          s => (actualClient = Started(creator.start(s.config))),
+          undef
+        ),
 
-    notify: (error, onError) =>
-      match(
-        actualClient,
-        configErrorThrows,
-        stillThrows,
-        notify(error, onError)
-      ),
+      notify: (error, onError) =>
+        match(
+          actualClient,
+          configErrorThrows,
+          stillThrows,
+          notify(error, onError)
+        ),
 
-    setUser: user =>
-      match(actualClient, configErrorThrows, stillThrows, setUser(user))
+      setUser: user =>
+        match(actualClient, configErrorThrows, stillThrows, setUser(user))
+    };
+
+    return c;
   };
-
-  return c;
-};
 
 // --- Helpers
 function match<R>(
@@ -123,11 +123,11 @@ function withDefaults(c: Config): Config {
 }
 
 function configErrorThrows(client: ConfigError): IOE.IOEither<Error, void> {
-  return IOE.ioEither.throwError(client.error);
+  return IOE.MonadThrow.throwError(client.error);
 }
 
 function stillThrows(_: Still): IOE.IOEither<Error, void> {
-  return IOE.ioEither.throwError(new Error(NOT_STARTED_ERR_MSG));
+  return IOE.MonadThrow.throwError(new Error(NOT_STARTED_ERR_MSG));
 }
 
 type ExecWhenIsStarted = (client: Started) => IOE.IOEither<Error, void>;
