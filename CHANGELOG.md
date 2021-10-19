@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.0.3](https://github.com/contactlab/gluex/releases/tag/v8.0.3)
+
+**Dependencies:**
+
+- Bump @bugsnag/js from 7.11.0 to 7.13.2 (#493)
+- [Security] Bump ansi-regex from 5.0.0 to 5.0.1 (#483)
+
 ## [8.0.2](https://github.com/contactlab/gluex/releases/tag/v8.0.2)
 
 **Dependencies:**
