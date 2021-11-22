@@ -43,7 +43,7 @@
     "io-ts": "^2.2.10"
   },
   "dependencies": {
-    "@bugsnag/js": "7.13.3",
+    "@bugsnag/js": "7.14.0",
     "@types/webpack-bugsnag-plugins": "^1.4.0",
     "tslib": "^2.0.0",
     "webpack-bugsnag-plugins": "^1.6.0"
