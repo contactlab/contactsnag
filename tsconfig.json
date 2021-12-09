@@ -15,7 +15,8 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "types": ["node", "jest"],
-    "baseUrl": "."
+    "baseUrl": ".",
+    "skipLibCheck": true
   },
   "include": ["./src/**/*", "./test/**/*"]
 }

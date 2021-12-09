@@ -3,7 +3,7 @@ jest.mock('@bugsnag/js');
 // ---
 
 import Bugsnag from '@bugsnag/js';
-import {mocked} from 'ts-jest/utils';
+import {mocked} from 'jest-mock';
 import {ContactSnag} from '../src/index';
 
 const bugsnagM = mocked(Bugsnag);
