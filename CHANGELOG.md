@@ -1,5 +1,11 @@
 # Changelog
 
+## [8.0.4](https://github.com/contactlab/gluex/releases/tag/v8.0.4)
+
+**Dependencies:**
+
+Bump @bugsnag/js from 7.13.2 to 7.16.0 (#507, #511, #540, #543)
+
 ## [8.0.3](https://github.com/contactlab/gluex/releases/tag/v8.0.3)
 
 **Dependencies:**
