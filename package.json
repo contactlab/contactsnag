@@ -55,7 +55,7 @@
     "eslint-config-contactlab": "^8.0.0",
     "eslint-config-prettier": "^8.0.0",
     "fp-ts": "^2.8.0",
-    "husky": "^7.0.0",
+    "husky": "^8.0.0",
     "io-ts": "^2.2.10",
     "jest": "^27.1.0",
     "pinst": "^3.0.0",
