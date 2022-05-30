@@ -1,5 +1,16 @@
 # Changelog
 
+## [9.0.0](https://github.com/contactlab/gluex/releases/tag/v9.0.0)
+
+**Breaking:**
+
+- Drop support for Nodejs <14
+
+**Dependencies:**
+
+- Bump @bugsnag/js from 7.16.0 to 7.16.5 (#547, #561, #588)
+- [Security] Bump minimist from 1.2.5 to 1.2.6 (#569)
+
 ## [8.0.4](https://github.com/contactlab/gluex/releases/tag/v8.0.4)
 
 **Dependencies:**
