@@ -1,5 +1,17 @@
 # Changelog
 
+## [10.0.0](https://github.com/contactlab/gluex/releases/tag/v10.0.0)
+
+**Breaking:**
+
+- Drop support for Node v14 (#709)
+
+**Dependencies:**
+
+- [Security] Bump webpack from 5.65.0 to 5.76.1 (#683)
+- [Security] Bump json5 from 1.0.1 to 1.0.2 (#664)
+- Bump @bugsnag/js from 7.16.5 to 7.20.2 (#594, #605, #626, #633, #671, #675, #697)
+
 ## [9.0.0](https://github.com/contactlab/gluex/releases/tag/v9.0.0)
 
 **Breaking:**
