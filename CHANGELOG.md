@@ -1,6 +1,6 @@
 # Changelog
 
-## [10.0.0](https://github.com/contactlab/gluex/releases/tag/v10.0.0)
+## [10.0.0](https://github.com/contactlab/gluex/releases/tag/10.0.0)
 
 **Breaking:**
 
@@ -12,7 +12,7 @@
 - [Security] Bump json5 from 1.0.1 to 1.0.2 (#664)
 - Bump @bugsnag/js from 7.16.5 to 7.20.2 (#594, #605, #626, #633, #671, #675, #697)
 
-## [9.0.0](https://github.com/contactlab/gluex/releases/tag/v9.0.0)
+## [9.0.0](https://github.com/contactlab/gluex/releases/tag/9.0.0)
 
 **Breaking:**
 
@@ -23,20 +23,20 @@
 - Bump @bugsnag/js from 7.16.0 to 7.16.5 (#547, #561, #588)
 - [Security] Bump minimist from 1.2.5 to 1.2.6 (#569)
 
-## [8.0.4](https://github.com/contactlab/gluex/releases/tag/v8.0.4)
+## [8.0.4](https://github.com/contactlab/gluex/releases/tag/8.0.4)
 
 **Dependencies:**
 
 Bump @bugsnag/js from 7.13.2 to 7.16.0 (#507, #511, #540, #543)
 
-## [8.0.3](https://github.com/contactlab/gluex/releases/tag/v8.0.3)
+## [8.0.3](https://github.com/contactlab/gluex/releases/tag/8.0.3)
 
 **Dependencies:**
 
 - Bump @bugsnag/js from 7.11.0 to 7.13.2 (#493)
 - [Security] Bump ansi-regex from 5.0.0 to 5.0.1 (#483)
 
-## [8.0.2](https://github.com/contactlab/gluex/releases/tag/v8.0.2)
+## [8.0.2](https://github.com/contactlab/gluex/releases/tag/8.0.2)
 
 **Dependencies:**
 
@@ -48,13 +48,13 @@ Bump @bugsnag/js from 7.13.2 to 7.16.0 (#507, #511, #540, #543)
 - [Security] Bump hosted-git-info from 2.8.8 to 2.8.9 (#416)
 - [Security] Bump lodash from 4.17.20 to 4.17.21 (#409)
 
-## [8.0.1](https://github.com/contactlab/gluex/releases/tag/v8.0.1)
+## [8.0.1](https://github.com/contactlab/gluex/releases/tag/8.0.1)
 
 **Bug fix:**
 
 - fix husky install on postinstall (#348)
 
-## [8.0.0](https://github.com/contactlab/gluex/releases/tag/v8.0.0)
+## [8.0.0](https://github.com/contactlab/gluex/releases/tag/8.0.0)
 
 **Breaking:**
 
@@ -73,7 +73,7 @@ Bump @bugsnag/js from 7.13.2 to 7.16.0 (#507, #511, #540, #543)
 
 - `[dependencies]` Upgrade Bugsnag to version 7.0.0 (#272)
 
-## [6.1.0](https://github.com/contactlab/gluex/releases/tag/v6.1.0)
+## [6.1.0](https://github.com/contactlab/gluex/releases/tag/6.1.0)
 
 **Internal:**
 
@@ -114,7 +114,7 @@ Bump @bugsnag/js from 7.13.2 to 7.16.0 (#507, #511, #540, #543)
 - Bump `@types/jest` from 24.0.18 to 24.0.21 (#183 - #179 - #176)
 - Bump `@types/node` from 12.7.12 to 12.12.5 (#181 - #178 - #175)
 
-## [6.0.2](https://github.com/contactlab/gluex/releases/tag/v6.0.2)
+## [6.0.2](https://github.com/contactlab/gluex/releases/tag/6.0.2)
 
 **Dependencies:**
 
